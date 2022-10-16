@@ -11,7 +11,7 @@ servers:
   - url: https://{env}.staircrusher.club/
     variables:
       env:
-        description: API 주소 환경
+        description: API 주소 환경 설정
         default: 'api'
         enum:
           - 'api'
