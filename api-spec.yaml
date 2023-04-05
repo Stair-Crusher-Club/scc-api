@@ -505,6 +505,8 @@ paths:
                 - placeAccessibilityId
       responses:
         '204': {}
+        '400':
+          $ref: '#/components/responses/ApiFailure'
 
 components:
   # Reusable schemas (data models)
@@ -750,3 +752,26 @@ components:
         - building
         - hasBuildingAccessibility
         - hasPlaceAccessibility
+
+    ApiErrorResponse:
+      type: object
+      properties:
+        msg:
+          type: string
+          description: reason for error
+        code:
+          type: string # Do not change to integer. Jackson's @JsonProperty does not support number serialization.
+          x-enum-varnames:
+            - INTERNAL_FAILURE # -999999
+            - INVALID_AUTHENTICATION # 1
+          enum:
+            - -999999
+            - 1
+
+  responses:
+    ApiFailure:
+      description: failed to get response
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiErrorResponse'
