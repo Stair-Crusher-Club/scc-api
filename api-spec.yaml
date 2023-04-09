@@ -706,8 +706,13 @@ components:
         distanceMeters:
           type: integer
           description: 요청에 currentLocation이 올라왔을 경우에만 non-null.
+        accessibilityRegistrable:
+          type: boolean
+          description: 접근성 정보를 등록할 수 있는지 여부.
+
       required:
         - place
         - building
         - hasBuildingAccessibility
         - hasPlaceAccessibility
+        - accessibilityRegistrable
