@@ -233,6 +233,56 @@ paths:
                   - placeAccessibility
                   - placeAccessibilityComments
                   - registeredUserOrder
+  
+  /registerPlaceAccessibility:
+    post:
+      summary: 점포의 접근성 정보를 등록한다.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterPlaceAccessibilityRequest'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  accessibilityInfo:
+                    $ref: '#/components/schemas/AccessibilityInfoDto'
+                  registeredUserOrder:
+                    type: integer
+                    description: "'n번째 정복자'를 표시해주기 위한 값."
+                required:
+                  - accessibilityInfo
+                  - registeredUserOrder
+    
+  /registerBuildingAccessibility:
+    post:
+      summary: 건물 접근성 정보를 등록한다.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterBuildingAccessibilityRequest'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  accessibilityInfo:
+                    $ref: '#/components/schemas/AccessibilityInfoDto'
+                  registeredUserOrder:
+                    type: integer
+                    description: "'n번째 정복자'를 표시해주기 위한 값."
+                required:
+                  - accessibilityInfo
+                  - registeredUserOrder
 
   /listPlacesInBuilding:
     post:
