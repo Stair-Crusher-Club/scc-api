@@ -198,10 +198,10 @@ paths:
               type: object
               properties:
                 buildingAccessibilityParams:
-                  $ref: '#/components/schemas/RegisterBuildingAccessibilityRequest'
+                  $ref: '#/components/schemas/RegisterBuildingAccessibilityRequestDto'
                   description: 각 건물에 대해 1번만 등록될 수 있다.
                 placeAccessibilityParams:
-                  $ref: '#/components/schemas/RegisterPlaceAccessibilityRequest'
+                  $ref: '#/components/schemas/RegisterPlaceAccessibilityRequestDto'
               required:
                 - placeAccessibilityParams
       responses:
@@ -242,7 +242,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/RegisterPlaceAccessibilityRequest'
+              $ref: '#/components/schemas/RegisterPlaceAccessibilityRequestDto'
       responses:
         '200':
           content:
@@ -267,7 +267,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/RegisterBuildingAccessibilityRequest'
+              $ref: '#/components/schemas/RegisterBuildingAccessibilityRequestDto'
       responses:
         '200':
           content:
@@ -757,7 +757,7 @@ components:
         - placeAccessibilityComments
         - hasOtherPlacesToRegisterInBuilding
 
-    RegisterBuildingAccessibilityRequest:
+    RegisterBuildingAccessibilityRequestDto:
       type: object
       description: 각 건물에 대해 1번만 등록될 수 있다.
       properties:
@@ -790,7 +790,7 @@ components:
         - elevatorStairInfo
         - elevatorImageUrls
 
-    RegisterPlaceAccessibilityRequest:
+    RegisterPlaceAccessibilityRequestDto:
       type: object
       properties:
         placeId:
