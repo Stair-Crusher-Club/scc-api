@@ -148,30 +148,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  buildingAccessibility:
-                    $ref: '#/components/schemas/BuildingAccessibility'
-                    description: 정보가 아직 채워지지 않았으면 null.
-                  buildingAccessibilityComments:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/BuildingAccessibilityComment'
-                    description: 정보가 아직 채워지지 않았으면 empty list.
-                  placeAccessibility:
-                    $ref: '#/components/schemas/PlaceAccessibility'
-                    description: 정보가 아직 채워지지 않았으면 null.
-                  placeAccessibilityComments:
-                    items:
-                      $ref: '#/components/schemas/PlaceAccessibilityComment'
-                    description: 정보가 아직 채워지지 않았으면 empty list.
-                  hasOtherPlacesToRegisterInBuilding:
-                    type: boolean
-                    description: "'이 건물의 다른 점포 등록하기'를 보여줄지 여부."
-                required:
-                  - buildingAccessibilityComments
-                  - placeAccessibilityComments
-                  - hasOtherPlacesToRegisterInBuilding
+                $ref: '#/components/schemas/AccessibilityInfoDto'
 
   /getImageUploadUrls:
     post:
@@ -221,60 +198,10 @@ paths:
               type: object
               properties:
                 buildingAccessibilityParams:
-                  type: object
+                  $ref: '#/components/schemas/RegisterBuildingAccessibilityRequest'
                   description: 각 건물에 대해 1번만 등록될 수 있다.
-                  properties:
-                    buildingId:
-                      type: string
-                    entranceStairInfo:
-                      $ref: '#/components/schemas/StairInfo'
-                    entranceImageUrls:
-                      type: array
-                      items:
-                        type: string
-                    hasSlope:
-                      type: boolean
-                    hasElevator:
-                      type: boolean
-                    elevatorStairInfo:
-                      $ref: '#/components/schemas/StairInfo'
-                    elevatorImageUrls:
-                      type: array
-                      items:
-                        type: string
-                    comment:
-                      type: string
-                  required:
-                    - buildingId
-                    - entranceStairInfo
-                    - entranceImageUrls
-                    - hasSlope
-                    - hasElevator
-                    - elevatorStairInfo
-                    - elevatorImageUrls
                 placeAccessibilityParams:
-                  type: object
-                  properties:
-                    placeId:
-                      type: string
-                    isFirstFloor:
-                      type: boolean
-                    stairInfo:
-                      $ref: '#/components/schemas/StairInfo'
-                    hasSlope:
-                      type: boolean
-                    imageUrls:
-                      type: array
-                      items:
-                        type: string
-                    comment:
-                      type: string
-                  required:
-                    - placeId
-                    - isFirstFloor
-                    - stairInfo
-                    - hasSlope
-                    - imageUrls
+                  $ref: '#/components/schemas/RegisterPlaceAccessibilityRequest'
               required:
                 - placeAccessibilityParams
       responses:
@@ -752,6 +679,90 @@ components:
         - building
         - hasBuildingAccessibility
         - hasPlaceAccessibility
+
+    AccessibilityInfoDto:
+      type: object
+      properties:
+        buildingAccessibility:
+          $ref: '#/components/schemas/BuildingAccessibility'
+          description: 정보가 아직 채워지지 않았으면 null.
+        buildingAccessibilityComments:
+          type: array
+          items:
+            $ref: '#/components/schemas/BuildingAccessibilityComment'
+          description: 정보가 아직 채워지지 않았으면 empty list.
+        placeAccessibility:
+          $ref: '#/components/schemas/PlaceAccessibility'
+          description: 정보가 아직 채워지지 않았으면 null.
+        placeAccessibilityComments:
+          type: array
+          items:
+            $ref: '#/components/schemas/PlaceAccessibilityComment'
+          description: 정보가 아직 채워지지 않았으면 empty list.
+        hasOtherPlacesToRegisterInBuilding:
+          type: boolean
+          description: "'이 건물의 다른 점포 등록하기'를 보여줄지 여부."
+      required:
+        - buildingAccessibilityComments
+        - placeAccessibilityComments
+        - hasOtherPlacesToRegisterInBuilding
+
+    RegisterBuildingAccessibilityRequest:
+      type: object
+      description: 각 건물에 대해 1번만 등록될 수 있다.
+      properties:
+        buildingId:
+          type: string
+        entranceStairInfo:
+          $ref: '#/components/schemas/StairInfo'
+        entranceImageUrls:
+          type: array
+          items:
+            type: string
+        hasSlope:
+          type: boolean
+        hasElevator:
+          type: boolean
+        elevatorStairInfo:
+          $ref: '#/components/schemas/StairInfo'
+        elevatorImageUrls:
+          type: array
+          items:
+            type: string
+        comment:
+          type: string
+      required:
+        - buildingId
+        - entranceStairInfo
+        - entranceImageUrls
+        - hasSlope
+        - hasElevator
+        - elevatorStairInfo
+        - elevatorImageUrls
+
+    RegisterPlaceAccessibilityRequest:
+      type: object
+      properties:
+        placeId:
+          type: string
+        isFirstFloor:
+          type: boolean
+        stairInfo:
+          $ref: '#/components/schemas/StairInfo'
+        hasSlope:
+          type: boolean
+        imageUrls:
+          type: array
+          items:
+            type: string
+        comment:
+          type: string
+      required:
+        - placeId
+        - isFirstFloor
+        - stairInfo
+        - hasSlope
+        - imageUrls
 
     ApiErrorResponse:
       type: object
