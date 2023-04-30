@@ -493,7 +493,7 @@ paths:
                 type: object
                 properties:
                   accessibilityRank:
-                    $ref: '#/components/schemas/AccessibilityRank'
+                    $ref: '#/components/schemas/AccessibilityRankDTO'
                 required:
                   - accessibilityRank
 
@@ -877,7 +877,7 @@ components:
         - hasSlope
         - imageUrls
 
-    AccessibilityRank:
+    AccessibilityRankDTO:
       type: object
       properties:
         conqueredCount:
