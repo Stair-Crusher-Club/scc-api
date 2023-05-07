@@ -517,7 +517,7 @@ paths:
                   ranks:
                     type: array
                     items:
-                      $ref: '#/components/schemas/AccessibilityRank'
+                      $ref: '#/components/schemas/AccessibilityRankDTO'
                 required:
                   - ranks
 
@@ -880,6 +880,8 @@ components:
     AccessibilityRankDTO:
       type: object
       properties:
+        userNickname:
+          type: string
         conqueredCount:
           type: integer
           description: 접근성 정보를 등록한 장소의 수.
@@ -888,6 +890,7 @@ components:
           format: int64
           description: 현재 나의 랭크. 1부터 시작.
       required:
+        - userNickname
         - conqueredCount
         - rank
 
