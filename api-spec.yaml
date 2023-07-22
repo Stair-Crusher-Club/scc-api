@@ -842,7 +842,7 @@ components:
         - HOSPITAL
         - PHARMACY
 
-    SearchKeywordOfPlaceCategory:
+    SearchKeywordOfPlaceCategoryDto:
       type: object
       properties:
         category:
@@ -938,7 +938,7 @@ components:
         - hasSlope
         - imageUrls
 
-    AccessibilityRankDTO:
+    AccessibilityRankDto:
       type: object
       properties:
         user:
