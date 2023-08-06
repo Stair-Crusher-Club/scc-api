@@ -114,6 +114,8 @@ paths:
                   type: string
                 eupMyeonDongId:
                   type: string
+                sort:
+                  $ref: '#/components/schemas/SearchPlaceSortDto'
               required:
                 - searchText
                 - distanceMetersLimit
@@ -975,6 +977,12 @@ components:
           type: string
       required:
         - buildingAccessibilityId
+
+    SearchPlaceSortDto:
+      type: string
+      enum:
+        - ACCURACY
+        - DISTANCE
 
   responses:
     ApiFailure:
