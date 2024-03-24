@@ -1391,14 +1391,13 @@ components:
         - hasSlope
 
     RegisterPlaceAccessibilityResponseDto:
-      schema:
-        type: object
-        properties:
-          accessibilityInfo:
-            $ref: '#/components/schemas/AccessibilityInfoDto'
-          registeredUserOrder:
-            type: integer
-            description: "'n번째 정복자'를 표시해주기 위한 값."
+      type: object
+      properties:
+        accessibilityInfo:
+          $ref: '#/components/schemas/AccessibilityInfoDto'
+        registeredUserOrder:
+          type: integer
+          description: "'n번째 정복자'를 표시해주기 위한 값."
         required:
           - accessibilityInfo
           - registeredUserOrder
