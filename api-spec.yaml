@@ -1362,6 +1362,8 @@ components:
           type: boolean
         elevatorStairInfo:
           $ref: '#/components/schemas/StairInfo'
+        elevatorStairHeightLevel:
+          $ref: '#/components/schemas/StairHeightLevel'
         elevatorImageUrls:
           type: array
           items:
