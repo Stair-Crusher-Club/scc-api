@@ -243,14 +243,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/GetChallengeWithInvitationCodeRequestDto'
+              $ref: '#/components/schemas/GetClientVersionStatusRequestDto'
         required: true
       responses:
         '200':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GetChallengeResponseDto'
+                $ref: '#/components/schemas/GetClientVersionStatusResponseDto'
 
   /getUserInfo:
     get:
