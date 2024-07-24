@@ -296,6 +296,18 @@ paths:
       responses:
         '204': { }
 
+  /givePlaceAccessibilityUpvote:
+    post:
+      summary: "'이 정보가 도움이 돼요'를 준다."
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GivePlaceAccessibilityUpvoteRequestDto'
+      responses:
+        '204': { }
+
   /joinChallenge:
     post:
       summary: 챌린지에 참여한다.
@@ -826,10 +838,19 @@ components:
         hasOtherPlacesToRegisterInBuilding:
           type: boolean
           description: "'이 건물의 다른 점포 등록하기'를 보여줄지 여부."
+        isFavoritePlace:
+          type: boolean
+          description: 내가 즐겨찾기한 장소인지 여부.
+        totalFavoriteCount:
+          type: integer
+          format: int64
+          description: 이 장소를 즐겨찾기한 사람 수.
       required:
         - buildingAccessibilityComments
         - placeAccessibilityComments
         - hasOtherPlacesToRegisterInBuilding
+        - isFavoritePlace
+        - totalFavoriteCount
 
     AccessibilityRankDto:
       type: object
@@ -1087,6 +1108,43 @@ components:
         - Upcoming # 오픈 예정
         - Closed # 종료된 챌린지
 
+    CreatePlaceFavoriteRequestDto:
+      type: object
+      properties:
+        placeId:
+          type: string
+      required:
+        - placeId
+
+    CreatePlaceFavoriteResponseDto:
+      type: object
+      properties:
+        totalPlaceFavoriteCount:
+          type: integer
+          format: int64
+        placeFavorite:
+          $ref: '#/components/schemas/PlaceFavorite'
+      required:
+        - totalPlaceFavoriteCount
+        - placeFavorite
+
+    DeletePlaceFavoriteRequestDto:
+      type: object
+      properties:
+        placeId:
+          type: string
+      required:
+        - placeId
+
+    DeletePlaceFavoriteResponseDto:
+      type: object
+      properties:
+        totalPlaceFavoriteCount:
+          type: integer
+          format: int64
+      required:
+        - totalPlaceFavoriteCount
+
     EntranceDoorType:
       type: string
       enum:
@@ -1121,6 +1179,19 @@ components:
           format: int64
       required:
         - value
+
+    PlaceFavorite:
+      type: object
+      properties:
+        userId:
+          type: string
+        placeId:
+          type: string
+        createdAt:
+          $ref: '#/components/schemas/EpochMillisTimestamp'
+      required:
+        - userId
+        - placeId
 
     GetAccessibilityActivityReportResponseDto:
       type: object
@@ -1412,6 +1483,9 @@ components:
         address:
           type: string
           description: 점포의 human-readable한 주소.
+        isFavorite:
+          type: boolean
+          description: 내가 즐겨찾기한 점포인지 여부.
       required:
         - id
         - name
@@ -1466,6 +1540,9 @@ components:
               description: 장소가 포함된 건물 중 마지막으로 남은 장소 정보인지 여부.
           required:
             - isLastInBuilding
+        isUpvoted:
+          type: boolean
+          description: 유저가 이 접근성 정보에 '도움이 돼요'를 표시했는지 여부.
         createdAt:
           $ref: '#/components/schemas/EpochMillisTimestamp'
       required:
@@ -1606,6 +1683,8 @@ components:
           type: array
           items:
             type: integer
+        createdAt:
+          $ref: '#/components/schemas/EpochMillisTimestamp'
       required:
         - imageUrls
         - hasSlope
@@ -1803,6 +1882,17 @@ components:
           description: '아직 썸네일이 생성되지 않았다면 null'
       required:
         - imageUrl
+
+    DayOfWeek:
+      type: string
+      enum:
+        - SUNDAY
+        - MONDAY
+        - TUESDAY
+        - WEDNESDAY
+        - THURSDAY
+        - FRIDAY
+        - SATURDAY
 
   responses:
     ApiFailure:
