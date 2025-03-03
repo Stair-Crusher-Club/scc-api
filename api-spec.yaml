@@ -909,6 +909,8 @@ paths:
   /checkNicknameDuplication:
     post:
       summary: 닉네임 중복 여부를 체크한다.
+      security:
+        - Identified: []
       requestBody:
         required: true
         content:
