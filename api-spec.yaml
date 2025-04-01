@@ -1511,6 +1511,10 @@ components:
           type: string
         idToken:
           type: string
+        accessTokenExpiresAt:
+          $ref: '#/components/schemas/EpochMillisTimestamp'
+        refreshTokenExpiresAt:
+          $ref: '#/components/schemas/EpochMillisTimestamp'
       required:
         - accessToken
         - refreshToken
