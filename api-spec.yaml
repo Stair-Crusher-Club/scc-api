@@ -2160,6 +2160,13 @@ components:
         - clickPageUrl
         - clickPageTitle
 
+    AccessibilityReportReason:
+      type: string
+      enum:
+        - INACCURATE_INFO
+        - CLOSED
+        - BAD_USER
+
   responses:
     ApiFailure:
       description: failed to get response
