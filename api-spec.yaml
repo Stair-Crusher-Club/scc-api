@@ -701,8 +701,12 @@ paths:
                 reason:
                   type: string
                   description: 신고 사유
+                detail:
+                  type: string
+                  description: 신고 상세 내용
               required:
                 - placeId
+                - reason
       responses:
         '204': { }
 
