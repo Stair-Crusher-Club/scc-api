@@ -7,7 +7,7 @@
 
 ### pre-commit hook 등록 (optional)
 
-Node 환경이 설정 되어 있어야 한다.
+pre-commit hook 을 사용하려면 Node 환경이 설정 되어 있어야 한다.
 
 ```
 chmod +x ./scripts/pre-commit
