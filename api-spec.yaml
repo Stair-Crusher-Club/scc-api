@@ -33,8 +33,8 @@ paths:
               $ref: '#/components/schemas/CancelBuildingAccessibilityUpvoteRequestDto'
         required: true
       responses:
-        '204': { }
-      summary: '''이 정보가 도움이 돼요''를 취소한다.'
+        '204': {}
+      summary: "'이 정보가 도움이 돼요'를 취소한다."
 
   /cancelPlaceAccessibilityUpvote:
     post:
@@ -47,8 +47,8 @@ paths:
               $ref: '#/components/schemas/CancelPlaceAccessibilityUpvoteRequestDto'
         required: true
       responses:
-        '204': { }
-      summary: '''이 정보가 도움이 돼요''를 취소한다.'
+        '204': {}
+      summary: "'이 정보가 도움이 돼요'를 취소한다."
 
   /createAnonymousUser:
     post:
@@ -99,7 +99,7 @@ paths:
               required:
                 - placeAccessibilityId
       responses:
-        '204': { }
+        '204': {}
         '400':
           $ref: '#/components/responses/ApiFailure'
 
@@ -127,7 +127,7 @@ paths:
       security:
         - Identified: []
       responses:
-        '204': { }
+        '204': {}
 
   /getAccessibility:
     post:
@@ -180,7 +180,7 @@ paths:
           application/json:
             schema:
               type: object
-              properties: { }
+              properties: {}
       responses:
         '200':
           content:
@@ -206,7 +206,7 @@ paths:
           application/json:
             schema:
               type: object
-              properties: { }
+              properties: {}
       responses:
         '200':
           content:
@@ -227,7 +227,7 @@ paths:
         content:
           application/json:
             schema:
-              properties: { }
+              properties: {}
               type: object
         required: true
       responses:
@@ -245,7 +245,8 @@ paths:
 
   /getImageUploadUrls:
     post:
-      summary: 점포 정보 등록 등의 상황에서 이미지를 업로드하기 위한 URL을 받아 온다.
+      summary:
+        점포 정보 등록 등의 상황에서 이미지를 업로드하기 위한 URL을 받아 온다.
       security:
         - Identified: []
       requestBody:
@@ -260,7 +261,9 @@ paths:
                   description: 업로드할 이미지 수.
                 filenameExtension:
                   type: string
-                  description: 업로드할 이미지의 확장자. '.'을 붙이지 말아야 한다. e.g. png, jpeg 등.
+                  description:
+                    업로드할 이미지의 확장자. '.'을 붙이지 말아야 한다. e.g.
+                    png, jpeg 등.
               required:
                 - count
                 - filenameExtension
@@ -365,7 +368,7 @@ paths:
             schema:
               $ref: '#/components/schemas/GiveBuildingAccessibilityUpvoteRequestDto'
       responses:
-        '204': { }
+        '204': {}
 
   /givePlaceAccessibilityUpvote:
     post:
@@ -379,7 +382,7 @@ paths:
             schema:
               $ref: '#/components/schemas/GivePlaceAccessibilityUpvoteRequestDto'
       responses:
-        '204': { }
+        '204': {}
 
   /joinChallenge:
     post:
@@ -408,7 +411,7 @@ paths:
           application/json:
             schema:
               type: object
-              properties: { }
+              properties: {}
       responses:
         '200':
           content:
@@ -509,14 +512,16 @@ paths:
   /listSearchKeywordsOfPlaceCategory:
     post:
       summary: 특정 카테고리의 점포들을 검색할 수 있게 키워드들을 내려준다.
-      description: "음식점, 카페, 편의점, 병원 같이 키워드를 내려주면 searchPlaces 키워드로 쓸 수 있습니다."
+      description:
+        '음식점, 카페, 편의점, 병원 같이 키워드를 내려주면 searchPlaces 키워드로
+        쓸 수 있습니다.'
       requestBody:
         required: true
         content:
           application/json:
             schema:
               type: object
-              properties: { }
+              properties: {}
       responses:
         '200':
           content:
@@ -726,7 +731,7 @@ paths:
                 - placeId
                 - reason
       responses:
-        '204': { }
+        '204': {}
 
   /searchExternalAccessibilities:
     post:
@@ -746,7 +751,9 @@ paths:
                   type: integer
                 categories:
                   type: array
-                  description: 조회하고 싶은 접근성 정보 카테고리. 현재 화장실 (TOILET) 만 있음.
+                  description:
+                    조회하고 싶은 접근성 정보 카테고리. 현재 화장실 (TOILET) 만
+                    있음.
                   items:
                     type: string
               required:
@@ -786,10 +793,10 @@ paths:
               schema:
                 $ref: '#/components/schemas/ExternalAccessibility'
 
-
   /searchPlaces:
     post:
-      summary: 점포를 검색한다. sort 가 null 인 경우에는 정확도순을 기본으로 한다.
+      summary:
+        점포를 검색한다. sort 가 null 인 경우에는 정확도순을 기본으로 한다.
       requestBody:
         required: true
         content:
@@ -940,10 +947,12 @@ paths:
               properties:
                 nickname:
                   type: string
-                  description: 유효성을 검사할 닉네임. null인 경우 유효한 것으로 간주
+                  description:
+                    유효성을 검사할 닉네임. null인 경우 유효한 것으로 간주
                 email:
                   type: string
-                  description: 유효성을 검사할 이메일. null인 경우 유효한 것으로 간주
+                  description:
+                    유효성을 검사할 이메일. null인 경우 유효한 것으로 간주
               required: []
       responses:
         '200':
@@ -954,10 +963,14 @@ paths:
                 properties:
                   nicknameErrorMessage:
                     type: string
-                    description: 닉네임이 유효하지 않은 경우 에러 메시지, 유효하거나 null인 경우 null
+                    description:
+                      닉네임이 유효하지 않은 경우 에러 메시지, 유효하거나 null인
+                      경우 null
                   emailErrorMessage:
                     type: string
-                    description: 이메일이 유효하지 않은 경우 에러 메시지, 유효하거나 null인 경우 null
+                    description:
+                      이메일이 유효하지 않은 경우 에러 메시지, 유효하거나 null인
+                      경우 null
                 required: []
         '400':
           $ref: '#/components/responses/ApiFailure'
@@ -1147,7 +1160,9 @@ components:
           description: 유저가 이 접근성 정보에 '도움이 돼요'를 표시했는지 여부.
         totalUpvoteCount:
           type: integer
-          description: 이 접근성 정보가 '도움이 돼요'를 받은 총 횟수. 이 숫자에 따라 버튼 텍스트에 '도움이 돼요'나 '정확한 정보에요'를 사용한다.
+          description:
+            이 접근성 정보가 '도움이 돼요'를 받은 총 횟수. 이 숫자에 따라 버튼
+            텍스트에 '도움이 돼요'나 '정확한 정보에요'를 사용한다.
         createdAt:
           $ref: '#/components/schemas/EpochMillisTimestamp'
       required:
@@ -1419,7 +1434,8 @@ components:
         contributionCountForNextRank:
           type: integer
           format: int64
-          description: 다음 랭크에 도달하기 위해 필요한 contribution 수. ex) 10개 정복
+          description:
+            다음 랭크에 도달하기 위해 필요한 contribution 수. ex) 10개 정복
         hasJoined:
           type: boolean
           description: 내가 참여하고 있는지에 대한 정보
@@ -1467,8 +1483,8 @@ components:
 
     GetUserInfoRequestDto:
       type: object
-      properties: { }
-      required: [ ]
+      properties: {}
+      required: []
 
     GetUserInfoResponseDto:
       type: object
@@ -1584,7 +1600,8 @@ components:
         - status
 
     ListChallengesResponseDto:
-      description: filter 가 없으면 진행중인, 참여중인 챌린지를 우선적으로 보여준다.
+      description:
+        filter 가 없으면 진행중인, 참여중인 챌린지를 우선적으로 보여준다.
       type: object
       properties:
         totalCount:
@@ -1619,7 +1636,8 @@ components:
           description: 정복한 장소의 전체 갯수
         nextToken:
           type: string
-          description: 다음 페이지 정보. 없으면 더 이상 요청할 값이 없음을 의미한다.
+          description:
+            다음 페이지 정보. 없으면 더 이상 요청할 값이 없음을 의미한다.
         items:
           type: array
           items:
@@ -1647,7 +1665,8 @@ components:
           format: int64
         nextToken:
           type: string
-          description: 다음 페이지 정보. 없으면 더 이상 요청할 값이 없음을 의미한다.
+          description:
+            다음 페이지 정보. 없으면 더 이상 요청할 값이 없음을 의미한다.
         items:
           type: array
           items:
@@ -1731,7 +1750,9 @@ components:
         isFirstFloor:
           type: boolean
           deprecated: true
-          description: '1층인지 여부. 240401 출시한 버전부터 이 필드는 사용하지 않고, floors 필드를 사용하도록 한다.'
+          description:
+            '1층인지 여부. 240401 출시한 버전부터 이 필드는 사용하지 않고,
+            floors 필드를 사용하도록 한다.'
         isStairOnlyOption:
           type: boolean
           description: '다른 층으로 가는 방법이 계단만 있는지 여부'
@@ -1763,7 +1784,8 @@ components:
           properties:
             isLastInBuilding:
               type: boolean
-              description: 장소가 포함된 건물 중 마지막으로 남은 장소 정보인지 여부.
+              description:
+                장소가 포함된 건물 중 마지막으로 남은 장소 정보인지 여부.
           required:
             - isLastInBuilding
         challengeCrusherGroup:
@@ -1987,7 +2009,9 @@ components:
         isFirstFloor:
           type: boolean
           deprecated: true
-          description: '1층인지 여부. 240401 출시한 버전부터 이 필드는 사용하지 않고, floors 필드를 사용하도록 한다.'
+          description:
+            '1층인지 여부. 240401 출시한 버전부터 이 필드는 사용하지 않고,
+            floors 필드를 사용하도록 한다.'
         imageUrls:
           type: array
           items:
@@ -2046,13 +2070,18 @@ components:
       properties:
         maxAccessibilityScore:
           type: double
-          description: 접근성 점수의 최대값. 이 값 이하의 점수를 가진 장소만 반환한다. null이면 필터링하지 않는다.
+          description:
+            접근성 점수의 최대값. 이 값 이하의 점수를 가진 장소만 반환한다.
+            null이면 필터링하지 않는다.
         hasSlope:
           type: boolean
-          description: 경사로가 있는/없는 장소만 반환한다. null이면 필터링하지 않는다.
+          description:
+            경사로가 있는/없는 장소만 반환한다. null이면 필터링하지 않는다.
         isRegistered:
           type: boolean
-          description: 접근성 정보가 등록된/등록되지 않은 장소만 반환한다. null이면 필터링하지 않는다.
+          description:
+            접근성 정보가 등록된/등록되지 않은 장소만 반환한다. null이면
+            필터링하지 않는다.
 
     SiGunGu:
       description: 시군구를 표현하기 위한 모델.
