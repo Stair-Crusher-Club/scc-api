@@ -1,7 +1,7 @@
-openapi: "3.0.0"
+openapi: '3.0.0'
 info:
   title: Stair Crusher Club API Specification
-  version: "1.0.0"
+  version: '1.0.0'
   description: |
     ## 계단정복지도 서비스의 서버 - 클라이언트 통신을 위한 API 명세.
 
@@ -12,10 +12,10 @@ servers:
     variables:
       env:
         description: API 주소 환경 설정
-        default: "api"
+        default: 'api'
         enum:
-          - "api"
-          - "api.dev"
+          - 'api'
+          - 'api.dev'
 
 security:
   # 모든 API 는 기본적으로 AnonymousUserAuth 를 적용
@@ -30,10 +30,10 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/CancelBuildingAccessibilityUpvoteRequestDto"
+              $ref: '#/components/schemas/CancelBuildingAccessibilityUpvoteRequestDto'
         required: true
       responses:
-        "204": {}
+        '204': {}
       summary: "'이 정보가 도움이 돼요'를 취소한다."
 
   /cancelPlaceAccessibilityUpvote:
@@ -44,10 +44,10 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/CancelPlaceAccessibilityUpvoteRequestDto"
+              $ref: '#/components/schemas/CancelPlaceAccessibilityUpvoteRequestDto'
         required: true
       responses:
-        "204": {}
+        '204': {}
       summary: "'이 정보가 도움이 돼요'를 취소한다."
 
   /createAnonymousUser:
@@ -55,11 +55,11 @@ paths:
       summary: 비회원 계정을 생성한다.
       security: []
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/CreateAnonymousUserResponseDto"
+                $ref: '#/components/schemas/CreateAnonymousUserResponseDto'
 
   /createPlaceFavorite:
     post:
@@ -71,13 +71,13 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/CreatePlaceFavoriteRequestDto"
+              $ref: '#/components/schemas/CreatePlaceFavoriteRequestDto'
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/CreatePlaceFavoriteResponseDto"
+                $ref: '#/components/schemas/CreatePlaceFavoriteResponseDto'
 
   /deleteAccessibility:
     post:
@@ -99,9 +99,9 @@ paths:
               required:
                 - placeAccessibilityId
       responses:
-        "204": {}
-        "400":
-          $ref: "#/components/responses/ApiFailure"
+        '204': {}
+        '400':
+          $ref: '#/components/responses/ApiFailure'
 
   /deletePlaceFavorite:
     post:
@@ -113,13 +113,13 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/DeletePlaceFavoriteRequestDto"
+              $ref: '#/components/schemas/DeletePlaceFavoriteRequestDto'
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/DeletePlaceFavoriteResponseDto"
+                $ref: '#/components/schemas/DeletePlaceFavoriteResponseDto'
 
   /deleteUser:
     post:
@@ -127,7 +127,7 @@ paths:
       security:
         - Identified: []
       responses:
-        "204": {}
+        '204': {}
 
   /getAccessibility:
     post:
@@ -144,11 +144,11 @@ paths:
               required:
                 - placeId
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/AccessibilityInfoDto"
+                $ref: '#/components/schemas/AccessibilityInfoDto'
 
   /getPlaceWithBuilding:
     post:
@@ -165,11 +165,11 @@ paths:
               required:
                 - placeId
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/PlaceListItem"
+                $ref: '#/components/schemas/PlaceListItem'
 
   /getAccessibilityLeaderboard:
     post:
@@ -182,7 +182,7 @@ paths:
               type: object
               properties: {}
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
@@ -191,7 +191,7 @@ paths:
                   ranks:
                     type: array
                     items:
-                      $ref: "#/components/schemas/AccessibilityRankDto"
+                      $ref: '#/components/schemas/AccessibilityRankDto'
                 required:
                   - ranks
 
@@ -208,14 +208,14 @@ paths:
               type: object
               properties: {}
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
                 type: object
                 properties:
                   accessibilityRank:
-                    $ref: "#/components/schemas/AccessibilityRankDto"
+                    $ref: '#/components/schemas/AccessibilityRankDto'
                 required:
                   - accessibilityRank
 
@@ -231,7 +231,7 @@ paths:
               type: object
         required: true
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
@@ -245,7 +245,8 @@ paths:
 
   /getImageUploadUrls:
     post:
-      summary: 점포 정보 등록 등의 상황에서 이미지를 업로드하기 위한 URL을 받아 온다.
+      summary:
+        점포 정보 등록 등의 상황에서 이미지를 업로드하기 위한 URL을 받아 온다.
       security:
         - Identified: []
       requestBody:
@@ -260,12 +261,14 @@ paths:
                   description: 업로드할 이미지 수.
                 filenameExtension:
                   type: string
-                  description: 업로드할 이미지의 확장자. '.'을 붙이지 말아야 한다. e.g. png, jpeg 등.
+                  description:
+                    업로드할 이미지의 확장자. '.'을 붙이지 말아야 한다. e.g.
+                    png, jpeg 등.
               required:
                 - count
                 - filenameExtension
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
@@ -276,7 +279,7 @@ paths:
                     url:
                       type: string
                     expireAt:
-                      $ref: "#/components/schemas/EpochMillisTimestamp"
+                      $ref: '#/components/schemas/EpochMillisTimestamp'
                       description: url의 만료 시각.
                   required:
                     - url
@@ -288,14 +291,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/GetChallengeRequestDto"
+              $ref: '#/components/schemas/GetChallengeRequestDto'
         required: true
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/GetChallengeResponseDto"
+                $ref: '#/components/schemas/GetChallengeResponseDto'
 
   /getChallengeWithInvitationCode:
     post:
@@ -304,14 +307,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/GetChallengeWithInvitationCodeRequestDto"
+              $ref: '#/components/schemas/GetChallengeWithInvitationCodeRequestDto'
         required: true
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/GetChallengeResponseDto"
+                $ref: '#/components/schemas/GetChallengeResponseDto'
 
   /getClientVersionStatus:
     post:
@@ -320,14 +323,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/GetClientVersionStatusRequestDto"
+              $ref: '#/components/schemas/GetClientVersionStatusRequestDto'
         required: true
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/GetClientVersionStatusResponseDto"
+                $ref: '#/components/schemas/GetClientVersionStatusResponseDto'
 
   /getAccessibilityActivityReport:
     post:
@@ -335,11 +338,11 @@ paths:
       security:
         - Identified: []
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/GetAccessibilityActivityReportResponseDto"
+                $ref: '#/components/schemas/GetAccessibilityActivityReportResponseDto'
 
   /getUserInfo:
     get:
@@ -347,11 +350,11 @@ paths:
       security:
         - Identified: []
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/GetUserInfoResponseDto"
+                $ref: '#/components/schemas/GetUserInfoResponseDto'
 
   /giveBuildingAccessibilityUpvote:
     post:
@@ -363,9 +366,9 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/GiveBuildingAccessibilityUpvoteRequestDto"
+              $ref: '#/components/schemas/GiveBuildingAccessibilityUpvoteRequestDto'
       responses:
-        "204": {}
+        '204': {}
 
   /givePlaceAccessibilityUpvote:
     post:
@@ -377,9 +380,9 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/GivePlaceAccessibilityUpvoteRequestDto"
+              $ref: '#/components/schemas/GivePlaceAccessibilityUpvoteRequestDto'
       responses:
-        "204": {}
+        '204': {}
 
   /joinChallenge:
     post:
@@ -391,13 +394,13 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/JoinChallengeRequestDto"
+              $ref: '#/components/schemas/JoinChallengeRequestDto'
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/JoinChallengeResponseDto"
+                $ref: '#/components/schemas/JoinChallengeResponseDto'
 
   /listAdministrativeAreas:
     post:
@@ -410,18 +413,18 @@ paths:
               type: object
               properties: {}
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
                 properties:
                   eupMyeonDongs:
                     items:
-                      $ref: "#/components/schemas/EupMyeonDong"
+                      $ref: '#/components/schemas/EupMyeonDong'
                     type: array
                   siGunGus:
                     items:
-                      $ref: "#/components/schemas/SiGunGu"
+                      $ref: '#/components/schemas/SiGunGu'
                     type: array
                 type: object
 
@@ -433,13 +436,13 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/ListChallengesRequestDto"
+              $ref: '#/components/schemas/ListChallengesRequestDto'
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ListChallengesResponseDto"
+                $ref: '#/components/schemas/ListChallengesResponseDto'
 
   /listConqueredPlaces:
     post:
@@ -451,13 +454,13 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/ListConqueredPlacesRequestDto"
+              $ref: '#/components/schemas/ListConqueredPlacesRequestDto'
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ListConqueredPlacesResponseDto"
+                $ref: '#/components/schemas/ListConqueredPlacesResponseDto'
 
   /listPlaceFavorites:
     post:
@@ -469,13 +472,13 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/ListPlaceFavoritesRequestDto"
+              $ref: '#/components/schemas/ListPlaceFavoritesRequestDto'
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ListPlaceFavoritesResponseDto"
+                $ref: '#/components/schemas/ListPlaceFavoritesResponseDto'
 
   /listPlacesInBuilding:
     post:
@@ -493,7 +496,7 @@ paths:
               required:
                 - buildingId
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
@@ -502,14 +505,16 @@ paths:
                   items:
                     type: array
                     items:
-                      $ref: "#/components/schemas/PlaceListItem"
+                      $ref: '#/components/schemas/PlaceListItem'
                 required:
                   - items
 
   /listSearchKeywordsOfPlaceCategory:
     post:
       summary: 특정 카테고리의 점포들을 검색할 수 있게 키워드들을 내려준다.
-      description: "음식점, 카페, 편의점, 병원 같이 키워드를 내려주면 searchPlaces 키워드로 쓸 수 있습니다."
+      description:
+        '음식점, 카페, 편의점, 병원 같이 키워드를 내려주면 searchPlaces 키워드로
+        쓸 수 있습니다.'
       requestBody:
         required: true
         content:
@@ -518,14 +523,14 @@ paths:
               type: object
               properties: {}
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
                 properties:
                   items:
                     items:
-                      $ref: "#/components/schemas/SearchKeywordOfPlaceCategoryDto"
+                      $ref: '#/components/schemas/SearchKeywordOfPlaceCategoryDto'
                     type: array
                 required:
                   - items
@@ -549,7 +554,7 @@ paths:
                 - nickname
                 - password
       responses:
-        "204":
+        '204':
           description: |
             빈 response body를 내려준다.
             대신 Header의 X-SCC-ACCESS-KEY에 access token을 내려준다. (회원가입하면 자동 로그인)
@@ -563,15 +568,15 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/LoginWithAppleRequestDto"
+              $ref: '#/components/schemas/LoginWithAppleRequestDto'
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/LoginResultDto"
-        "400":
-          $ref: "#/components/responses/ApiFailure"
+                $ref: '#/components/schemas/LoginResultDto'
+        '400':
+          $ref: '#/components/responses/ApiFailure'
           description: |-
             에러 코드 설명
             - INVALID_AUTHENTICATION : 클라이언트에서 올려준 토큰 중 일부가 잘못된 경우.
@@ -587,17 +592,17 @@ paths:
               type: object
               properties:
                 kakaoTokens:
-                  $ref: "#/components/schemas/KakaoTokensDto"
+                  $ref: '#/components/schemas/KakaoTokensDto'
               required:
                 - kakaoTokens
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/LoginResultDto"
-        "400":
-          $ref: "#/components/responses/ApiFailure"
+                $ref: '#/components/schemas/LoginResultDto'
+        '400':
+          $ref: '#/components/responses/ApiFailure'
           description: |-
             에러 코드 설명
             - INVALID_AUTHENTICATION : kakaoTokens 중 일부가 잘못된 경우.
@@ -612,9 +617,9 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/RegisterBuildingAccessibilityRequestDto"
+              $ref: '#/components/schemas/RegisterBuildingAccessibilityRequestDto'
       responses:
-        "204":
+        '204':
           description: |
             장소 id를 알 수 없으므로 GetAccessibilityInfo를 내려줄 수 없다.
             따라서 건물 장소 등록 이후에 명시적으로 /getAccessibility API를 별도로 호출하도록 한다.
@@ -639,14 +644,14 @@ paths:
                 - buildingId
                 - comment
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
                 type: object
                 properties:
                   buildingAccessibilityComment:
-                    $ref: "#/components/schemas/BuildingAccessibilityComment"
+                    $ref: '#/components/schemas/BuildingAccessibilityComment'
                     description: 방금 등록된 댓글.
                 required:
                   - buildingAccessibilityComment
@@ -661,13 +666,13 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/RegisterPlaceAccessibilityRequestDto"
+              $ref: '#/components/schemas/RegisterPlaceAccessibilityRequestDto'
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/RegisterPlaceAccessibilityResponseDto"
+                $ref: '#/components/schemas/RegisterPlaceAccessibilityResponseDto'
 
   /registerPlaceAccessibilityComment:
     post:
@@ -689,14 +694,14 @@ paths:
                 - placeId
                 - comment
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
                 type: object
                 properties:
                   placeAccessibilityComment:
-                    $ref: "#/components/schemas/PlaceAccessibilityComment"
+                    $ref: '#/components/schemas/PlaceAccessibilityComment'
                     description: 방금 등록된 댓글.
                 required:
                   - placeAccessibilityComment
@@ -726,7 +731,7 @@ paths:
                 - placeId
                 - reason
       responses:
-        "204": {}
+        '204': {}
 
   /searchExternalAccessibilities:
     post:
@@ -741,18 +746,20 @@ paths:
                 searchText:
                   type: string
                 currentLocation:
-                  $ref: "#/components/schemas/Location"
+                  $ref: '#/components/schemas/Location'
                 distanceMetersLimit:
                   type: integer
                 categories:
                   type: array
-                  description: 조회하고 싶은 접근성 정보 카테고리. 현재 화장실 (TOILET) 만 있음.
+                  description:
+                    조회하고 싶은 접근성 정보 카테고리. 현재 화장실 (TOILET) 만
+                    있음.
                   items:
                     type: string
               required:
                 - distanceMetersLimit
       responses:
-        "200":
+        '200':
           description: 응답 리스트
           content:
             application/json:
@@ -760,7 +767,7 @@ paths:
                 properties:
                   items:
                     items:
-                      $ref: "#/components/schemas/ExternalAccessibility"
+                      $ref: '#/components/schemas/ExternalAccessibility'
                     type: array
                 type: object
 
@@ -779,16 +786,17 @@ paths:
               required:
                 - externalAccessibilityId
       responses:
-        "200":
+        '200':
           description: 해당 접근성 정보를 응답으로 내려준다.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ExternalAccessibility"
+                $ref: '#/components/schemas/ExternalAccessibility'
 
   /searchPlaces:
     post:
-      summary: 점포를 검색한다. sort 가 null 인 경우에는 정확도순을 기본으로 한다.
+      summary:
+        점포를 검색한다. sort 가 null 인 경우에는 정확도순을 기본으로 한다.
       requestBody:
         required: true
         content:
@@ -799,7 +807,7 @@ paths:
                 searchText:
                   type: string
                 currentLocation:
-                  $ref: "#/components/schemas/Location"
+                  $ref: '#/components/schemas/Location'
                 distanceMetersLimit:
                   type: integer
                 siGunGuId:
@@ -807,21 +815,21 @@ paths:
                 eupMyeonDongId:
                   type: string
                 sort:
-                  $ref: "#/components/schemas/SearchPlaceSortDto"
+                  $ref: '#/components/schemas/SearchPlaceSortDto'
                 filters:
-                  $ref: "#/components/schemas/SearchPlaceFilterDto"
+                  $ref: '#/components/schemas/SearchPlaceFilterDto'
               required:
                 - searchText
                 - distanceMetersLimit
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
                 properties:
                   items:
                     items:
-                      $ref: "#/components/schemas/PlaceListItem"
+                      $ref: '#/components/schemas/PlaceListItem'
                     type: array
                 type: object
   /signUp:
@@ -844,7 +852,7 @@ paths:
                 - nickname
                 - password
       responses:
-        "204":
+        '204':
           description: |
             빈 response body를 내려준다.
             대신 Header의 X-SCC-ACCESS-KEY에 access token을 내려준다. (회원가입하면 자동 로그인)
@@ -874,7 +882,7 @@ paths:
                 mobilityTools:
                   type: array
                   items:
-                    $ref: "#/components/schemas/UserMobilityToolDto"
+                    $ref: '#/components/schemas/UserMobilityToolDto'
                 isNewsLetterSubscriptionAgreed:
                   type: boolean
               required:
@@ -882,18 +890,18 @@ paths:
                 - email
                 - mobilityTools
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
                 properties:
                   user:
-                    $ref: "#/components/schemas/User"
+                    $ref: '#/components/schemas/User'
                 required:
                   - user
                 type: object
-        "400":
-          $ref: "#/components/responses/ApiFailure"
+        '400':
+          $ref: '#/components/responses/ApiFailure'
           description: |-
             에러 코드 설명
             - INVALID_NICKNAME : 닉네임이 유효하지 않을 때. e.g. 중복, 2글자 미만 등.
@@ -914,18 +922,18 @@ paths:
               required:
                 - pushToken
       responses:
-        "200": {}
+        '200': {}
 
   /getHomeBanners:
     post:
       summary: 홈에서 보여줄 배너 정보 목록을 가져온다.
       operationId: getHomeBanners
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/GetHomeBannersResponseDto"
+                $ref: '#/components/schemas/GetHomeBannersResponseDto'
 
   /validateUserProfile:
     post:
@@ -939,13 +947,15 @@ paths:
               properties:
                 nickname:
                   type: string
-                  description: 유효성을 검사할 닉네임. null인 경우 유효한 것으로 간주
+                  description:
+                    유효성을 검사할 닉네임. null인 경우 유효한 것으로 간주
                 email:
                   type: string
-                  description: 유효성을 검사할 이메일. null인 경우 유효한 것으로 간주
+                  description:
+                    유효성을 검사할 이메일. null인 경우 유효한 것으로 간주
               required: []
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
@@ -953,13 +963,17 @@ paths:
                 properties:
                   nicknameErrorMessage:
                     type: string
-                    description: 닉네임이 유효하지 않은 경우 에러 메시지, 유효하거나 null인 경우 null
+                    description:
+                      닉네임이 유효하지 않은 경우 에러 메시지, 유효하거나 null인
+                      경우 null
                   emailErrorMessage:
                     type: string
-                    description: 이메일이 유효하지 않은 경우 에러 메시지, 유효하거나 null인 경우 null
+                    description:
+                      이메일이 유효하지 않은 경우 에러 메시지, 유효하거나 null인
+                      경우 null
                 required: []
-        "400":
-          $ref: "#/components/responses/ApiFailure"
+        '400':
+          $ref: '#/components/responses/ApiFailure'
 
 components:
   # Security schemes
@@ -978,20 +992,20 @@ components:
       type: object
       properties:
         buildingAccessibility:
-          $ref: "#/components/schemas/BuildingAccessibility"
+          $ref: '#/components/schemas/BuildingAccessibility'
           description: 정보가 아직 채워지지 않았으면 null.
         buildingAccessibilityComments:
           type: array
           items:
-            $ref: "#/components/schemas/BuildingAccessibilityComment"
+            $ref: '#/components/schemas/BuildingAccessibilityComment'
           description: 정보가 아직 채워지지 않았으면 empty list.
         placeAccessibility:
-          $ref: "#/components/schemas/PlaceAccessibility"
+          $ref: '#/components/schemas/PlaceAccessibility'
           description: 정보가 아직 채워지지 않았으면 null.
         placeAccessibilityComments:
           type: array
           items:
-            $ref: "#/components/schemas/PlaceAccessibilityComment"
+            $ref: '#/components/schemas/PlaceAccessibilityComment'
           description: 정보가 아직 채워지지 않았으면 empty list.
         hasOtherPlacesToRegisterInBuilding:
           type: boolean
@@ -1014,7 +1028,7 @@ components:
       type: object
       properties:
         user:
-          $ref: "#/components/schemas/AccessibilityRegistererDto"
+          $ref: '#/components/schemas/AccessibilityRegistererDto'
         conqueredCount:
           type: integer
           description: 접근성 정보를 등록한 장소의 수.
@@ -1089,7 +1103,7 @@ components:
           type: string
           description: 건물의 human-readable한 주소.
         location:
-          $ref: "#/components/schemas/Location"
+          $ref: '#/components/schemas/Location'
           description: 건물의 위경도.
       required:
         - id
@@ -1101,9 +1115,9 @@ components:
         id:
           type: string
         entranceStairInfo:
-          $ref: "#/components/schemas/StairInfo"
+          $ref: '#/components/schemas/StairInfo'
         entranceStairHeightLevel:
-          $ref: "#/components/schemas/StairHeightLevel"
+          $ref: '#/components/schemas/StairHeightLevel'
         entranceImageUrls:
           deprecated: true
           type: array
@@ -1112,19 +1126,19 @@ components:
         entranceImages:
           type: array
           items:
-            $ref: "#/components/schemas/ImageDto"
+            $ref: '#/components/schemas/ImageDto'
         entranceDoorTypes:
           type: array
           items:
-            $ref: "#/components/schemas/EntranceDoorType"
+            $ref: '#/components/schemas/EntranceDoorType'
         hasSlope:
           type: boolean
         hasElevator:
           type: boolean
         elevatorStairInfo:
-          $ref: "#/components/schemas/StairInfo"
+          $ref: '#/components/schemas/StairInfo'
         elevatorStairHeightLevel:
-          $ref: "#/components/schemas/StairHeightLevel"
+          $ref: '#/components/schemas/StairHeightLevel'
         elevatorImageUrls:
           deprecated: true
           type: array
@@ -1133,22 +1147,24 @@ components:
         elevatorImages:
           type: array
           items:
-            $ref: "#/components/schemas/ImageDto"
+            $ref: '#/components/schemas/ImageDto'
         buildingId:
           type: string
         registeredUserName:
           type: string
           description: 익명으로 등록되었으면 null.
         challengeCrusherGroup:
-          $ref: "#/components/schemas/ChallengeCrusherGroupDto"
+          $ref: '#/components/schemas/ChallengeCrusherGroupDto'
         isUpvoted:
           type: boolean
           description: 유저가 이 접근성 정보에 '도움이 돼요'를 표시했는지 여부.
         totalUpvoteCount:
           type: integer
-          description: 이 접근성 정보가 '도움이 돼요'를 받은 총 횟수. 이 숫자에 따라 버튼 텍스트에 '도움이 돼요'나 '정확한 정보에요'를 사용한다.
+          description:
+            이 접근성 정보가 '도움이 돼요'를 받은 총 횟수. 이 숫자에 따라 버튼
+            텍스트에 '도움이 돼요'나 '정확한 정보에요'를 사용한다.
         createdAt:
-          $ref: "#/components/schemas/EpochMillisTimestamp"
+          $ref: '#/components/schemas/EpochMillisTimestamp'
       required:
         - id
         - entranceStairInfo
@@ -1170,12 +1186,12 @@ components:
         buildingId:
           type: string
         user:
-          $ref: "#/components/schemas/AccessibilityRegistererDto"
+          $ref: '#/components/schemas/AccessibilityRegistererDto'
           description: 익명으로 달린 댓글이면 null.
         comment:
           type: string
         createdAt:
-          $ref: "#/components/schemas/EpochMillisTimestamp"
+          $ref: '#/components/schemas/EpochMillisTimestamp'
       required:
         - id
         - buildingId
@@ -1206,15 +1222,15 @@ components:
         name:
           type: string
         status:
-          $ref: "#/components/schemas/ChallengeStatusDto"
+          $ref: '#/components/schemas/ChallengeStatusDto'
         isPublic:
           type: boolean
         isComplete:
           type: boolean
         startsAt:
-          $ref: "#/components/schemas/EpochMillisTimestamp"
+          $ref: '#/components/schemas/EpochMillisTimestamp'
         endsAt:
-          $ref: "#/components/schemas/EpochMillisTimestamp"
+          $ref: '#/components/schemas/EpochMillisTimestamp'
         goal:
           type: integer
           format: int32
@@ -1232,7 +1248,7 @@ components:
         description:
           type: string
         crusherGroup:
-          $ref: "#/components/schemas/ChallengeCrusherGroupDto"
+          $ref: '#/components/schemas/ChallengeCrusherGroupDto'
       required:
         - id
         - name
@@ -1276,7 +1292,7 @@ components:
       type: object
       properties:
         icon:
-          $ref: "#/components/schemas/ImageDto"
+          $ref: '#/components/schemas/ImageDto'
         name:
           type: string
       required:
@@ -1286,7 +1302,7 @@ components:
       type: object
       properties:
         authTokens:
-          $ref: "#/components/schemas/AuthTokensDto"
+          $ref: '#/components/schemas/AuthTokensDto'
       required:
         - authTokens
 
@@ -1305,7 +1321,7 @@ components:
           type: integer
           format: int64
         placeFavorite:
-          $ref: "#/components/schemas/PlaceFavorite"
+          $ref: '#/components/schemas/PlaceFavorite'
       required:
         - totalPlaceFavoriteCount
         - placeFavorite
@@ -1370,7 +1386,7 @@ components:
         placeId:
           type: string
         createdAt:
-          $ref: "#/components/schemas/EpochMillisTimestamp"
+          $ref: '#/components/schemas/EpochMillisTimestamp'
       required:
         - userId
         - placeId
@@ -1390,7 +1406,7 @@ components:
           description: 이번주 정복한 요일들 일요일(0) - 토요일(6)
           type: array
           items:
-            $ref: "#/components/schemas/DayOfWeek"
+            $ref: '#/components/schemas/DayOfWeek'
       required:
         - todayConqueredCount
         - thisMonthConqueredCount
@@ -1408,17 +1424,18 @@ components:
       type: object
       properties:
         challenge:
-          $ref: "#/components/schemas/ChallengeDto"
+          $ref: '#/components/schemas/ChallengeDto'
         myRank:
-          $ref: "#/components/schemas/ChallengeRankDto"
+          $ref: '#/components/schemas/ChallengeRankDto'
         ranks:
           type: array
           items:
-            $ref: "#/components/schemas/ChallengeRankDto"
+            $ref: '#/components/schemas/ChallengeRankDto'
         contributionCountForNextRank:
           type: integer
           format: int64
-          description: 다음 랭크에 도달하기 위해 필요한 contribution 수. ex) 10개 정복
+          description:
+            다음 랭크에 도달하기 위해 필요한 contribution 수. ex) 10개 정복
         hasJoined:
           type: boolean
           description: 내가 참여하고 있는지에 대한 정보
@@ -1473,7 +1490,7 @@ components:
       type: object
       properties:
         user:
-          $ref: "#/components/schemas/User"
+          $ref: '#/components/schemas/User'
         flags:
           type: array
           items:
@@ -1513,12 +1530,12 @@ components:
       type: object
       properties:
         challenge:
-          $ref: "#/components/schemas/ChallengeDto"
+          $ref: '#/components/schemas/ChallengeDto'
         ranks:
           type: array
           description: 10위권까지의 랭킹 정보
           items:
-            $ref: "#/components/schemas/ChallengeRankDto"
+            $ref: '#/components/schemas/ChallengeRankDto'
       required:
         - challenge
         - ranks
@@ -1533,9 +1550,9 @@ components:
         idToken:
           type: string
         accessTokenExpiresAt:
-          $ref: "#/components/schemas/EpochMillisTimestamp"
+          $ref: '#/components/schemas/EpochMillisTimestamp'
         refreshTokenExpiresAt:
-          $ref: "#/components/schemas/EpochMillisTimestamp"
+          $ref: '#/components/schemas/EpochMillisTimestamp'
       required:
         - accessToken
         - refreshToken
@@ -1549,16 +1566,16 @@ components:
         name:
           type: string
         status:
-          $ref: "#/components/schemas/ChallengeStatusDto"
+          $ref: '#/components/schemas/ChallengeStatusDto'
         startsAt:
-          $ref: "#/components/schemas/EpochMillisTimestamp"
+          $ref: '#/components/schemas/EpochMillisTimestamp'
         endsAt:
-          $ref: "#/components/schemas/EpochMillisTimestamp"
+          $ref: '#/components/schemas/EpochMillisTimestamp'
         hasJoined:
           type: boolean
           description: 내가 참여중인지 여부
         createdAt:
-          $ref: "#/components/schemas/EpochMillisTimestamp"
+          $ref: '#/components/schemas/EpochMillisTimestamp'
       required:
         - id
         - name
@@ -1573,7 +1590,7 @@ components:
         statuses:
           type: array
           items:
-            $ref: "#/components/schemas/ChallengeStatusDto"
+            $ref: '#/components/schemas/ChallengeStatusDto'
         nextToken:
           type: string
         limit:
@@ -1583,7 +1600,8 @@ components:
         - status
 
     ListChallengesResponseDto:
-      description: filter 가 없으면 진행중인, 참여중인 챌린지를 우선적으로 보여준다.
+      description:
+        filter 가 없으면 진행중인, 참여중인 챌린지를 우선적으로 보여준다.
       type: object
       properties:
         totalCount:
@@ -1594,7 +1612,7 @@ components:
         items:
           type: array
           items:
-            $ref: "#/components/schemas/ListChallengesItemDto"
+            $ref: '#/components/schemas/ListChallengesItemDto'
       required:
         - totalCount
         - items
@@ -1618,11 +1636,12 @@ components:
           description: 정복한 장소의 전체 갯수
         nextToken:
           type: string
-          description: 다음 페이지 정보. 없으면 더 이상 요청할 값이 없음을 의미한다.
+          description:
+            다음 페이지 정보. 없으면 더 이상 요청할 값이 없음을 의미한다.
         items:
           type: array
           items:
-            $ref: "#/components/schemas/PlaceListItem"
+            $ref: '#/components/schemas/PlaceListItem'
       required:
         - totalNumberOfItems
         - items
@@ -1646,11 +1665,12 @@ components:
           format: int64
         nextToken:
           type: string
-          description: 다음 페이지 정보. 없으면 더 이상 요청할 값이 없음을 의미한다.
+          description:
+            다음 페이지 정보. 없으면 더 이상 요청할 값이 없음을 의미한다.
         items:
           type: array
           items:
-            $ref: "#/components/schemas/PlaceListItem"
+            $ref: '#/components/schemas/PlaceListItem'
       required:
         - totalNumberOfItems
         - items
@@ -1673,9 +1693,9 @@ components:
       type: object
       properties:
         authTokens:
-          $ref: "#/components/schemas/AuthTokensDto"
+          $ref: '#/components/schemas/AuthTokensDto'
         user:
-          $ref: "#/components/schemas/User"
+          $ref: '#/components/schemas/User'
       required:
         - authTokens
         - user
@@ -1703,7 +1723,7 @@ components:
           type: string
           description: 점포의 human-readable한 주소.
         location:
-          $ref: "#/components/schemas/Location"
+          $ref: '#/components/schemas/Location'
           description: 점포의 위경도.
         category:
           type: PlaceCategoryDto
@@ -1730,10 +1750,12 @@ components:
         isFirstFloor:
           type: boolean
           deprecated: true
-          description: "1층인지 여부. 240401 출시한 버전부터 이 필드는 사용하지 않고, floors 필드를 사용하도록 한다."
+          description:
+            '1층인지 여부. 240401 출시한 버전부터 이 필드는 사용하지 않고,
+            floors 필드를 사용하도록 한다.'
         isStairOnlyOption:
           type: boolean
-          description: "다른 층으로 가는 방법이 계단만 있는지 여부"
+          description: '다른 층으로 가는 방법이 계단만 있는지 여부'
         imageUrls:
           deprecated: true
           type: array
@@ -1742,17 +1764,17 @@ components:
         images:
           type: array
           items:
-            $ref: "#/components/schemas/ImageDto"
+            $ref: '#/components/schemas/ImageDto'
         stairInfo:
-          $ref: "#/components/schemas/StairInfo"
+          $ref: '#/components/schemas/StairInfo'
         stairHeightLevel:
-          $ref: "#/components/schemas/StairHeightLevel"
+          $ref: '#/components/schemas/StairHeightLevel'
         hasSlope:
           type: boolean
         entranceDoorTypes:
           type: array
           items:
-            $ref: "#/components/schemas/EntranceDoorType"
+            $ref: '#/components/schemas/EntranceDoorType'
         registeredUserName:
           type: string
           description: 익명으로 등록되었으면 null.
@@ -1762,16 +1784,17 @@ components:
           properties:
             isLastInBuilding:
               type: boolean
-              description: 장소가 포함된 건물 중 마지막으로 남은 장소 정보인지 여부.
+              description:
+                장소가 포함된 건물 중 마지막으로 남은 장소 정보인지 여부.
           required:
             - isLastInBuilding
         challengeCrusherGroup:
-          $ref: "#/components/schemas/ChallengeCrusherGroupDto"
+          $ref: '#/components/schemas/ChallengeCrusherGroupDto'
         isUpvoted:
           type: boolean
           description: 유저가 이 접근성 정보에 '도움이 돼요'를 표시했는지 여부.
         createdAt:
-          $ref: "#/components/schemas/EpochMillisTimestamp"
+          $ref: '#/components/schemas/EpochMillisTimestamp'
       required:
         - id
         - placeId
@@ -1789,12 +1812,12 @@ components:
         placeId:
           type: string
         user:
-          $ref: "#/components/schemas/AccessibilityRegistererDto"
+          $ref: '#/components/schemas/AccessibilityRegistererDto'
           description: 익명으로 달린 댓글이면 null.
         comment:
           type: string
         createdAt:
-          $ref: "#/components/schemas/EpochMillisTimestamp"
+          $ref: '#/components/schemas/EpochMillisTimestamp'
       required:
         - id
         - placeId
@@ -1835,12 +1858,12 @@ components:
           type: string
           description: 장소의 human-readable한 주소.
         location:
-          $ref: "#/components/schemas/Location"
+          $ref: '#/components/schemas/Location'
         category:
           type: string
           description: 장소의 종류
         toilet_details:
-          $ref: "#/components/schemas/ToiletAccessibilityDetails"
+          $ref: '#/components/schemas/ToiletAccessibilityDetails'
       required:
         - id
         - name
@@ -1879,9 +1902,9 @@ components:
       type: object
       properties:
         place:
-          $ref: "#/components/schemas/Place"
+          $ref: '#/components/schemas/Place'
         building:
-          $ref: "#/components/schemas/Building"
+          $ref: '#/components/schemas/Building'
         hasBuildingAccessibility:
           type: boolean
         hasPlaceAccessibility:
@@ -1893,7 +1916,7 @@ components:
           type: boolean
           description: 접근성 정보를 등록할 수 있는지 여부.
         accessibilityInfo:
-          $ref: "#/components/schemas/CompactAccessibilityInfoDto"
+          $ref: '#/components/schemas/CompactAccessibilityInfoDto'
 
       required:
         - place
@@ -1915,7 +1938,7 @@ components:
         images:
           type: array
           items:
-            $ref: "#/components/schemas/ImageDto"
+            $ref: '#/components/schemas/ImageDto'
         hasSlope:
           type: boolean
         floors:
@@ -1923,7 +1946,7 @@ components:
           items:
             type: integer
         createdAt:
-          $ref: "#/components/schemas/EpochMillisTimestamp"
+          $ref: '#/components/schemas/EpochMillisTimestamp'
       required:
         - images
         - imageUrls
@@ -1937,9 +1960,9 @@ components:
         buildingId:
           type: string
         entranceStairInfo:
-          $ref: "#/components/schemas/StairInfo"
+          $ref: '#/components/schemas/StairInfo'
         entranceStairHeightLevel:
-          $ref: "#/components/schemas/StairHeightLevel"
+          $ref: '#/components/schemas/StairHeightLevel'
         entranceImageUrls:
           type: array
           items:
@@ -1947,15 +1970,15 @@ components:
         entranceDoorTypes:
           type: array
           items:
-            $ref: "#/components/schemas/EntranceDoorType"
+            $ref: '#/components/schemas/EntranceDoorType'
         hasSlope:
           type: boolean
         hasElevator:
           type: boolean
         elevatorStairInfo:
-          $ref: "#/components/schemas/StairInfo"
+          $ref: '#/components/schemas/StairInfo'
         elevatorStairHeightLevel:
-          $ref: "#/components/schemas/StairHeightLevel"
+          $ref: '#/components/schemas/StairHeightLevel'
         elevatorImageUrls:
           type: array
           items:
@@ -1982,25 +2005,27 @@ components:
             type: integer
         isStairOnlyOption:
           type: boolean
-          description: "다른 층으로 가는 방법이 계단만 있는지 여부"
+          description: '다른 층으로 가는 방법이 계단만 있는지 여부'
         isFirstFloor:
           type: boolean
           deprecated: true
-          description: "1층인지 여부. 240401 출시한 버전부터 이 필드는 사용하지 않고, floors 필드를 사용하도록 한다."
+          description:
+            '1층인지 여부. 240401 출시한 버전부터 이 필드는 사용하지 않고,
+            floors 필드를 사용하도록 한다.'
         imageUrls:
           type: array
           items:
             type: string
         stairInfo:
-          $ref: "#/components/schemas/StairInfo"
+          $ref: '#/components/schemas/StairInfo'
         stairHeightLevel:
-          $ref: "#/components/schemas/StairHeightLevel"
+          $ref: '#/components/schemas/StairHeightLevel'
         hasSlope:
           type: boolean
         entranceDoorTypes:
           type: array
           items:
-            $ref: "#/components/schemas/EntranceDoorType"
+            $ref: '#/components/schemas/EntranceDoorType'
         comment:
           type: string
       required:
@@ -2013,7 +2038,7 @@ components:
       type: object
       properties:
         accessibilityInfo:
-          $ref: "#/components/schemas/AccessibilityInfoDto"
+          $ref: '#/components/schemas/AccessibilityInfoDto'
         registeredUserOrder:
           type: integer
           description: "'n번째 정복자'를 표시해주기 위한 값."
@@ -2025,10 +2050,10 @@ components:
       type: object
       properties:
         category:
-          $ref: "#/components/schemas/PlaceCategoryDto"
+          $ref: '#/components/schemas/PlaceCategoryDto'
         keyword:
           type: string
-          description: "검색창에 들어가는 문자열. ex) 음식점, 병원, 카페"
+          description: '검색창에 들어가는 문자열. ex) 음식점, 병원, 카페'
       required:
         - category
         - keyword
@@ -2045,13 +2070,18 @@ components:
       properties:
         maxAccessibilityScore:
           type: double
-          description: 접근성 점수의 최대값. 이 값 이하의 점수를 가진 장소만 반환한다. null이면 필터링하지 않는다.
+          description:
+            접근성 점수의 최대값. 이 값 이하의 점수를 가진 장소만 반환한다.
+            null이면 필터링하지 않는다.
         hasSlope:
           type: boolean
-          description: 경사로가 있는/없는 장소만 반환한다. null이면 필터링하지 않는다.
+          description:
+            경사로가 있는/없는 장소만 반환한다. null이면 필터링하지 않는다.
         isRegistered:
           type: boolean
-          description: 접근성 정보가 등록된/등록되지 않은 장소만 반환한다. null이면 필터링하지 않는다.
+          description:
+            접근성 정보가 등록된/등록되지 않은 장소만 반환한다. null이면
+            필터링하지 않는다.
 
     SiGunGu:
       description: 시군구를 표현하기 위한 모델.
@@ -2097,7 +2127,7 @@ components:
         mobilityTools:
           type: array
           items:
-            $ref: "#/components/schemas/UserMobilityToolDto"
+            $ref: '#/components/schemas/UserMobilityToolDto'
         isNewsLetterSubscriptionAgreed:
           type: boolean
           description: 뉴스레터 구독 동의 여부
@@ -2128,14 +2158,14 @@ components:
         imageWidth:
           type: integer
           format: int32
-          description: "원본 이미지의 width"
+          description: '원본 이미지의 width'
         imageHeight:
           type: integer
           format: int32
-          description: "원본 이미지의 height"
+          description: '원본 이미지의 height'
         thumbnailUrl:
           type: string
-          description: "아직 썸네일이 생성되지 않았다면 null"
+          description: '아직 썸네일이 생성되지 않았다면 null'
       required:
         - imageUrl
 
@@ -2156,7 +2186,7 @@ components:
         banners:
           type: array
           items:
-            $ref: "#/components/schemas/HomeBannerDto"
+            $ref: '#/components/schemas/HomeBannerDto'
       required:
         - banners
 
@@ -2193,4 +2223,4 @@ components:
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/ApiErrorResponse"
+            $ref: '#/components/schemas/ApiErrorResponse'
