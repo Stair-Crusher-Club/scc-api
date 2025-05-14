@@ -122,6 +122,10 @@ paths:
                   description: 삭제할 건물 정보의 아이디
               required:
                 - buildingAccessibilityId
+      responses:
+        '204': {}
+        '400':
+          $ref: '#/components/responses/ApiFailure'
 
   /deletePlaceAccessibility:
     post:
@@ -141,6 +145,10 @@ paths:
                   description: 삭제할 장소 정보의 아이디
               required:
                 - placeAccessibilityId
+      responses:
+        '204': {}
+        '400':
+          $ref: '#/components/responses/ApiFailure'
 
   /deletePlaceFavorite:
     post:
