@@ -81,6 +81,7 @@ paths:
 
   /deleteAccessibility:
     post:
+      deprecated: true
       summary: |
         등록한 접근성 정보를 삭제한다.
         기본적으로는 장소 정보만 삭제하지만, 삭제하는 장소 정보가 해당 건물의 마지막 장소 정보일 경우 건물 정보도 함께 삭제한다.
@@ -102,6 +103,44 @@ paths:
         '204': {}
         '400':
           $ref: '#/components/responses/ApiFailure'
+
+  /deleteBuildingAccessibility:
+    post:
+      summary: |
+        등록한 건물의 접근성 정보를 삭제한다.
+      security:
+        - Identified: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                buildingAccessibilityId:
+                  type: string
+                  description: 삭제할 건물 정보의 아이디
+              required:
+                - buildingAccessibilityId
+
+  /deletePlaceAccessibility:
+    post:
+      summary: |
+        등록한 장소의 접근성 정보를 삭제한다.
+      security:
+        - Identified: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                placeAccessibilityId:
+                  type: string
+                  description: 삭제할 장소 정보의 아이디
+              required:
+                - placeAccessibilityId
 
   /deletePlaceFavorite:
     post:
