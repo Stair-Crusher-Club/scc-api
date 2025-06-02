@@ -769,7 +769,7 @@ paths:
                   type: string
                   description: 신고할 장소의 아이디
                 reason:
-                  type: string
+                  $ref: '#/components/schemas/AccessibilityReportReason'
                   description: 신고 사유
                 detail:
                   type: string
