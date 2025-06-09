@@ -64,7 +64,9 @@ paths:
 
   /clubQuests/create/dryRun:
     post:
-      summary: 주어진 조건(중심 위치, 반경, 퀘스트 분할 숫자 등)으로 퀘스트를 생성하면 어떻게 생성될지 시뮬레이션하여 미리 확인한다.
+      summary:
+        주어진 조건(중심 위치, 반경, 퀘스트 분할 숫자 등)으로 퀘스트를 생성하면
+        어떻게 생성될지 시뮬레이션하여 미리 확인한다.
       requestBody:
         required: true
         content:
@@ -144,7 +146,9 @@ paths:
 
   /clubQuests/createAndNotifyDailyClubQuest:
     post:
-      summary: 구글 폼으로 입력 받은 정보를 기반으로 일상 퀘스트를 즉시 생성하고 알림을 보낸다.
+      summary:
+        구글 폼으로 입력 받은 정보를 기반으로 일상 퀘스트를 즉시 생성하고 알림을
+        보낸다.
       operationId: createAndNotifyDailyClubQuest
       requestBody:
         required: true
@@ -507,7 +511,9 @@ paths:
   /places/startCrawling:
     post:
       operationId: startPlaceCrawling
-      summary: 지정된 지역 내의 장소를 지도 API를 통해 크롤링해서 계단정복지도 서버 DB에 캐싱한다.
+      summary:
+        지정된 지역 내의 장소를 지도 API를 통해 크롤링해서 계단정복지도 서버
+        DB에 캐싱한다.
       requestBody:
         required: true
         content:
@@ -732,7 +738,8 @@ components:
         - CONVENIENCE_STORE
 
     ClubQuestCreateDryRunResultItemDTO:
-      description: 퀘스트 생성 시뮬레이션 결과. 각 퀘스트마다 1개의 아이템이 반환된다.
+      description:
+        퀘스트 생성 시뮬레이션 결과. 각 퀘스트마다 1개의 아이템이 반환된다.
       properties:
         questNamePostfix:
           type: string
@@ -1113,41 +1120,17 @@ components:
       properties:
         name:
           type: string
-        isPublic:
-          type: boolean
-        invitationCode:
-          type: string
         passcode:
           type: string
-        startsAtMillis:
-          type: integer
-          format: int64
         endsAtMillis:
           type: integer
           format: int64
-        goal:
-          type: integer
-          format: int32
-        milestones:
-          type: array
-          items:
-            type: integer
-            format: int32
-        conditions:
-          type: array
-          items:
-            $ref: '#/components/schemas/AdminChallengeConditionDTO'
         description:
           type: string
         crusherGroup:
           $ref: '#/components/schemas/AdminCrusherGroupDto'
       required:
         - name
-        - isPublic
-        - startsAtMillis
-        - goal
-        - milestones
-        - conditions
         - description
 
     AdminUpdatePlaceAccessibilityRequestDTO:
@@ -1483,7 +1466,9 @@ components:
           description: 업로드할 이미지 수.
         filenameExtension:
           type: string
-          description: 업로드할 이미지의 확장자. '.'을 붙이지 말아야 한다. e.g. png, jpeg 등.
+          description:
+            업로드할 이미지의 확장자. '.'을 붙이지 말아야 한다. e.g. png, jpeg
+            등.
       required:
         - purposeType
         - count
