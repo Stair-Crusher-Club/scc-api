@@ -1189,41 +1189,15 @@ components:
       properties:
         name:
           type: string
-        isPublic:
-          type: boolean
-        invitationCode:
-          type: string
-        passcode:
-          type: string
-        startsAtMillis:
-          type: integer
-          format: int64
         endsAtMillis:
           type: integer
           format: int64
-        goal:
-          type: integer
-          format: int32
-        milestones:
-          type: array
-          items:
-            type: integer
-            format: int32
-        conditions:
-          type: array
-          items:
-            $ref: '#/components/schemas/AdminChallengeConditionDTO'
         description:
           type: string
         crusherGroup:
           $ref: '#/components/schemas/AdminCrusherGroupDto'
       required:
         - name
-        - isPublic
-        - startsAtMillis
-        - goal
-        - milestones
-        - conditions
         - description
 
     AdminUpdatePlaceAccessibilityRequestDTO:
