@@ -7,6 +7,7 @@ on:
       - synchronize
     paths:
       - 'api-spec.yaml'
+      - 'admin-api-spec.yaml'
 
 jobs:
   lint-and-format:
