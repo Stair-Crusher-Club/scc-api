@@ -586,7 +586,7 @@ paths:
   /listSearchPlacePresets:
     post:
       summary: 특정 조건의 검색을 할 수 있는 추천 값을 내려준다.
-      description: ''
+      description: '현재는 추천 키워드만 내려준다'
       requestBody:
         required: true
         content:
@@ -1747,18 +1747,12 @@ components:
     ListSearchPlacePresetsResponseDto:
       type: object
       properties:
-        nearbyPresets:
-          description: '주변 추천 프리셋'
-          type: array
-          items:
-            $ref: '#/components/schemas/SearchPlacePresetDto'
         keywordPresets:
           description: '추천 키워드'
           type: array
           items:
             $ref: '#/components/schemas/SearchPlacePresetDto'
       required:
-        - nearbyPresets
         - keywordPresets
 
     Location:
