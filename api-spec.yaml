@@ -583,6 +583,24 @@ paths:
                   - items
                 type: object
 
+  /listSearchPlacePresets:
+    post:
+      summary: 특정 조건의 검색을 할 수 있는 추천 값을 내려준다.
+      description: ''
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties: {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListSearchPlacePresetsResponseDto'
+
   /login:
     post:
       summary: 로그인을 한다.
@@ -1726,6 +1744,23 @@ components:
         - totalNumberOfItems
         - items
 
+    ListSearchPlacePresetsResponseDto:
+      type: object
+      properties:
+        nearbyPresets:
+          description: '주변 추천 프리셋'
+          type: array
+          items:
+            $ref: '#/components/schemas/SearchPlacePresetDto'
+        keywordPresets:
+          description: '추천 키워드'
+          type: array
+          items:
+            $ref: '#/components/schemas/SearchPlacePresetDto'
+      required:
+        - nearbyPresets
+        - keywordPresets
+
     Location:
       description: 위치를 위경도로 표현하기 위한 모델.
       type: object
@@ -2111,6 +2146,27 @@ components:
       required:
         - category
         - keyword
+
+    SearchPlacePresetDto:
+      type: object
+      properties:
+        id:
+          type: string
+        description:
+          type: string
+        searchText:
+          type: string
+        distanceMetersLimit:
+          type: integer
+        sort:
+          $ref: '#/components/schemas/SearchPlaceSortDto'
+        filters:
+          $ref: '#/components/schemas/SearchPlaceFilterDto'
+      required:
+        - id
+        - description
+        - searchText
+        - distanceMetersLimit
 
     SearchPlaceSortDto:
       type: string
