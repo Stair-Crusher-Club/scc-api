@@ -2152,10 +2152,6 @@ components:
           type: string
         distanceMetersLimit:
           type: integer
-        sort:
-          $ref: '#/components/schemas/SearchPlaceSortDto'
-        filters:
-          $ref: '#/components/schemas/SearchPlaceFilterDto'
       required:
         - id
         - description
