@@ -2150,13 +2150,10 @@ components:
           type: string
         searchText:
           type: string
-        distanceMetersLimit:
-          type: integer
       required:
         - id
         - description
         - searchText
-        - distanceMetersLimit
 
     SearchPlaceSortDto:
       type: string
