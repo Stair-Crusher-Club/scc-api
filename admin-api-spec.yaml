@@ -694,7 +694,7 @@ paths:
       responses:
         '200': {}
 
-  /notifications/pushSchedule:
+  /notifications/pushSchedules:
     get:
       summary: 커서링 방식의 푸시 알림 조회.
       operationId: adminGetPushSchedules
@@ -719,7 +719,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/AdminListPushNotificationSchedulesResponseDTO'
 
-  /notifications/pushSchedule/{scheduleId}:
+  /notifications/pushSchedules/{scheduleId}:
     get:
       summary: 푸시 알림 스케쥴을 조회한다.
       parameters:
@@ -1593,11 +1593,6 @@ components:
       properties:
         id:
           type: string
-        groupId:
-          type: string
-          description:
-            '타겟 유저의 수(1000명)에 따라 청킹될 수 있다. 함께 생성됐지만
-            청킹된 스케쥴을 묶는 id'
         scheduledAt:
           $ref: '#/components/schemas/EpochMillisTimestamp'
         sentAt:
@@ -1608,16 +1603,14 @@ components:
           type: string
         deepLink:
           type: string
-        userIds:
-          type: array
-          items:
-            type: string
+        targetUsersCount:
+          type: integer
+          format: int32
       required:
         - id
-        - groupId
         - scheduledAt
         - body
-        - userIds
+        - targetUsersCount
 
     AdminListPushNotificationSchedulesResponseDTO:
       type: object
