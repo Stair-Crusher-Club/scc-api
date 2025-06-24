@@ -197,6 +197,30 @@ paths:
               schema:
                 $ref: '#/components/schemas/AccessibilityInfoDto'
 
+  /getNearbyAccessibilityStatus:
+    post:
+      summary: 주변 정복 상태를 조회한다.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                currentLocation:
+                  $ref: '#/components/schemas/Location'
+                distanceMetersLimit:
+                  type: integer
+      response:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  conqueredCount:
+                    type: integer
+
   /getPlaceWithBuilding:
     post:
       summary: 건물 & 점포 정보를 조회한다.
