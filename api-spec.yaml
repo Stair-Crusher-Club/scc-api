@@ -211,7 +211,7 @@ paths:
                   $ref: '#/components/schemas/Location'
                 distanceMetersLimit:
                   type: integer
-      response:
+      responses:
         '200':
           content:
             application/json:
