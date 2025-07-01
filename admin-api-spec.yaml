@@ -523,7 +523,7 @@ paths:
       responses:
         '204': {}
 
-  /places/searchPreset:
+  /places/searchPresets:
     get:
       operationId: getSearchPreset
       summary: 등록된 모든 추천 검색어를 가져온다.
@@ -552,7 +552,7 @@ paths:
       responses:
         '204': {}
 
-  /places/searchPreset/{id}:
+  /places/searchPresets/{id}:
     parameters:
       - in: path
         name: id
