@@ -197,6 +197,30 @@ paths:
               schema:
                 $ref: '#/components/schemas/AccessibilityInfoDto'
 
+  /getNearbyAccessibilityStatus:
+    post:
+      summary: 주변 정복 상태를 조회한다.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                currentLocation:
+                  $ref: '#/components/schemas/Location'
+                distanceMetersLimit:
+                  type: integer
+      response:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  conqueredCount:
+                    type: integer
+
   /getPlaceWithBuilding:
     post:
       summary: 건물 & 점포 정보를 조회한다.
@@ -582,6 +606,24 @@ paths:
                 required:
                   - items
                 type: object
+
+  /listSearchPlacePresets:
+    post:
+      summary: 특정 조건의 검색을 할 수 있는 추천 값을 내려준다.
+      description: '현재는 추천 키워드만 내려준다'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties: {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListSearchPlacePresetsResponseDto'
 
   /login:
     post:
@@ -1726,6 +1768,17 @@ components:
         - totalNumberOfItems
         - items
 
+    ListSearchPlacePresetsResponseDto:
+      type: object
+      properties:
+        keywordPresets:
+          description: '추천 키워드'
+          type: array
+          items:
+            $ref: '#/components/schemas/SearchPlacePresetDto'
+      required:
+        - keywordPresets
+
     Location:
       description: 위치를 위경도로 표현하기 위한 모델.
       type: object
@@ -2111,6 +2164,20 @@ components:
       required:
         - category
         - keyword
+
+    SearchPlacePresetDto:
+      type: object
+      properties:
+        id:
+          type: string
+        description:
+          type: string
+        searchText:
+          type: string
+      required:
+        - id
+        - description
+        - searchText
 
     SearchPlaceSortDto:
       type: string
