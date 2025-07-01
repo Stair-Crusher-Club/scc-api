@@ -211,6 +211,9 @@ paths:
                   $ref: '#/components/schemas/Location'
                 distanceMetersLimit:
                   type: integer
+              required:
+                - currentLocation
+                - distanceMetersLimit
       responses:
         '200':
           content:
