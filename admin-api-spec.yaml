@@ -523,6 +523,49 @@ paths:
       responses:
         '204': {}
 
+  /places/searchPreset:
+    get:
+      operationId: getSearchPreset
+      summary: 등록된 모든 추천 검색어를 가져온다.
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  presets:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/AdminSearchPlacePresetDTO'
+                required:
+                  - presets
+    post:
+      operationId: createSearchPreset
+      summary: 추천 검색어를 등록한다.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdminCreateSearchPlacePresetRequestDTO'
+      responses:
+        '204': {}
+
+  /places/searchPreset/{id}:
+    parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+
+    delete:
+      operationId: deleteSearchPreset
+      summary: 등록된 추천 검색어를 삭제한다.
+      responses:
+        '204': {}
+
   /closed-place-candidates:
     get:
       operationId: listClosedPlaceCandidates
@@ -1567,6 +1610,31 @@ components:
       required:
         - url
         - expireAt
+
+    AdminSearchPlacePresetDTO:
+      type: object
+      properties:
+        id:
+          type: string
+        description:
+          type: string
+        searchText:
+          type: string
+      required:
+        - id
+        - description
+        - searchText
+
+    AdminCreateSearchPlacePresetRequestDTO:
+      type: object
+      properties:
+        description:
+          type: string
+        searchText:
+          type: string
+      required:
+        - description
+        - searchText
 
     AdminSendPushNotificationRequestDTO:
       type: object
