@@ -168,6 +168,50 @@ paths:
               schema:
                 $ref: '#/components/schemas/DeletePlaceFavoriteResponseDto'
 
+  /deletePlaceReview:
+    post:
+      summary: 등록한 장소 리뷰를 삭제한다.
+      security:
+        - Identified: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                placeReviewId:
+                  type: string
+                  description: 삭제할 장소 리뷰의 아이디
+              required:
+                - placeReviewId
+      responses:
+        '204': {}
+        '400':
+          $ref: '#/components/responses/ApiFailure'
+
+  /deleteToiletReview:
+    post:
+      summary: 등록한 화장실 리뷰를 삭제한다.
+      security:
+        - Identified: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                toiletReviewId:
+                  type: string
+                  description: 삭제할 화장실 리뷰의 아이디
+              required:
+                - toiletReviewId
+      responses:
+        '204': {}
+        '400':
+          $ref: '#/components/responses/ApiFailure'
+
   /deleteUser:
     post:
       summary: 계정을 삭제한다.
@@ -870,6 +914,60 @@ paths:
                   description: 신고 상세 내용
               required:
                 - placeId
+                - reason
+      responses:
+        '204': {}
+
+  /reportPlaceReview:
+    post:
+      summary: 장소의 내부 리뷰가 올바르지 않은 경우 신고한다.
+      security:
+        - Identified: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                placeReviewId:
+                  type: string
+                  description: 신고할 장소 리뷰의 아이디
+                reason:
+                  $ref: '#/components/schemas/AccessibilityReportReason'
+                  description: 신고 사유
+                detail:
+                  type: string
+                  description: 신고 상세 내용
+              required:
+                - placeReviewId
+                - reason
+      responses:
+        '204': {}
+
+  /reportToiletReview:
+    post:
+      summary: 화장실 리뷰가 올바르지 않은 경우 신고한다.
+      security:
+        - Identified: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                toiletReviewId:
+                  type: string
+                  description: 신고할 화장실 리뷰의 아이디
+                reason:
+                  $ref: '#/components/schemas/AccessibilityReportReason'
+                  description: 신고 사유
+                detail:
+                  type: string
+                  description: 신고 상세 내용
+              required:
+                - toiletReviewId
                 - reason
       responses:
         '204': {}
