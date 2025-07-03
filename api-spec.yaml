@@ -2156,6 +2156,83 @@ components:
         - accessibilityInfo
         - registeredUserOrder
 
+    RegisterPlaceReviewRequestDto:
+      type: object
+      properties:
+        placeId:
+          type: string
+        recommendedMobilityTypes:
+          description: 누구에게 추천하시나요?
+          type: array
+          items:
+            $ref: '#/components/schemas/RecommendedMobilityType'
+        spaciousType:
+          $ref: '#/components/schemas/SpaciousType'
+          description: 내부 공간이 여유롭나요?
+        imageUrls:
+          type: array
+          items:
+            type: string
+        comment:
+          type: string
+          description: 장소 이용 경험
+        mobilityTool:
+          description: 매장 이용시 사용한 이동보조기기
+          $ref: '#/components/schemas/UserMobilityToolDto'
+        seatTypes:
+          description: 좌석 구성
+          # $ref: '#/components/schemas/SeatType'
+          type: array
+          items:
+            type: string
+        orderTypes:
+          description: 매장 내 주문 방법
+          type: array
+          items:
+            type: '#/components/schemas/OrderType'
+        featureTypes:
+          description: 공간 특이사항
+          type: array
+          items:
+            $ref: '#/components/schemas/EntranceDoorType'
+      required:
+        - placeId
+        - recommendedMobilityTypes
+        - spaciousType
+        - mobilityTool
+        - seatTypes
+        - orderTypes
+
+    RegisterAccessibleRestroomReviewRequestDto:
+      type: object
+      properties:
+        placeId:
+          type: string
+        accessibleRestroomLocationType:
+          description: 장애인 화장실 유무를 알려주세요
+          $ref: '#/components/schemas/AccessibleRestroomLocationType'
+        floor:
+          type: integer
+          description: 몇층에 있는 장소인가요?
+        entranceDoorTypes:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntranceDoorType'
+        imageUrls:
+          type: array
+          items:
+            type: string
+        comment:
+          type: string
+          description: 화장실에 대해 자세히 알려주세요
+      required:
+        - placeId
+        - accessibleRestroomLocationType
+        - floor
+        - entranceDoorTypes
+        - imageUrls
+        - comment
+
     SearchKeywordOfPlaceCategoryDto:
       type: object
       properties:
@@ -2340,6 +2417,58 @@ components:
         - INACCURATE_INFO
         - CLOSED
         - BAD_USER
+
+    RecommendedMobilityType:
+      type: string
+      enum:
+        - MANUAL_WHEELCHAIR # 수동휠체어
+        - ELECTRIC_WHEELCHAIR # 전동휠체어
+        - ELDERLY # 고령자
+        - STROLLER # 유아차 이용자
+        - DONT_KNOW # 모름
+        - NONE # 추천 안함
+
+    SpaciousType:
+      type: string
+      enum:
+        - ENOUGH # 내부 공간이 매우 원활
+        - LIMITED # 일부 구역만 여유로움
+        - TIGHT # 매우 좁음
+
+    SeatType:
+      type: string
+      enum:
+        - STANDING # 입식
+        - SITTING # 좌식 (신발 벗고 앉는 구조)
+        - BAR_TABLE # 바테이블
+        - SMALL_COUNTER # 카운터석 (낮음)
+        - TALL_COUNTER # 카운터석 (높음)
+        - FIXED # 고정좌석
+        - ETC # 기타
+
+    OrderType:
+      type: string
+      enum:
+        - COUNTER # 카운터에서 주문
+        - KIOSK # 키오스크 주문
+        - BARRIER_FREE_KIOSK # 배리어프리 키오스크 주문
+        - TABLE_ORDER # 테이블 오더 주문
+        - SERVER_AT_SEAT # 자리에서 직원에게 주문
+
+    PlaceFeatureType:
+      type: string
+      enum:
+        - THREE_OR_MORE_WHEELCHAIR_ACCESSIBLE_SEAT # 휠체어 이용 가능한 좌석수 3개 이상
+        - NAVIGATABLE_WITHOUT_ASSISTANCE # 직원 도움 없이 이동 가능
+
+    AccessibleRestroomLocationType:
+      type: string
+      enum:
+        - PLACE # 매장 내 있음
+        - BUILDING # 건물 내 있음
+        - NONE # 없음
+        - DONT_KNOW # 모름
+        - ETC # 기타
 
   responses:
     ApiFailure:
