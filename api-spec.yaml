@@ -338,6 +338,9 @@ paths:
                   description:
                     업로드할 이미지의 확장자. '.'을 붙이지 말아야 한다. e.g.
                     png, jpeg 등.
+                purposeType:
+                  $ref: '#/components/schema/ImageUploadPurpose'
+                  description: 업로드하는 이미지의 타입
               required:
                 - count
                 - filenameExtension
@@ -2156,6 +2159,82 @@ components:
         - accessibilityInfo
         - registeredUserOrder
 
+    RegisterPlaceReviewRequestDto:
+      type: object
+      properties:
+        placeId:
+          type: string
+        recommendedMobilityTypes:
+          description: 누구에게 추천하시나요?
+          type: array
+          items:
+            $ref: '#/components/schemas/RecommendedMobilityTypeDto'
+        spaciousType:
+          $ref: '#/components/schemas/SpaciousTypeDto'
+          description: 내부 공간이 여유롭나요?
+        imageUrls:
+          type: array
+          items:
+            type: string
+        comment:
+          type: string
+          description: 장소 이용 경험
+        mobilityTool:
+          description: 매장 이용시 사용한 이동보조기기
+          $ref: '#/components/schemas/UserMobilityToolDto'
+        seatTypes:
+          description: 좌석 구성
+          type: array
+          items:
+            type: string
+        orderMethods:
+          description: 매장 내 주문 방법
+          type: array
+          items:
+            type: string
+        features:
+          description: 공간 특이사항
+          type: array
+          items:
+            $ref: string
+      required:
+        - placeId
+        - recommendedMobilityTypes
+        - spaciousType
+        - mobilityTool
+        - seatTypes
+        - orderMethods
+
+    RegisterToiletReviewRequestDto:
+      type: object
+      properties:
+        placeId:
+          type: string
+        toiletLocationType:
+          description: 장애인 화장실 유무를 알려주세요
+          $ref: '#/components/schemas/ToiletLocationTypeDto'
+        floor:
+          type: integer
+          description: 몇층에 있는 장소인가요?
+        entranceDoorTypes:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntranceDoorType'
+        imageUrls:
+          type: array
+          items:
+            type: string
+        comment:
+          type: string
+          description: 화장실에 대해 자세히 알려주세요
+      required:
+        - placeId
+        - toiletLocationType
+        - floor
+        - entranceDoorTypes
+        - imageUrls
+        - comment
+
     SearchKeywordOfPlaceCategoryDto:
       type: object
       properties:
@@ -2293,6 +2372,13 @@ components:
       required:
         - imageUrl
 
+    ImageUploadPurpose:
+      type: string
+      enum:
+        - ACCESSIBILITY
+        - PLACE_REVIEW
+        - TOILET
+
     DayOfWeek:
       type: string
       enum:
@@ -2340,6 +2426,33 @@ components:
         - INACCURATE_INFO
         - CLOSED
         - BAD_USER
+
+    RecommendedMobilityTypeDto:
+      type: string
+      enum:
+        - MANUAL_WHEELCHAIR # 수동휠체어
+        - ELECTRIC_WHEELCHAIR # 전동휠체어
+        - ELDERLY # 고령자
+        - STROLLER # 유아차 이용자
+        - NOT_SURE # 모름
+        - NONE # 추천 안함
+
+    SpaciousTypeDto:
+      type: string
+      enum:
+        - WIDE # 매우 넓고, 이용하기 적합해요
+        - ENOUGH # 대부분의 구역을 이용하기에 적합해요
+        - LIMITED # 일부 구역만 이용하기에 적합해요
+        - TIGHT # 매우 좁아서 내부 이동이 불가능해요
+
+    ToiletLocationTypeDto:
+      type: string
+      enum:
+        - PLACE # 매장 내 있음
+        - BUILDING # 건물 내 있음
+        - NONE # 없음
+        - NOT_SURE # 모름
+        - ETC # 기타
 
   responses:
     ApiFailure:
