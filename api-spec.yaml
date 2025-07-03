@@ -2553,7 +2553,7 @@ components:
         orderMethods:
           type: array
           items:
-              type: string
+            type: string
         features:
           type: array
           items:
