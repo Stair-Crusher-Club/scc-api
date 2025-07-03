@@ -2380,6 +2380,9 @@ components:
         isNewsLetterSubscriptionAgreed:
           type: boolean
           description: 뉴스레터 구독 동의 여부
+        isClubMember:
+          type: boolean
+          description: 클럽 멤버 여부
       required:
         - id
         - nickname
@@ -2513,16 +2516,14 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/EntranceDoorType'
-        imageUrls:
-          type: array
-          items:
-            type: string
         comment:
           type: string
         images:
           type: array
           items:
             $ref: '#/components/schemas/ImageDto'
+        user:
+          $ref: '#/components/schemas/User'
         createdAt:
           $ref: '#/components/schemas/EpochMillisTimestamp'
       required:
@@ -2530,7 +2531,7 @@ components:
         - toiletLocationType
         - floor
         - entranceDoorTypes
-        - imageUrls
+        - images
         - comment
         - createdAt
     
@@ -2563,6 +2564,8 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ImageDto'
+        user:
+          $ref: '#/components/schemas/User'
         createdAt:
           $ref: '#/components/schemas/EpochMillisTimestamp'
       required:
@@ -2572,6 +2575,7 @@ components:
         - mobilityTool
         - seatTypes
         - orderMethods
+        - images
         - createdAt
 
   responses:
