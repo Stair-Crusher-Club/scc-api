@@ -197,7 +197,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/AccessibilityInfoDto'
 
-  /getToiletReview:
+  /listToiletReviews:
     post:
       summary: 화장실 리뷰를 조회한다.
       requestBody:
@@ -216,9 +216,11 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ToiletReviewDto'
+                type: array
+                items:
+                  $ref: '#/components/schemas/ToiletReviewDto'
   
-  /getPlaceReview:
+  /listPlaceReviews:
     post:
       summary: 실내 리뷰를 조회한다.
       requestBody:
@@ -237,7 +239,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PlaceReviewDto'
+                type: array
+                items:
+                  $ref: '#/components/schemas/PlaceReviewDto'
 
   /getNearbyAccessibilityStatus:
     post:
