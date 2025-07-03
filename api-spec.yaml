@@ -2554,6 +2554,8 @@ components:
             type: string
         orderMethods:
           type: array
+          items:
+              type: string
         features:
           type: array
           items:
