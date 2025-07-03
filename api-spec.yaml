@@ -338,6 +338,9 @@ paths:
                   description:
                     업로드할 이미지의 확장자. '.'을 붙이지 말아야 한다. e.g.
                     png, jpeg 등.
+                purposeType:
+                  $ref: '#/components/schema/ImageUploadPurpose'
+                  description: 업로드하는 이미지의 타입
               required:
                 - count
                 - filenameExtension
@@ -2368,6 +2371,13 @@ components:
           description: '아직 썸네일이 생성되지 않았다면 null'
       required:
         - imageUrl
+
+    ImageUploadPurpose:
+      type: string
+      enum:
+        - ACCESSIBILITY
+        - PLACE_REVIEW
+        - ACCESSIBLE_RESTROOM
 
     DayOfWeek:
       type: string
