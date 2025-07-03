@@ -197,6 +197,48 @@ paths:
               schema:
                 $ref: '#/components/schemas/AccessibilityInfoDto'
 
+  /getToiletReview:
+    post:
+      summary: 화장실 리뷰를 조회한다.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                placeId:
+                  type: string
+              required:
+                - placeId
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ToiletReviewDto'
+  
+  /getPlaceReview:
+    post:
+      summary: 실내 리뷰를 조회한다.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                placeId:
+                  type: string
+              required:
+                - placeId
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlaceReviewDto'
+
   /getNearbyAccessibilityStatus:
     post:
       summary: 주변 정복 상태를 조회한다.
@@ -2453,6 +2495,74 @@ components:
         - NONE # 없음
         - NOT_SURE # 모름
         - ETC # 기타
+    
+    ToiletReviewDto:
+      type: object
+      properties:
+        id:
+          type: string
+        toiletLocationType:
+          $ref: '#/components/schemas/ToiletLocationTypeDto'
+        floor:
+          type: integer
+        entranceDoorTypes:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntranceDoorType'
+        imageUrls:
+          type: array
+          items:
+            type: string
+        comment:
+          type: string
+        images:
+          type: array
+          items:
+            $ref: '#/components/schemas/ImageDto'
+      required:
+        - id
+        - toiletLocationType
+        - floor
+        - entranceDoorTypes
+        - imageUrls
+        - comment
+    
+    PlaceReviewDto:
+      type: object
+      properties:
+        id:
+          type: string
+        recommendedMobilityTypes:
+          type: array
+          items:
+            $ref: '#/components/schemas/RecommendedMobilityTypeDto'
+        spaciousType:
+          $ref: '#/components/schemas/SpaciousTypeDto'
+        mobilityTool:
+          $ref: '#/components/schemas/UserMobilityToolDto'
+        seatTypes:
+          type: array
+          items:
+            type: string
+        orderMethods:
+          type: array
+        features:
+          type: array
+          items:
+            type: string
+        comment:
+          type: string
+        images:
+          type: array
+          items:
+            $ref: '#/components/schemas/ImageDto'
+      required:
+        - id
+        - recommendedMobilityTypes
+        - spaciousType
+        - mobilityTool
+        - seatTypes
+        - orderMethods
 
   responses:
     ApiFailure:
