@@ -2205,14 +2205,14 @@ components:
         - seatTypes
         - orderMethods
 
-    RegisterAccessibleRestroomReviewRequestDto:
+    RegisterToiletReviewRequestDto:
       type: object
       properties:
         placeId:
           type: string
-        accessibleRestroomLocationType:
+        toiletLocationType:
           description: 장애인 화장실 유무를 알려주세요
-          $ref: '#/components/schemas/AccessibleRestroomLocationType'
+          $ref: '#/components/schemas/ToiletLocationType'
         floor:
           type: integer
           description: 몇층에 있는 장소인가요?
@@ -2229,7 +2229,7 @@ components:
           description: 화장실에 대해 자세히 알려주세요
       required:
         - placeId
-        - accessibleRestroomLocationType
+        - toiletLocationType
         - floor
         - entranceDoorTypes
         - imageUrls
@@ -2377,7 +2377,7 @@ components:
       enum:
         - ACCESSIBILITY
         - PLACE_REVIEW
-        - ACCESSIBLE_RESTROOM
+        - TOILET
 
     DayOfWeek:
       type: string
@@ -2444,7 +2444,7 @@ components:
         - LIMITED # 일부 구역만 여유로움
         - TIGHT # 매우 좁음
 
-    AccessibleRestroomLocationType:
+    ToiletLocationType:
       type: string
       enum:
         - PLACE # 매장 내 있음
