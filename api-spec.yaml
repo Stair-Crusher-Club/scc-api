@@ -2523,6 +2523,8 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ImageDto'
+        createdAt:
+          $ref: '#/components/schemas/EpochMillisTimestamp'
       required:
         - id
         - toiletLocationType
@@ -2530,6 +2532,7 @@ components:
         - entranceDoorTypes
         - imageUrls
         - comment
+        - createdAt
     
     PlaceReviewDto:
       type: object
@@ -2560,6 +2563,8 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ImageDto'
+        createdAt:
+          $ref: '#/components/schemas/EpochMillisTimestamp'
       required:
         - id
         - recommendedMobilityTypes
@@ -2567,6 +2572,7 @@ components:
         - mobilityTool
         - seatTypes
         - orderMethods
+        - createdAt
 
   responses:
     ApiFailure:
