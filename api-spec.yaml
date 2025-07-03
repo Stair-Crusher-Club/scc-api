@@ -2168,9 +2168,9 @@ components:
           description: 누구에게 추천하시나요?
           type: array
           items:
-            $ref: '#/components/schemas/RecommendedMobilityType'
+            $ref: '#/components/schemas/RecommendedMobilityTypeDto'
         spaciousType:
-          $ref: '#/components/schemas/SpaciousType'
+          $ref: '#/components/schemas/SpaciousTypeDto'
           description: 내부 공간이 여유롭나요?
         imageUrls:
           type: array
@@ -2212,7 +2212,7 @@ components:
           type: string
         toiletLocationType:
           description: 장애인 화장실 유무를 알려주세요
-          $ref: '#/components/schemas/ToiletLocationType'
+          $ref: '#/components/schemas/ToiletLocationTypeDto'
         floor:
           type: integer
           description: 몇층에 있는 장소인가요?
@@ -2427,7 +2427,7 @@ components:
         - CLOSED
         - BAD_USER
 
-    RecommendedMobilityType:
+    RecommendedMobilityTypeDto:
       type: string
       enum:
         - MANUAL_WHEELCHAIR # 수동휠체어
@@ -2437,7 +2437,7 @@ components:
         - NOT_SURE # 모름
         - NONE # 추천 안함
 
-    SpaciousType:
+    SpaciousTypeDto:
       type: string
       enum:
         - WIDE # 매우 넓고, 이용하기 적합해요
@@ -2445,7 +2445,7 @@ components:
         - LIMITED # 일부 구역만 이용하기에 적합해요
         - TIGHT # 매우 좁아서 내부 이동이 불가능해요
 
-    ToiletLocationType:
+    ToiletLocationTypeDto:
       type: string
       enum:
         - PLACE # 매장 내 있음
