@@ -2194,7 +2194,7 @@ components:
           description: 공간 특이사항
           type: array
           items:
-            $ref: '#/components/schemas/EntranceDoorType'
+            $ref: '#/components/schemas/PlaceFeatureType'
       required:
         - placeId
         - recommendedMobilityTypes
