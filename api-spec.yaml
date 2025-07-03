@@ -219,7 +219,7 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/ToiletReviewDto'
-  
+
   /listPlaceReviews:
     post:
       summary: 실내 리뷰를 조회한다.
@@ -2502,7 +2502,7 @@ components:
         - NONE # 없음
         - NOT_SURE # 모름
         - ETC # 기타
-    
+
     ToiletReviewDto:
       type: object
       properties:
@@ -2534,7 +2534,7 @@ components:
         - images
         - comment
         - createdAt
-    
+
     PlaceReviewDto:
       type: object
       properties:
