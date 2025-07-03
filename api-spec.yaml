@@ -847,6 +847,48 @@ paths:
                 required:
                   - placeAccessibilityComment
 
+  /registerPlaceReview:
+    post:
+      summary: 점포의 내부 및 리뷰 정보를 등록한다.
+      security:
+        - Identified: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterPlaceReviewRequestDto'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  placeReview:
+                    $ref: '#/components/schemas/PlaceReviewDto'
+
+  /registerToiletReview:
+    post:
+      summary: 화장실 리뷰 정보를 등록한다.
+      security:
+        - Identified: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterToiletReviewRequestDto'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  placeReview:
+                    $ref: '#/components/schemas/ToiletReviewDto'
+
   /reportAccessibility:
     post:
       summary: 등록된 접근성 정보가 올바르지 않은 경우 신고한다.
