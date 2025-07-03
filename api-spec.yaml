@@ -2426,7 +2426,7 @@ components:
       enum:
         - ACCESSIBILITY
         - PLACE_REVIEW
-        - TOILET
+        - TOILET_REVIEW
 
     DayOfWeek:
       type: string
