@@ -1191,6 +1191,9 @@ components:
           type: string
         instagramId:
           type: string
+        isClubMember:
+          type: boolean
+          description: 클럽 멤버인지 여부
       required:
         - id
         - nickname
@@ -2380,9 +2383,6 @@ components:
         isNewsLetterSubscriptionAgreed:
           type: boolean
           description: 뉴스레터 구독 동의 여부
-        isClubMember:
-          type: boolean
-          description: 클럽 멤버 여부
       required:
         - id
         - nickname
@@ -2523,7 +2523,7 @@ components:
           items:
             $ref: '#/components/schemas/ImageDto'
         user:
-          $ref: '#/components/schemas/User'
+          $ref: '#/components/schemas/AccessibilityRegistererDto'
         createdAt:
           $ref: '#/components/schemas/EpochMillisTimestamp'
       required:
@@ -2565,7 +2565,7 @@ components:
           items:
             $ref: '#/components/schemas/ImageDto'
         user:
-          $ref: '#/components/schemas/User'
+          $ref: '#/components/schemas/AccessibilityRegistererDto'
         createdAt:
           $ref: '#/components/schemas/EpochMillisTimestamp'
       required:
