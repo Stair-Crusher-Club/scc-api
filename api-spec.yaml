@@ -2666,7 +2666,7 @@ components:
     ReportTargetType:
       type: string
       enum:
-        - ACCESSIBILITY
+        - PLACE_ACCESSIBILITY
         - PLACE_REVIEW
         - TOILET
 
