@@ -2145,6 +2145,8 @@ components:
           type: array
           items:
             type: integer
+        reviewCount:
+          type: integer
         createdAt:
           $ref: '#/components/schemas/EpochMillisTimestamp'
       required:
