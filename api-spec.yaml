@@ -2318,7 +2318,6 @@ components:
       required:
         - placeId
         - toiletLocationType
-        - comment
 
     SearchKeywordOfPlaceCategoryDto:
       type: object
@@ -2566,10 +2565,6 @@ components:
       required:
         - id
         - toiletLocationType
-        - floor
-        - entranceDoorTypes
-        - images
-        - comment
         - createdAt
 
     PlaceReviewDto:
