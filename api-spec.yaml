@@ -931,7 +931,9 @@ paths:
 
   /reportAccessibility:
     post:
-      summary: 등록된 접근성 정보가 올바르지 않은 경우 신고한다.
+      summary:
+        등록된 접근성 정보, 장소 리뷰, 화장실 정보 등이 올바르지 않은 경우
+        신고한다.
       security:
         - Identified: []
       requestBody:
@@ -950,62 +952,10 @@ paths:
                 detail:
                   type: string
                   description: 신고 상세 내용
+                targetType:
+                  $ref: '#/components/schemas/ReportTargetType'
               required:
                 - placeId
-                - reason
-      responses:
-        '204': {}
-
-  /reportPlaceReview:
-    post:
-      summary: 장소의 내부 리뷰가 올바르지 않은 경우 신고한다.
-      security:
-        - Identified: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                placeReviewId:
-                  type: string
-                  description: 신고할 장소 리뷰의 아이디
-                reason:
-                  $ref: '#/components/schemas/AccessibilityReportReason'
-                  description: 신고 사유
-                detail:
-                  type: string
-                  description: 신고 상세 내용
-              required:
-                - placeReviewId
-                - reason
-      responses:
-        '204': {}
-
-  /reportToiletReview:
-    post:
-      summary: 화장실 리뷰가 올바르지 않은 경우 신고한다.
-      security:
-        - Identified: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                toiletReviewId:
-                  type: string
-                  description: 신고할 화장실 리뷰의 아이디
-                reason:
-                  $ref: '#/components/schemas/AccessibilityReportReason'
-                  description: 신고 사유
-                detail:
-                  type: string
-                  description: 신고 상세 내용
-              required:
-                - toiletReviewId
                 - reason
       responses:
         '204': {}
@@ -2712,6 +2662,13 @@ components:
         - user
         - isDeletable
         - createdAt
+
+    ReportTargetType:
+      type: string
+      enum:
+        - ACCESSIBILITY
+        - PLACE_REVIEW
+        - TOILET
 
   responses:
     ApiFailure:
