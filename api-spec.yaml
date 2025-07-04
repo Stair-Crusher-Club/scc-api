@@ -812,8 +812,6 @@ paths:
   /registerBuildingAccessibilityComment:
     post:
       summary: 건물에 의견을 추가한다.
-      security:
-        - Identified: []
       requestBody:
         required: true
         content:
@@ -862,8 +860,6 @@ paths:
   /registerPlaceAccessibilityComment:
     post:
       summary: 점포에 의견을 추가한다.
-      security:
-        - Identified: []
       requestBody:
         required: true
         content:
@@ -890,6 +886,48 @@ paths:
                     description: 방금 등록된 댓글.
                 required:
                   - placeAccessibilityComment
+
+  /registerPlaceReview:
+    post:
+      summary: 점포의 내부 및 리뷰 정보를 등록한다.
+      security:
+        - Identified: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterPlaceReviewRequestDto'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  placeReview:
+                    $ref: '#/components/schemas/PlaceReviewDto'
+
+  /registerToiletReview:
+    post:
+      summary: 화장실 리뷰 정보를 등록한다.
+      security:
+        - Identified: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterToiletReviewRequestDto'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  toiletReview:
+                    $ref: '#/components/schemas/ToiletReviewDto'
 
   /reportAccessibility:
     post:
@@ -2374,10 +2412,6 @@ components:
       required:
         - placeId
         - toiletLocationType
-        - floor
-        - entranceDoorTypes
-        - imageUrls
-        - comment
 
     SearchKeywordOfPlaceCategoryDto:
       type: object
@@ -2620,15 +2654,15 @@ components:
             $ref: '#/components/schemas/ImageDto'
         user:
           $ref: '#/components/schemas/AccessibilityRegistererDto'
+        isDeletable:
+          type: boolean
         createdAt:
           $ref: '#/components/schemas/EpochMillisTimestamp'
       required:
         - id
         - toiletLocationType
-        - floor
-        - entranceDoorTypes
-        - images
-        - comment
+        - user
+        - isDeletable
         - createdAt
 
     PlaceReviewDto:
@@ -2664,6 +2698,8 @@ components:
             $ref: '#/components/schemas/ImageDto'
         user:
           $ref: '#/components/schemas/AccessibilityRegistererDto'
+        isDeletable:
+          type: boolean
         createdAt:
           $ref: '#/components/schemas/EpochMillisTimestamp'
       required:
@@ -2673,7 +2709,8 @@ components:
         - mobilityTool
         - seatTypes
         - orderMethods
-        - images
+        - user
+        - isDeletable
         - createdAt
 
   responses:
