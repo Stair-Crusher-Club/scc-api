@@ -2567,6 +2567,8 @@ components:
       required:
         - id
         - toiletLocationType
+        - user
+        - isDeletable
         - createdAt
 
     PlaceReviewDto:
@@ -2613,7 +2615,6 @@ components:
         - mobilityTool
         - seatTypes
         - orderMethods
-        - images
         - user
         - isDeletable
         - createdAt
