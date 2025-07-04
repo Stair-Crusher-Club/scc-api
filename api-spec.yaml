@@ -168,6 +168,50 @@ paths:
               schema:
                 $ref: '#/components/schemas/DeletePlaceFavoriteResponseDto'
 
+  /deletePlaceReview:
+    post:
+      summary: 등록한 장소 리뷰를 삭제한다.
+      security:
+        - Identified: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                placeReviewId:
+                  type: string
+                  description: 삭제할 장소 리뷰의 아이디
+              required:
+                - placeReviewId
+      responses:
+        '204': {}
+        '400':
+          $ref: '#/components/responses/ApiFailure'
+
+  /deleteToiletReview:
+    post:
+      summary: 등록한 화장실 리뷰를 삭제한다.
+      security:
+        - Identified: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                toiletReviewId:
+                  type: string
+                  description: 삭제할 화장실 리뷰의 아이디
+              required:
+                - toiletReviewId
+      responses:
+        '204': {}
+        '400':
+          $ref: '#/components/responses/ApiFailure'
+
   /deleteUser:
     post:
       summary: 계정을 삭제한다.
@@ -887,7 +931,9 @@ paths:
 
   /reportAccessibility:
     post:
-      summary: 등록된 접근성 정보가 올바르지 않은 경우 신고한다.
+      summary:
+        등록된 접근성 정보, 장소 리뷰, 화장실 정보 등이 올바르지 않은 경우
+        신고한다.
       security:
         - Identified: []
       requestBody:
@@ -906,6 +952,8 @@ paths:
                 detail:
                   type: string
                   description: 신고 상세 내용
+                targetType:
+                  $ref: '#/components/schemas/ReportTargetType'
               required:
                 - placeId
                 - reason
@@ -2616,6 +2664,13 @@ components:
         - user
         - isDeletable
         - createdAt
+
+    ReportTargetType:
+      type: string
+      enum:
+        - PLACE_ACCESSIBILITY
+        - PLACE_REVIEW
+        - TOILET
 
   responses:
     ApiFailure:
