@@ -2564,6 +2564,8 @@ components:
             $ref: '#/components/schemas/ImageDto'
         user:
           $ref: '#/components/schemas/AccessibilityRegistererDto'
+        isDeletable:
+          type: boolean
         createdAt:
           $ref: '#/components/schemas/EpochMillisTimestamp'
       required:
@@ -2572,6 +2574,8 @@ components:
         - floor
         - entranceDoorTypes
         - images
+        - user
+        - isDeletable
         - comment
         - createdAt
 
@@ -2608,6 +2612,8 @@ components:
             $ref: '#/components/schemas/ImageDto'
         user:
           $ref: '#/components/schemas/AccessibilityRegistererDto'
+        isDeletable:
+          type: boolean
         createdAt:
           $ref: '#/components/schemas/EpochMillisTimestamp'
       required:
@@ -2618,6 +2624,8 @@ components:
         - seatTypes
         - orderMethods
         - images
+        - user
+        - isDeletable
         - createdAt
 
   responses:
