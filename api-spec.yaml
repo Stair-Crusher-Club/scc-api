@@ -812,6 +812,8 @@ paths:
   /registerBuildingAccessibilityComment:
     post:
       summary: 건물에 의견을 추가한다.
+      security:
+        - Identified: []
       requestBody:
         required: true
         content:
@@ -860,6 +862,8 @@ paths:
   /registerPlaceAccessibilityComment:
     post:
       summary: 점포에 의견을 추가한다.
+      security:
+        - Identified: []
       requestBody:
         required: true
         content:
