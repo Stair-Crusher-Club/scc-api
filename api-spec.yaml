@@ -886,7 +886,7 @@ paths:
               schema:
                 type: object
                 properties:
-                  placeReview:
+                  toiletReview:
                     $ref: '#/components/schemas/ToiletReviewDto'
 
   /reportAccessibility:
@@ -2318,10 +2318,6 @@ components:
       required:
         - placeId
         - toiletLocationType
-        - floor
-        - entranceDoorTypes
-        - imageUrls
-        - comment
 
     SearchKeywordOfPlaceCategoryDto:
       type: object
@@ -2571,12 +2567,6 @@ components:
       required:
         - id
         - toiletLocationType
-        - floor
-        - entranceDoorTypes
-        - images
-        - user
-        - isDeletable
-        - comment
         - createdAt
 
     PlaceReviewDto:
