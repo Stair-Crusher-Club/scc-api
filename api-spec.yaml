@@ -2318,9 +2318,6 @@ components:
       required:
         - placeId
         - toiletLocationType
-        - floor
-        - entranceDoorTypes
-        - imageUrls
         - comment
 
     SearchKeywordOfPlaceCategoryDto:
