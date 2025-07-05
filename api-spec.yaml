@@ -748,6 +748,7 @@ paths:
   /loginWithApple:
     post:
       summary: 애플 로그인을 통해 로그인 or 회원가입을 한다.
+      security: []
       requestBody:
         required: true
         content:
@@ -769,6 +770,7 @@ paths:
   /loginWithKakao:
     post:
       summary: 카카오 로그인을 통해 로그인 or 회원가입을 한다.
+      security: []
       requestBody:
         required: true
         content:

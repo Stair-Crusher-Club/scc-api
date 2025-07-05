@@ -7,6 +7,10 @@ info:
 
 defaultContentType: application/json
 
+security:
+  # 모든 API 는 기본적으로 AdminAuth 를 적용
+  - Admin: []
+
 tags:
   - name: challenge
   - name: accessibility
@@ -16,6 +20,7 @@ paths:
   /login:
     post:
       summary: 로그인을 한다.
+      security: []
       requestBody:
         required: true
         content:
@@ -166,6 +171,7 @@ paths:
   /clubQuests/{clubQuestId}:
     get:
       summary: 퀘스트를 조회한다.
+      security: []
       parameters:
         - in: path
           name: clubQuestId
@@ -192,6 +198,7 @@ paths:
   /clubQuests/{clubQuestId}/isClosed:
     put:
       summary: 점포의 폐점 여부를 저장한다.
+      security: []
       parameters:
         - in: path
           name: clubQuestId
@@ -222,6 +229,7 @@ paths:
   /clubQuests/{clubQuestId}/isNotAccessible:
     put:
       summary: 점포의 접근 가능 여부를 저장한다.
+      security: []
       parameters:
         - in: path
           name: clubQuestId
