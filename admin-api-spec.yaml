@@ -816,6 +816,11 @@ paths:
 
 components:
   # Reusable schemas (data models)
+  securitySchemes:
+    Admin:
+      type: http
+      scheme: bearer
+
   schemas:
     EpochMillisTimestamp:
       description: 특정 시각을 표현하기 위한 모델.
