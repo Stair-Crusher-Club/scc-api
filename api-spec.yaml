@@ -21,6 +21,9 @@ security:
   # 모든 API 는 기본적으로 AnonymousUserAuth 를 적용
   - Anonymous: []
 
+parameters:
+  - $ref: '#/components/parameters/SccCommonHeaders'
+
 paths:
   /cancelBuildingAccessibilityUpvote:
     post:
@@ -1209,6 +1212,15 @@ paths:
           $ref: '#/components/responses/ApiFailure'
 
 components:
+  parameters:
+    SccCommonHeaders:
+      in: header
+      name: X-SCC-REQUEST-ID
+      required: false
+      schema:
+        type: string
+      description: Optional request ID header used for tracing and logging.
+
   # Security schemes
   securitySchemes:
     Anonymous:
