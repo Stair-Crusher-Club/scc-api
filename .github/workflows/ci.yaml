@@ -28,7 +28,7 @@ jobs:
       - name: Run Lint
         uses: stoplightio/spectral-action@latest
         with:
-          file_glob: '*-sepc.yaml'
+          file_glob: '*-spec.yaml'
 
       - name: Check formatting
         run: |
