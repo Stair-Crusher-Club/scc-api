@@ -5,10 +5,8 @@ info:
   description: |
     ## 계단정복지도 서비스의 서버 - 클라이언트 통신을 위한 API 명세.
 
-defaultContentType: application/json
-
 servers:
-  - url: https://{env}.staircrusher.club/
+  - url: https://{env}.staircrusher.club
     variables:
       env:
         description: API 주소 환경 설정
@@ -21,12 +19,13 @@ security:
   # 모든 API 는 기본적으로 AnonymousUserAuth 를 적용
   - Anonymous: []
 
-parameters:
-  - $ref: '#/components/parameters/SccCommonHeaders'
+# parameters:
+#   - $ref: '#/components/parameters/SccCommonHeaders'
 
 paths:
   /cancelBuildingAccessibilityUpvote:
     post:
+      summary: "건물에 대해 '이 정보가 도움이 돼요'를 취소한다."
       security:
         - Identified: []
       requestBody:
@@ -36,11 +35,12 @@ paths:
               $ref: '#/components/schemas/CancelBuildingAccessibilityUpvoteRequestDto'
         required: true
       responses:
-        '204': {}
-      summary: "'이 정보가 도움이 돼요'를 취소한다."
+        '204':
+          $ref: '#/components/responses/NoContent'
 
   /cancelPlaceAccessibilityUpvote:
     post:
+      summary: "장소에 대해 '이 정보가 도움이 돼요'를 취소한다."
       security:
         - Identified: []
       requestBody:
@@ -50,8 +50,8 @@ paths:
               $ref: '#/components/schemas/CancelPlaceAccessibilityUpvoteRequestDto'
         required: true
       responses:
-        '204': {}
-      summary: "'이 정보가 도움이 돼요'를 취소한다."
+        '204':
+          $ref: '#/components/responses/NoContent'
 
   /createAnonymousUser:
     post:
@@ -59,6 +59,7 @@ paths:
       security: []
       responses:
         '200':
+          description: 비회원 계정 생성 성공
           content:
             application/json:
               schema:
@@ -77,6 +78,7 @@ paths:
               $ref: '#/components/schemas/CreatePlaceFavoriteRequestDto'
       responses:
         '200':
+          description: 즐겨찾기 추가 성공
           content:
             application/json:
               schema:
@@ -101,7 +103,8 @@ paths:
               required:
                 - buildingAccessibilityId
       responses:
-        '204': {}
+        '204':
+          $ref: '#/components/responses/NoContent'
         '400':
           $ref: '#/components/responses/ApiFailure'
 
@@ -124,7 +127,8 @@ paths:
               required:
                 - placeAccessibilityId
       responses:
-        '204': {}
+        '204':
+          $ref: '#/components/responses/NoContent'
         '400':
           $ref: '#/components/responses/ApiFailure'
 
@@ -141,6 +145,7 @@ paths:
               $ref: '#/components/schemas/DeletePlaceFavoriteRequestDto'
       responses:
         '200':
+          description: 즐겨찾기 삭제 성공
           content:
             application/json:
               schema:
@@ -164,7 +169,8 @@ paths:
               required:
                 - placeReviewId
       responses:
-        '204': {}
+        '204':
+          $ref: '#/components/responses/NoContent'
         '400':
           $ref: '#/components/responses/ApiFailure'
 
@@ -186,7 +192,8 @@ paths:
               required:
                 - toiletReviewId
       responses:
-        '204': {}
+        '204':
+          $ref: '#/components/responses/NoContent'
         '400':
           $ref: '#/components/responses/ApiFailure'
 
@@ -196,7 +203,8 @@ paths:
       security:
         - Identified: []
       responses:
-        '204': {}
+        '204':
+          $ref: '#/components/responses/NoContent'
 
   /getAccessibility:
     post:
@@ -214,6 +222,7 @@ paths:
                 - placeId
       responses:
         '200':
+          description: 건물 & 장소 접근성 정보
           content:
             application/json:
               schema:
@@ -235,6 +244,7 @@ paths:
                 - placeId
       responses:
         '200':
+          description: 화장실 리뷰를 리스트의 형태로 내려준다.
           content:
             application/json:
               schema:
@@ -258,6 +268,7 @@ paths:
                 - placeId
       responses:
         '200':
+          description: 장소에 대한 실내 리뷰를 리스트의 형태로 내려준다.
           content:
             application/json:
               schema:
@@ -284,6 +295,7 @@ paths:
                 - distanceMetersLimit
       responses:
         '200':
+          description: 주변 정복 상태를 내려준다
           content:
             application/json:
               schema:
@@ -308,6 +320,7 @@ paths:
                 - placeId
       responses:
         '200':
+          description: 건물 & 정포 정보
           content:
             application/json:
               schema:
@@ -325,6 +338,7 @@ paths:
               properties: {}
       responses:
         '200':
+          description: 조회된 탑 랭커들을 내려준다.
           content:
             application/json:
               schema:
@@ -351,6 +365,7 @@ paths:
               properties: {}
       responses:
         '200':
+          description: 현재 나의 랭크를 내려준다.
           content:
             application/json:
               schema:
@@ -363,17 +378,19 @@ paths:
 
   /getCountForNextRank:
     post:
+      summary: 다음 랭크로 올라가기 위한 점수를 조회한다.
       security:
         - Identified: []
       requestBody:
+        required: true
         content:
           application/json:
             schema:
               properties: {}
               type: object
-        required: true
       responses:
         '200':
+          description: 다음 랭크로 올라가긴 위한 점수를 내려준다.
           content:
             application/json:
               schema:
@@ -383,7 +400,6 @@ paths:
                 required:
                   - countForNextRank
                 type: object
-      summary: 다음 랭크로 올라가기 위한 점수를 조회한다.
 
   /getImageUploadUrls:
     post:
@@ -407,13 +423,13 @@ paths:
                     업로드할 이미지의 확장자. '.'을 붙이지 말아야 한다. e.g.
                     png, jpeg 등.
                 purposeType:
-                  $ref: '#/components/schema/ImageUploadPurpose'
-                  description: 업로드하는 이미지의 타입
+                  $ref: '#/components/schemas/ImageUploadPurpose'
               required:
                 - count
                 - filenameExtension
       responses:
         '200':
+          description: 이미지를 업로드 하기 위한 URL 을 내려준다.
           content:
             application/json:
               schema:
@@ -425,7 +441,6 @@ paths:
                       type: string
                     expireAt:
                       $ref: '#/components/schemas/EpochMillisTimestamp'
-                      description: url의 만료 시각.
                   required:
                     - url
                     - expireAt
@@ -440,6 +455,7 @@ paths:
         required: true
       responses:
         '200':
+          description: 조회된 챌린지를 내려준다.
           content:
             application/json:
               schema:
@@ -456,6 +472,7 @@ paths:
         required: true
       responses:
         '200':
+          description: 초대코드를 통해 조회된 챌린지를 내려준다.
           content:
             application/json:
               schema:
@@ -472,6 +489,7 @@ paths:
         required: true
       responses:
         '200':
+          description: 앱 업데이트 상태를 내려준다.
           content:
             application/json:
               schema:
@@ -484,6 +502,7 @@ paths:
         - Identified: []
       responses:
         '200':
+          description: 정복 활동 리포트를 내려준다.
           content:
             application/json:
               schema:
@@ -496,6 +515,7 @@ paths:
         - Identified: []
       responses:
         '200':
+          description: 유저 정보를 내려준다.
           content:
             application/json:
               schema:
@@ -503,7 +523,7 @@ paths:
 
   /giveBuildingAccessibilityUpvote:
     post:
-      summary: "'이 정보가 도움이 돼요'를 준다."
+      summary: "건물에 대해 '이 정보가 도움이 돼요'를 준다."
       security:
         - Identified: []
       requestBody:
@@ -513,11 +533,12 @@ paths:
             schema:
               $ref: '#/components/schemas/GiveBuildingAccessibilityUpvoteRequestDto'
       responses:
-        '204': {}
+        '204':
+          $ref: '#/components/responses/NoContent'
 
   /givePlaceAccessibilityUpvote:
     post:
-      summary: "'이 정보가 도움이 돼요'를 준다."
+      summary: "장소에 대해 '이 정보가 도움이 돼요'를 준다."
       security:
         - Identified: []
       requestBody:
@@ -527,7 +548,8 @@ paths:
             schema:
               $ref: '#/components/schemas/GivePlaceAccessibilityUpvoteRequestDto'
       responses:
-        '204': {}
+        '204':
+          $ref: '#/components/responses/NoContent'
 
   /joinChallenge:
     post:
@@ -542,36 +564,11 @@ paths:
               $ref: '#/components/schemas/JoinChallengeRequestDto'
       responses:
         '200':
+          description: 참여한 챌린지의 정보를 내려준다.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/JoinChallengeResponseDto'
-
-  /listAdministrativeAreas:
-    post:
-      summary: 점포를 검색한다.
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties: {}
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                properties:
-                  eupMyeonDongs:
-                    items:
-                      $ref: '#/components/schemas/EupMyeonDong'
-                    type: array
-                  siGunGus:
-                    items:
-                      $ref: '#/components/schemas/SiGunGu'
-                    type: array
-                type: object
 
   /listChallenges:
     post:
@@ -584,6 +581,7 @@ paths:
               $ref: '#/components/schemas/ListChallengesRequestDto'
       responses:
         '200':
+          description: 조회된 챌린지를 내려준다.
           content:
             application/json:
               schema:
@@ -602,6 +600,7 @@ paths:
               $ref: '#/components/schemas/ListConqueredPlacesRequestDto'
       responses:
         '200':
+          description: 내가 정복한 장소를 페이징 해서 내려준다.
           content:
             application/json:
               schema:
@@ -620,6 +619,7 @@ paths:
               $ref: '#/components/schemas/ListPlaceFavoritesRequestDto'
       responses:
         '200':
+          description: 내가 즐겨찾기한 장소를 페이징 해서 내려준다.
           content:
             application/json:
               schema:
@@ -642,6 +642,7 @@ paths:
                 - buildingId
       responses:
         '200':
+          description: 해당 건물에 있는 다른 장소의 목록을 내려준다.
           content:
             application/json:
               schema:
@@ -669,6 +670,7 @@ paths:
               properties: {}
       responses:
         '200':
+          description: 키워드의 목록을 내려준다.
           content:
             application/json:
               schema:
@@ -694,6 +696,7 @@ paths:
               properties: {}
       responses:
         '200':
+          description: 추천 키워드를 내려준다.
           content:
             application/json:
               schema:
@@ -735,15 +738,21 @@ paths:
               $ref: '#/components/schemas/LoginWithAppleRequestDto'
       responses:
         '200':
+          description: 로그인 성공.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/LoginResultDto'
         '400':
-          $ref: '#/components/responses/ApiFailure'
+          # open-api spec 은 $ref 와 같은 level 에 다른 property 를 허용하지 않기 때문에
+          # 오류 코드에 대한 description 을 적고 싶을 땐 '#/components/responses/ApiFailure' 대신 아래와 같은 형태를 사용한다.
           description: |-
             에러 코드 설명
             - INVALID_AUTHENTICATION : 클라이언트에서 올려준 토큰 중 일부가 잘못된 경우.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
 
   /loginWithKakao:
     post:
@@ -762,15 +771,19 @@ paths:
                 - kakaoTokens
       responses:
         '200':
+          description: 로그인 성공.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/LoginResultDto'
         '400':
-          $ref: '#/components/responses/ApiFailure'
           description: |-
             에러 코드 설명
             - INVALID_AUTHENTICATION : kakaoTokens 중 일부가 잘못된 경우.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
 
   /registerBuildingAccessibility:
     post:
@@ -810,6 +823,7 @@ paths:
                 - comment
       responses:
         '200':
+          description: 의견 추가 성공.
           content:
             application/json:
               schema:
@@ -817,7 +831,6 @@ paths:
                 properties:
                   buildingAccessibilityComment:
                     $ref: '#/components/schemas/BuildingAccessibilityComment'
-                    description: 방금 등록된 댓글.
                 required:
                   - buildingAccessibilityComment
 
@@ -834,6 +847,7 @@ paths:
               $ref: '#/components/schemas/RegisterPlaceAccessibilityRequestDto'
       responses:
         '200':
+          description: 접근성 정보 등록 성공.
           content:
             application/json:
               schema:
@@ -860,6 +874,7 @@ paths:
                 - comment
       responses:
         '200':
+          description: 점포에 대한 의견 추가 성공.
           content:
             application/json:
               schema:
@@ -867,13 +882,12 @@ paths:
                 properties:
                   placeAccessibilityComment:
                     $ref: '#/components/schemas/PlaceAccessibilityComment'
-                    description: 방금 등록된 댓글.
                 required:
                   - placeAccessibilityComment
 
   /registerPlaceReview:
     post:
-      summary: 점포의 내부 및 리뷰 정보를 등록한다.
+      summary: 점포의 내부 및 방문 리뷰 정보를 등록한다.
       security:
         - Identified: []
       requestBody:
@@ -884,6 +898,7 @@ paths:
               $ref: '#/components/schemas/RegisterPlaceReviewRequestDto'
       responses:
         '200':
+          description: 점포 리뷰 등록 성공.
           content:
             application/json:
               schema:
@@ -905,6 +920,7 @@ paths:
               $ref: '#/components/schemas/RegisterToiletReviewRequestDto'
       responses:
         '200':
+          description: 화장실 리뷰 등록 성공.
           content:
             application/json:
               schema:
@@ -932,7 +948,6 @@ paths:
                   description: 신고할 장소의 아이디
                 reason:
                   $ref: '#/components/schemas/AccessibilityReportReason'
-                  description: 신고 사유
                 detail:
                   type: string
                   description: 신고 상세 내용
@@ -942,7 +957,8 @@ paths:
                 - placeId
                 - reason
       responses:
-        '204': {}
+        '204':
+          $ref: '#/components/responses/NoContent'
 
   /searchExternalAccessibilities:
     post:
@@ -1034,6 +1050,7 @@ paths:
                 - distanceMetersLimit
       responses:
         '200':
+          description: 검색된 장소의 리스트를 내려준다.
           content:
             application/json:
               schema:
@@ -1043,6 +1060,7 @@ paths:
                       $ref: '#/components/schemas/PlaceListItem'
                     type: array
                 type: object
+
   /signUp:
     post:
       summary: 회원가입을 한다.
@@ -1102,6 +1120,7 @@ paths:
                 - mobilityTools
       responses:
         '200':
+          description: 유저 정보 수정 성공.
           content:
             application/json:
               schema:
@@ -1112,12 +1131,16 @@ paths:
                   - user
                 type: object
         '400':
-          $ref: '#/components/responses/ApiFailure'
           description: |-
             에러 코드 설명
             - INVALID_NICKNAME : 닉네임이 유효하지 않을 때. e.g. 중복, 2글자 미만 등.
             - INVALID_EMAIL : 이메일이 유효하지 않을 때. e.g. 중복, 이상한 형태 등.
             - INVALID_BIRTH_YEAR : 출생 연도가 유효하지 않을 때. e.g. 1900년 이전, 2025년 이후 등.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+
   /updatePushToken:
     post:
       summary: 유저의 push token 정보를 수정한다.
@@ -1133,7 +1156,8 @@ paths:
               required:
                 - pushToken
       responses:
-        '200': {}
+        '200':
+          $ref: '#/components/responses/NoContent'
 
   /getHomeBanners:
     post:
@@ -1141,6 +1165,7 @@ paths:
       operationId: getHomeBanners
       responses:
         '200':
+          description: 배너 목록을 내려준다.
           content:
             application/json:
               schema:
@@ -1164,9 +1189,9 @@ paths:
                   type: string
                   description:
                     유효성을 검사할 이메일. null인 경우 유효한 것으로 간주
-              required: []
       responses:
         '200':
+          description: 유효성 검증 결과를 내려준다.
           content:
             application/json:
               schema:
@@ -1182,7 +1207,6 @@ paths:
                     description:
                       이메일이 유효하지 않은 경우 에러 메시지, 유효하거나 null인
                       경우 null
-                required: []
         '400':
           $ref: '#/components/responses/ApiFailure'
 
@@ -1213,20 +1237,16 @@ components:
       properties:
         buildingAccessibility:
           $ref: '#/components/schemas/BuildingAccessibility'
-          description: 정보가 아직 채워지지 않았으면 null.
         buildingAccessibilityComments:
           type: array
           items:
             $ref: '#/components/schemas/BuildingAccessibilityComment'
-          description: 정보가 아직 채워지지 않았으면 empty list.
         placeAccessibility:
           $ref: '#/components/schemas/PlaceAccessibility'
-          description: 정보가 아직 채워지지 않았으면 null.
         placeAccessibilityComments:
           type: array
           items:
             $ref: '#/components/schemas/PlaceAccessibilityComment'
-          description: 정보가 아직 채워지지 않았으면 empty list.
         hasOtherPlacesToRegisterInBuilding:
           type: boolean
           description: "'이 건물의 다른 점포 등록하기'를 보여줄지 여부."
@@ -1327,7 +1347,6 @@ components:
           description: 건물의 human-readable한 주소.
         location:
           $ref: '#/components/schemas/Location'
-          description: 건물의 위경도.
       required:
         - id
         - address
@@ -1406,7 +1425,7 @@ components:
         - createdAt
 
     BuildingAccessibilityComment:
-      description: 건물에 대한 의견.
+      description: 건물에 대한 의견. 익명으로 달린 댓글이면 user 가 null 이다.
       properties:
         id:
           type: string
@@ -1414,7 +1433,6 @@ components:
           type: string
         user:
           $ref: '#/components/schemas/AccessibilityRegistererDto'
-          description: 익명으로 달린 댓글이면 null.
         comment:
           type: string
         createdAt:
@@ -1711,7 +1729,6 @@ components:
     GetUserInfoRequestDto:
       type: object
       properties: {}
-      required: []
 
     GetUserInfoResponseDto:
       type: object
@@ -1962,10 +1979,8 @@ components:
           description: 점포의 human-readable한 주소.
         location:
           $ref: '#/components/schemas/Location'
-          description: 점포의 위경도.
         category:
-          type: PlaceCategoryDto
-          description: 점포의 카테고리
+          $ref: '#/components/schemas/PlaceCategoryDto'
         isFavorite:
           type: boolean
           description: 내가 즐겨찾기한 점포인지 여부.
@@ -2037,7 +2052,7 @@ components:
         - createdAt
 
     PlaceAccessibilityComment:
-      description: 점포에 대한 의견.
+      description: 점포에 대한 의견. 익명으로 달린 댓글이면 user 가 null 이다.
       properties:
         id:
           type: string
@@ -2045,7 +2060,6 @@ components:
           type: string
         user:
           $ref: '#/components/schemas/AccessibilityRegistererDto'
-          description: 익명으로 달린 댓글이면 null.
         comment:
           type: string
         createdAt:
@@ -2161,7 +2175,8 @@ components:
       type: object
       properties:
         accessibilityScore:
-          type: double
+          type: number
+          format: double
           description: 접근성 점수. 접근성 정보가 없는 경우 null
         imageUrls:
           type: array
@@ -2386,7 +2401,8 @@ components:
       type: object
       properties:
         maxAccessibilityScore:
-          type: double
+          type: number
+          format: double
           description:
             접근성 점수의 최대값. 이 값 이하의 점수를 가진 장소만 반환한다.
             null이면 필터링하지 않는다.
@@ -2662,3 +2678,6 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/ApiErrorResponse'
+
+    NoContent:
+      description: successful operation
