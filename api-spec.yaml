@@ -2019,15 +2019,6 @@ components:
         isDeletable:
           type: boolean
           description: 삭제 가능 여부
-        deletionInfo:
-          deprecated: true
-          type: object
-          description: 삭제 가능하면 non-null, 삭제 불가능하면 null.
-          properties:
-            isLastInBuilding:
-              type: boolean
-              description:
-                장소가 포함된 건물 중 마지막으로 남은 장소 정보인지 여부.
         challengeCrusherGroup:
           $ref: '#/components/schemas/ChallengeCrusherGroupDto'
         isUpvoted:
