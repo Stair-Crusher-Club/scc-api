@@ -3,3 +3,4 @@ rules:
   info-contact: off
   operation-description: off
   operation-operationId: off
+  operation-tags: off
