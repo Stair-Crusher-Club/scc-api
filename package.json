@@ -3,7 +3,8 @@
   "description": "계단정복지도 서비스의 서버 - 클라이언트 통신을 위한 API 명세.",
   "scripts": {
     "format:check": "prettier --check api-spec.yaml admin-api-spec.yaml",
-    "format:fix": "prettier --write api-spec.yaml admin-api-spec.yaml"
+    "format:fix": "prettier --write api-spec.yaml admin-api-spec.yaml",
+    "lint": "./scripts/lint.sh"
   },
   "devDependencies": {
     "prettier": "^3.5.3"
