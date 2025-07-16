@@ -1,4 +1,4 @@
-openapi: '3.1.0'
+openapi: '3.0.0'
 info:
   title: Stair Crusher Club Admin API Specification
   version: '1.0.0'
@@ -1172,7 +1172,6 @@ components:
           $ref: '#/components/schemas/AdminChallengeAddressConditionDTO'
         actionCondition:
           $ref: '#/components/schemas/AdminChallengeActionConditionDTO'
-      required: []
 
     AdminChallengeAddressConditionDTO:
       type: object
@@ -1181,7 +1180,6 @@ components:
           type: array
           items:
             type: string
-      required: []
 
     AdminChallengeActionConditionDTO:
       type: object
@@ -1190,7 +1188,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/AdminChallengeActionConditionTypeEnumDTO'
-      required: []
 
     AdminChallengeActionConditionTypeEnumDTO:
       type: string
@@ -1689,7 +1686,7 @@ components:
       type: object
       properties:
         scheduledAt:
-          description: '비어 있으면 즉시 전송, 값이 있으면 예약 전송한다'
+          # description: '비어 있으면 즉시 전송, 값이 있으면 예약 전송한다'
           $ref: '#/components/schemas/EpochMillisTimestamp'
         userIds:
           type: array
