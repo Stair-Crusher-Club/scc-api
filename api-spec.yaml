@@ -1,4 +1,4 @@
-openapi: '3.1.0'
+openapi: '3.0.0'
 info:
   title: Stair Crusher Club API Specification
   version: '1.0.0'
@@ -18,9 +18,6 @@ servers:
 security:
   # 모든 API 는 기본적으로 AnonymousUserAuth 를 적용
   - Anonymous: []
-
-# parameters:
-#   - $ref: '#/components/parameters/SccCommonHeaders'
 
 paths:
   /cancelBuildingAccessibilityUpvote:
@@ -424,7 +421,6 @@ paths:
                     png, jpeg 등.
                 purposeType:
                   $ref: '#/components/schemas/ImageUploadPurpose'
-                  description: 업로드하는 이미지의 타입
               required:
                 - count
                 - filenameExtension
@@ -442,7 +438,6 @@ paths:
                       type: string
                     expireAt:
                       $ref: '#/components/schemas/EpochMillisTimestamp'
-                      description: url의 만료 시각.
                   required:
                     - url
                     - expireAt
@@ -747,9 +742,10 @@ paths:
                 $ref: '#/components/schemas/LoginResultDto'
         '400':
           $ref: '#/components/responses/ApiFailure'
-          description: |-
-            에러 코드 설명
-            - INVALID_AUTHENTICATION : 클라이언트에서 올려준 토큰 중 일부가 잘못된 경우.
+          # open-api v3.1 부터 사용 가능
+          # description: |-
+          #   에러 코드 설명
+          #   - INVALID_AUTHENTICATION : 클라이언트에서 올려준 토큰 중 일부가 잘못된 경우.
 
   /loginWithKakao:
     post:
@@ -775,9 +771,9 @@ paths:
                 $ref: '#/components/schemas/LoginResultDto'
         '400':
           $ref: '#/components/responses/ApiFailure'
-          description: |-
-            에러 코드 설명
-            - INVALID_AUTHENTICATION : kakaoTokens 중 일부가 잘못된 경우.
+          # description: |-
+          #   에러 코드 설명
+          #   - INVALID_AUTHENTICATION : kakaoTokens 중 일부가 잘못된 경우.
 
   /registerBuildingAccessibility:
     post:
@@ -1126,11 +1122,11 @@ paths:
                 type: object
         '400':
           $ref: '#/components/responses/ApiFailure'
-          description: |-
-            에러 코드 설명
-            - INVALID_NICKNAME : 닉네임이 유효하지 않을 때. e.g. 중복, 2글자 미만 등.
-            - INVALID_EMAIL : 이메일이 유효하지 않을 때. e.g. 중복, 이상한 형태 등.
-            - INVALID_BIRTH_YEAR : 출생 연도가 유효하지 않을 때. e.g. 1900년 이전, 2025년 이후 등.
+          # description: |-
+          #   에러 코드 설명
+          #   - INVALID_NICKNAME : 닉네임이 유효하지 않을 때. e.g. 중복, 2글자 미만 등.
+          #   - INVALID_EMAIL : 이메일이 유효하지 않을 때. e.g. 중복, 이상한 형태 등.
+          #   - INVALID_BIRTH_YEAR : 출생 연도가 유효하지 않을 때. e.g. 1900년 이전, 2025년 이후 등.
 
   /updatePushToken:
     post:
@@ -1228,7 +1224,7 @@ components:
       properties:
         buildingAccessibility:
           $ref: '#/components/schemas/BuildingAccessibility'
-          description: 정보가 아직 채워지지 않았으면 null.
+          # description: 정보가 아직 채워지지 않았으면 null.
         buildingAccessibilityComments:
           type: array
           items:
@@ -1236,7 +1232,7 @@ components:
           description: 정보가 아직 채워지지 않았으면 empty list.
         placeAccessibility:
           $ref: '#/components/schemas/PlaceAccessibility'
-          description: 정보가 아직 채워지지 않았으면 null.
+          # description: 정보가 아직 채워지지 않았으면 null.
         placeAccessibilityComments:
           type: array
           items:
