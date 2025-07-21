@@ -2335,6 +2335,8 @@ components:
       properties:
         placeId:
           type: string
+        mobilityTool:
+          $ref: '#/components/schemas/UserMobilityToolDto'
         toiletLocationType:
           $ref: '#/components/schemas/ToiletLocationTypeDto'
         floor:
@@ -2354,6 +2356,7 @@ components:
       required:
         - placeId
         - toiletLocationType
+        - mobilityTool
 
     SearchKeywordOfPlaceCategoryDto:
       type: object
@@ -2580,6 +2583,8 @@ components:
       properties:
         id:
           type: string
+        mobilityTool:
+          $ref: '#/components/schemas/UserMobilityToolDto'
         toiletLocationType:
           $ref: '#/components/schemas/ToiletLocationTypeDto'
         floor:
@@ -2604,6 +2609,7 @@ components:
         - id
         - toiletLocationType
         - user
+        - mobilityTool
         - isDeletable
         - createdAt
 
