@@ -1196,6 +1196,7 @@ components:
         - BUILDING_ACCESSIBILITY_COMMENT
         - PLACE_ACCESSIBILITY
         - PLACE_ACCESSIBILITY_COMMENT
+        - PLACE_REVIEW
 
     AdminCreateChallengeRequestDTO:
       type: object
