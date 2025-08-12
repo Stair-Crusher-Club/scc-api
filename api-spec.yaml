@@ -1683,12 +1683,18 @@ components:
         hasCompanyName:
           type: boolean
           description: 회사명을 입력해야만 참여할 수 있는 B2B 챌린지인지
+        quests:
+          type: array
+          items:
+            $ref: '#/components/schemas/ChallengeQuestDto'
+          description: 챌린지의 퀘스트 목록 (진행 현황 포함)
       required:
         - challenge
         - ranks
         - hasJoined
         - hasPasscode
         - hasCompanyName
+        - quests
 
     GetChallengeWithInvitationCodeRequestDto:
       type: object
@@ -2690,6 +2696,37 @@ components:
       required:
         - companyName
         - participantName
+
+    ChallengeQuestDto:
+      type: object
+      properties:
+        id:
+          type: string
+          description: 퀘스트 ID
+        title:
+          type: string
+          description: 퀘스트 제목
+        description:
+          type: string
+          description: 퀘스트 설명
+        targetCount:
+          type: integer
+          format: int32
+          description: 목표 완료 개수
+        completedCount:
+          type: integer
+          format: int32
+          description: 현재 완료한 개수 (참여하지 않은 경우 0)
+        isCompleted:
+          type: boolean
+          description: 퀘스트 완료 여부 (참여하지 않은 경우 false)
+      required:
+        - id
+        - title
+        - description
+        - targetCount
+        - completedCount
+        - isCompleted
 
   responses:
     ApiFailure:
