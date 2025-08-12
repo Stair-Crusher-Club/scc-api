@@ -1307,6 +1307,7 @@ components:
             - CHALLENGE_NOT_OPENED # 12
             - CHALLENGE_CLOSED # 13
             - INVALID_BIRTH_YEAR # 14
+            - INVALID_COMPANY_NAME # 15
 
           enum:
             - -999999
@@ -1319,6 +1320,7 @@ components:
             - 12
             - 13
             - 14
+            - 15
 
     AuthTokensDto:
       type: object
@@ -1678,11 +1680,15 @@ components:
         hasPasscode:
           type: boolean
           description: 참여코드를 입력해야만 참여할 수 있는 챌린지인지
+        hasCompanyName:
+          type: boolean
+          description: 회사명을 입력해야만 참여할 수 있는 B2B 챌린지인지
       required:
         - challenge
         - ranks
         - hasJoined
         - hasPasscode
+        - hasCompanyName
 
     GetChallengeWithInvitationCodeRequestDto:
       type: object
@@ -1758,6 +1764,9 @@ components:
         passcode:
           type: string
           description: 참여코드를 입력해야만 참여가 가능한 챌린지에 한해서 필요
+        companyInfo:
+          $ref: '#/components/schemas/JoinChallengeRequestCompanyJoinInfoDto'
+          description: 회사명과 본인의 이름을 입력해서 참여하는 B2B 챌린지용 정보
       required:
         - challengeId
 
@@ -2667,6 +2676,20 @@ components:
         - PLACE_ACCESSIBILITY
         - PLACE_REVIEW
         - TOILET
+
+    JoinChallengeRequestCompanyJoinInfoDto:
+      type: object
+      description: B2B 챌린지 참여 시 회사명과 본인의 이름을 입력받는 DTO. 둘 다 존재하거나 둘 다 null이어야 함.
+      properties:
+        companyName:
+          type: string
+          description: 회사명
+        participantName:
+          type: string
+          description: 본인의 이름
+      required:
+        - companyName
+        - participantName
 
   responses:
     ApiFailure:

@@ -1208,6 +1208,8 @@ components:
           type: string
         passcode:
           type: string
+        companyName:
+          type: string
         startsAtMillis:
           type: integer
           format: int64
