@@ -1772,7 +1772,6 @@ components:
           description: 참여코드를 입력해야만 참여가 가능한 챌린지에 한해서 필요
         companyInfo:
           $ref: '#/components/schemas/JoinChallengeRequestCompanyJoinInfoDto'
-          description: 회사명과 본인의 이름을 입력해서 참여하는 B2B 챌린지용 정보
       required:
         - challengeId
 
