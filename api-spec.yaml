@@ -1307,7 +1307,7 @@ components:
             - CHALLENGE_NOT_OPENED # 12
             - CHALLENGE_CLOSED # 13
             - INVALID_BIRTH_YEAR # 14
-            - INVALID_COMPANY_NAME # 15
+            - B2B_INFO_REQUIRED # 15
 
           enum:
             - -999999
@@ -1684,9 +1684,9 @@ components:
         hasPasscode:
           type: boolean
           description: 참여코드를 입력해야만 참여할 수 있는 챌린지인지
-        hasCompanyName:
+        isB2B:
           type: boolean
-          description: 회사명을 입력해야만 참여할 수 있는 B2B 챌린지인지
+          description: B2B 챌린지인지 (회사명과 참가자명을 입력받을지 결정)
         quests:
           type: array
           items:
@@ -1697,7 +1697,7 @@ components:
         - ranks
         - hasJoined
         - hasPasscode
-        - hasCompanyName
+        - isB2B
         - quests
 
     GetChallengeWithInvitationCodeRequestDto:
