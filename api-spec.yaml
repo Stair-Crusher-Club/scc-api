@@ -1514,6 +1514,10 @@ components:
         nickname:
           type: string
           description: 성과를 이룬 유저 이름.
+        companyName:
+          type: string
+          description: B2B 챌린지의 경우, 회사 이름.
+
       required:
         - rank
         - contributionCount
