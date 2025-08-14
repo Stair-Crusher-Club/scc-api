@@ -1545,8 +1545,11 @@ components:
       properties:
         authTokens:
           $ref: '#/components/schemas/AuthTokensDto'
+        userId:
+          type: string
       required:
         - authTokens
+        - userId
 
     CreatePlaceFavoriteRequestDto:
       type: object
