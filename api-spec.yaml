@@ -1307,6 +1307,7 @@ components:
             - CHALLENGE_NOT_OPENED # 12
             - CHALLENGE_CLOSED # 13
             - INVALID_BIRTH_YEAR # 14
+            - B2B_INFO_REQUIRED # 15
 
           enum:
             - -999999
@@ -1319,6 +1320,7 @@ components:
             - 12
             - 13
             - 14
+            - 15
 
     AuthTokensDto:
       type: object
@@ -1512,6 +1514,10 @@ components:
         nickname:
           type: string
           description: 성과를 이룬 유저 이름.
+        companyName:
+          type: string
+          description: B2B 챌린지의 경우, 회사 이름.
+
       required:
         - rank
         - contributionCount
@@ -1678,11 +1684,21 @@ components:
         hasPasscode:
           type: boolean
           description: 참여코드를 입력해야만 참여할 수 있는 챌린지인지
+        isB2B:
+          type: boolean
+          description: B2B 챌린지인지 (회사명과 참가자명을 입력받을지 결정)
+        quests:
+          type: array
+          items:
+            $ref: '#/components/schemas/ChallengeQuestDto'
+          description: 챌린지의 퀘스트 목록 (진행 현황 포함)
       required:
         - challenge
         - ranks
         - hasJoined
         - hasPasscode
+        - isB2B
+        - quests
 
     GetChallengeWithInvitationCodeRequestDto:
       type: object
@@ -1758,6 +1774,8 @@ components:
         passcode:
           type: string
           description: 참여코드를 입력해야만 참여가 가능한 챌린지에 한해서 필요
+        companyInfo:
+          $ref: '#/components/schemas/JoinChallengeRequestCompanyJoinInfoDto'
       required:
         - challengeId
 
@@ -2667,6 +2685,55 @@ components:
         - PLACE_ACCESSIBILITY
         - PLACE_REVIEW
         - TOILET
+
+    JoinChallengeRequestCompanyJoinInfoDto:
+      type: object
+      description: B2B 챌린지 참여 시 회사명과 본인의 이름을 입력받는 DTO. 둘 다 존재하거나 둘 다 null이어야 함.
+      properties:
+        companyName:
+          type: string
+          description: 회사명
+        participantName:
+          type: string
+          description: 본인의 이름
+      required:
+        - companyName
+        - participantName
+
+    ChallengeQuestDto:
+      type: object
+      properties:
+        id:
+          type: string
+          description: 퀘스트 ID
+        title:
+          type: string
+          description: 퀘스트 제목
+        description:
+          type: string
+          description: 퀘스트 설명
+        targetCount:
+          type: integer
+          format: int32
+          description: 목표 완료 개수
+        completedCount:
+          type: integer
+          format: int32
+          description: 현재 완료한 개수 (참여하지 않은 경우 0)
+        isCompleted:
+          type: boolean
+          description: 퀘스트 완료 여부 (참여하지 않은 경우 false)
+        startDate:
+          $ref: '#/components/schemas/EpochMillisTimestamp'
+        endDate:
+          $ref: '#/components/schemas/EpochMillisTimestamp'
+      required:
+        - id
+        - title
+        - description
+        - targetCount
+        - completedCount
+        - isCompleted
 
   responses:
     ApiFailure:
