@@ -1720,14 +1720,14 @@ components:
           type: string
         deepLink:
           type: string
-        targetUsersCount:
-          type: integer
-          format: int32
+        targetUserIds:
+          type: array
+          items:
+            type: string
       required:
         - id
-        - scheduledAt
         - body
-        - targetUsersCount
+        - targetUserIds
 
     AdminListPushNotificationSchedulesResponseDTO:
       type: object
