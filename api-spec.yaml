@@ -2691,7 +2691,9 @@ components:
 
     JoinChallengeRequestCompanyJoinInfoDto:
       type: object
-      description: B2B 챌린지 참여 시 회사명과 본인의 이름을 입력받는 DTO. 둘 다 존재하거나 둘 다 null이어야 함.
+      description:
+        B2B 챌린지 참여 시 회사명과 본인의 이름을 입력받는 DTO. 둘 다 존재하거나
+        둘 다 null이어야 함.
       properties:
         companyName:
           type: string

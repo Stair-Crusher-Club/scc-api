@@ -32,16 +32,4 @@ jobs:
 
       - name: Check formatting
         run: |
-          npm run format:check || echo "FORMAT_NEEDED=true" >> $GITHUB_ENV
-
-      - name: Auto-fix and commit formatting changes
-        if: env.FORMAT_NEEDED == 'true'
-        run: |
-          npm run format:fix
-
-          git config --global user.email "staircrusherclub.dev@gmail.com"
-          git config --global user.name "Stair-Crusher-Club"
-
-          git add api-spec.yaml
-          git commit -m "chore: auto-format api-spec.yaml"
-          git push
+          npm run format:check
