@@ -2723,9 +2723,8 @@ components:
           type: integer
           format: int32
           description: 현재 완료한 개수 (참여하지 않은 경우 0)
-        isCompleted:
-          type: boolean
-          description: 퀘스트 완료 여부 (참여하지 않은 경우 false)
+        completedAt:
+          $ref: '#/components/schemas/EpochMillisTimestamp'
         startDate:
           $ref: '#/components/schemas/EpochMillisTimestamp'
         endDate:
@@ -2736,7 +2735,6 @@ components:
         - description
         - targetCount
         - completedCount
-        - isCompleted
 
   responses:
     ApiFailure:
