@@ -2725,6 +2725,8 @@ components:
           type: integer
           format: int32
           description: 현재 완료한 개수 (참여하지 않은 경우 0)
+        completeStampType:
+          $ref: '#/components/schemas/ChallengeQuestCompleteStampType'
         completedAt:
           $ref: '#/components/schemas/EpochMillisTimestamp'
         startDate:
@@ -2737,6 +2739,17 @@ components:
         - description
         - targetCount
         - completedCount
+        - completeStampType
+
+    ChallengeQuestCompleteStampType:
+      type: string
+      enum:
+        - FLAG
+        - CAFE
+        - THUMBS_UP
+        - POTION
+        - RESTAURANT
+        - REVIEW
 
   responses:
     ApiFailure:
