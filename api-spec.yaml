@@ -2260,7 +2260,7 @@ components:
           description: 이 정보 등록으로 인해 기여한 챌린지 목록
           type: array
           items:
-            $ref: '#/components/schemas/ContributedChallengeInfo'
+            $ref: '#/components/schemas/ContributedChallengeInfoDto'
       required: []
 
     RegisterPlaceAccessibilityRequestDto:
@@ -2315,16 +2315,16 @@ components:
           description: 이 정보 등록으로 인해 기여한 챌린지 목록
           type: array
           items:
-            $ref: '#/components/schemas/ContributedChallengeInfo'
+            $ref: '#/components/schemas/ContributedChallengeInfoDto'
       required:
         - accessibilityInfo
         - registeredUserOrder
 
-    ContributedChallengeInfo:
+    ContributedChallengeInfoDto:
       type: object
       properties:
         challenge:
-          '#/components/schemas/ChallengeDto'
+          $ref: '#/components/schemas/ChallengeDto'
         completedQuestsByContribution:
           description: 이번 유저 참여로 인해 달성된 퀘스트 목록.
           type: array
@@ -2332,7 +2332,7 @@ components:
             $ref: '#/components/schemas/ChallengeQuestDto'
       required:
         - challenge
-        - completedQuests
+        - completedQuestsByContribution
 
     RegisterPlaceReviewRequestDto:
       type: object
@@ -2387,7 +2387,7 @@ components:
           description: 이 리뷰 등록으로 인해 기여한 챌린지 목록
           type: array
           items:
-            $ref: '#/components/schemas/ContributedChallengeInfo'
+            $ref: '#/components/schemas/ContributedChallengeInfoDto'
         required:
           - placeReview
 
@@ -2766,7 +2766,7 @@ components:
           format: int32
           description: 현재 완료한 개수 (참여하지 않은 경우 0)
         completeStampType:
-          $ref: '#/components/schemas/ChallengeQuestCompleteStampType'
+          $ref: '#/components/schemas/ChallengeQuestCompleteStampTypeDto'
         completedAt:
           $ref: '#/components/schemas/EpochMillisTimestamp'
         startDate:
@@ -2781,7 +2781,7 @@ components:
         - completedCount
         - completeStampType
 
-    ChallengeQuestCompleteStampType:
+    ChallengeQuestCompleteStampTypeDto:
       type: string
       enum:
         - FLAG
