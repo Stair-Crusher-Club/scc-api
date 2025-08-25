@@ -38,7 +38,7 @@ paths:
 
   /cancelPlaceAccessibilityUpvote:
     post:
-      depreacted: true
+      deprecated: true
       summary: "장소에 대해 '이 정보가 도움이 돼요'를 취소한다."
       security:
         - Identified: []
