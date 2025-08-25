@@ -839,6 +839,7 @@ paths:
               $ref: '#/components/schemas/RegisterBuildingAccessibilityRequestDto'
       responses:
         '200':
+          description: 접근성 정보 등록 성공
           content:
             application/json:
               schema:
@@ -2363,7 +2364,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ContributedChallengeInfoDto'
-      required: []
 
     RegisterPlaceAccessibilityRequestDto:
       type: object
@@ -2490,8 +2490,8 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ContributedChallengeInfoDto'
-        required:
-          - placeReview
+      required:
+        - placeReview
 
     RegisterToiletReviewRequestDto:
       type: object
