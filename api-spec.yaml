@@ -22,6 +22,7 @@ security:
 paths:
   /cancelBuildingAccessibilityUpvote:
     post:
+      deprecated: true
       summary: "건물에 대해 '이 정보가 도움이 돼요'를 취소한다."
       security:
         - Identified: []
@@ -37,6 +38,7 @@ paths:
 
   /cancelPlaceAccessibilityUpvote:
     post:
+      depreacted: true
       summary: "장소에 대해 '이 정보가 도움이 돼요'를 취소한다."
       security:
         - Identified: []
@@ -45,6 +47,21 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/CancelPlaceAccessibilityUpvoteRequestDto'
+        required: true
+      responses:
+        '204':
+          $ref: '#/components/responses/NoContent'
+
+  /cancelUpvote:
+    post:
+      summary: "'도움이 돼요'를 취소한다."
+      security:
+        - Identified: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CancelUpvoteRequestDto'
         required: true
       responses:
         '204':
@@ -248,6 +265,23 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/ToiletReviewDto'
+
+  /listUpvotes:
+    post:
+      summary: 도움이 돼요 리스트를 조회한다.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ListUpvotesRequestDto'
+        required: true
+      responses:
+        '200':
+          description: 조회된 도움이 돼요 리스트를 내려준다.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListUpvotesResponseDto'
 
   /listPlaceReviews:
     post:
@@ -520,6 +554,7 @@ paths:
 
   /giveBuildingAccessibilityUpvote:
     post:
+      deprecated: true
       summary: "건물에 대해 '이 정보가 도움이 돼요'를 준다."
       security:
         - Identified: []
@@ -535,6 +570,7 @@ paths:
 
   /givePlaceAccessibilityUpvote:
     post:
+      deprecated: true
       summary: "장소에 대해 '이 정보가 도움이 돼요'를 준다."
       security:
         - Identified: []
@@ -544,6 +580,21 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/GivePlaceAccessibilityUpvoteRequestDto'
+      responses:
+        '204':
+          $ref: '#/components/responses/NoContent'
+
+  /giveUpvote:
+    post:
+      summary: "'도움이 돼요'를 준다."
+      security:
+        - Identified: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GiveUpvoteRequestDto'
       responses:
         '204':
           $ref: '#/components/responses/NoContent'
@@ -1450,6 +1501,17 @@ components:
         - placeAccessibilityId
       type: object
 
+    CancelUpvoteRequestDto:
+      type: object
+      properties:
+        targetType:
+          $ref: '#/components/schemas/UpvoteTargetTypeDto'
+        id:
+          type: string
+      required:
+        - targetType
+        - id
+
     ChallengeDto:
       type: object
       properties:
@@ -1767,6 +1829,17 @@ components:
       required:
         - placeAccessibilityId
 
+    GiveUpvoteRequestDto:
+      type: object
+      properties:
+        targetType:
+          $ref: '#/components/schemas/UpvoteTargetTypeDto'
+        id:
+          type: string
+      required:
+        - targetType
+        - id
+
     JoinChallengeRequestDto:
       type: object
       properties:
@@ -1939,6 +2012,35 @@ components:
             $ref: '#/components/schemas/SearchPlacePresetDto'
       required:
         - keywordPresets
+
+    ListUpvotesRequestDto:
+      type: object
+      properties:
+        targetType:
+          $ref: '#/components/schemas/UpvoteTargetTypeDto'
+      required:
+        - targetType
+
+    ListUpvotesResponseDto:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ListUpvotesItemDto'
+      required:
+        - items
+
+    ListUpvotesItemDto:
+      type: object
+      properties:
+        nickname:
+          type: string
+        mobilityTool:
+          $ref: '#/components/schemas/UserMobilityToolDto'
+      required:
+        - nickname
+        - mobilityTool
 
     Location:
       description: 위치를 위경도로 표현하기 위한 모델.
@@ -2538,6 +2640,13 @@ components:
         - NONE # 해당사항없음
         - FRIEND_OF_TOOL_USER # 도구를 사용하는 사람의 친구
 
+    UpvoteTargetTypeDto:
+      type: string
+      enum:
+        - PLACE_ACCESSIBILITY
+        - BUILDING_ACCESSIBILITY
+        - PLACE_REVIEW
+
     ImageDto:
       type: object
       properties:
@@ -2708,6 +2817,8 @@ components:
         user:
           $ref: '#/components/schemas/AccessibilityRegistererDto'
         isDeletable:
+          type: boolean
+        isUpvoted:
           type: boolean
         createdAt:
           $ref: '#/components/schemas/EpochMillisTimestamp'
