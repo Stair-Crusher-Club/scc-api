@@ -969,6 +969,11 @@ paths:
                 placeId:
                   type: string
                   description: 신고할 장소의 아이디
+                buildingId:
+                  type: string
+                  description:
+                    빌딩 접근성에 관한 경우, 빌딩의 아이디. targetType 이 빌딩
+                    접근성일 경우, non-null 이어야 한다
                 reason:
                   $ref: '#/components/schemas/AccessibilityReportReason'
                 detail:
