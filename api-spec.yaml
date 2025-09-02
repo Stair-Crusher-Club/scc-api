@@ -967,15 +967,20 @@ paths:
               type: object
               properties:
                 placeId:
+                  deprecated: true
                   type: string
                   description: 신고할 장소의 아이디
+                # FIXME: 강업 후 non-null 로 만들기
+                targetType:
+                  $ref: '#/components/schemas/ReportTargetType'
+                id:
+                  type: string
+                  description: 신고하고자 하는 정보의 id
                 reason:
                   $ref: '#/components/schemas/AccessibilityReportReason'
                 detail:
                   type: string
                   description: 신고 상세 내용
-                targetType:
-                  $ref: '#/components/schemas/ReportTargetType'
               required:
                 - placeId
                 - reason
@@ -2823,6 +2828,7 @@ components:
       type: string
       enum:
         - PLACE_ACCESSIBILITY
+        - BUILDING_ACCESSIBILITY
         - PLACE_REVIEW
         - TOILET
 
