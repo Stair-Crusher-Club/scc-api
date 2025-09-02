@@ -2079,11 +2079,11 @@ components:
         placeReviews:
           type: array
           items:
-            $ref: '#/components/schemas/PlaceReviewDto'
+            $ref: '#/components/schemas/PlaceReviewListItemDto'
         toiletReviews:
           type: array
           items:
-            $ref: '#/components/schemas/ToiletReviewDto'
+            $ref: '#/components/schemas/ToiletReviewListItemDto'
       required:
         - totalNumberOfItems
         - placeReviews
@@ -2113,11 +2113,11 @@ components:
         placeReviews:
           type: array
           items:
-            $ref: '#/components/schemas/PlaceReviewDto'
+            $ref: '#/components/schemas/PlaceReviewListItemDto'
         toiletReviews:
           type: array
           items:
-            $ref: '#/components/schemas/ToiletReviewDto'
+            $ref: '#/components/schemas/ToiletReviewListItemDto'
       required:
         - totalNumberOfItems
         - placeReviews
@@ -2232,6 +2232,9 @@ components:
         isUpvoted:
           type: boolean
           description: 유저가 이 접근성 정보에 '도움이 돼요'를 표시했는지 여부.
+        totalUpvoteCount:
+          type: integer
+          description: 총 몇개의 도움이 돼요가 눌렸는지.
         createdAt:
           $ref: '#/components/schemas/EpochMillisTimestamp'
       required:
@@ -2242,6 +2245,8 @@ components:
         - hasSlope
         - isFirstFloor
         - isDeletable
+        - isUpvoted
+        - totalUpvoteCount
         - createdAt
 
     PlaceAccessibilityComment:
@@ -2363,6 +2368,28 @@ components:
         - hasBuildingAccessibility
         - hasPlaceAccessibility
         - isAccessibilityRegistrable
+
+    PlaceReviewListItemDto:
+      type: object
+      properties:
+        place:
+          $ref: '#/components/schemas/Place'
+        placeReview:
+          $ref: '#/components/schemas/PlaceReviewDto'
+      required:
+        - place
+        - placeReview
+
+    ToiletReviewListItemDto:
+      type: object
+      properties:
+        place:
+          $ref: '#/components/schemas/Place'
+        toiletReview:
+          $ref: '#/components/schemas/ToiletReviewDto'
+      required:
+        - place
+        - toiletReview
 
     CompactAccessibilityInfoDto:
       type: object
@@ -2912,6 +2939,10 @@ components:
           $ref: '#/components/schemas/AccessibilityRegistererDto'
         isDeletable:
           type: boolean
+        isUpvoted:
+          type: boolean
+        totalUpvoteCount:
+          type: integer
         createdAt:
           $ref: '#/components/schemas/EpochMillisTimestamp'
       required:
@@ -2920,6 +2951,8 @@ components:
         - user
         - mobilityTool
         - isDeletable
+        - isUpvoted
+        - totalUpvoteCount
         - createdAt
 
     PlaceReviewDto:
@@ -2957,6 +2990,10 @@ components:
           $ref: '#/components/schemas/AccessibilityRegistererDto'
         isDeletable:
           type: boolean
+        isUpvoted:
+          type: boolean
+        totalUpvoteCount:
+          type: integer
         createdAt:
           $ref: '#/components/schemas/EpochMillisTimestamp'
       required:
@@ -2968,6 +3005,8 @@ components:
         - orderMethods
         - user
         - isDeletable
+        - isUpvoted
+        - totalUpvoteCount
         - createdAt
 
     ReportTargetType:
