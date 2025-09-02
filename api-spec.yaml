@@ -972,7 +972,7 @@ paths:
                   description: 신고할 장소의 아이디
                 # FIXME: 강업 후 non-null 로 만들기
                 targetType:
-                  $ref: '#/components/schemas/ReportTargetType'
+                  $ref: '#/components/schemas/ReportTargetTypeDto'
                 id:
                   type: string
                   description: 신고하고자 하는 정보의 id
@@ -2824,13 +2824,13 @@ components:
         - isDeletable
         - createdAt
 
-    ReportTargetType:
+    ReportTargetTypeDto:
       type: string
       enum:
         - PLACE_ACCESSIBILITY
         - BUILDING_ACCESSIBILITY
         - PLACE_REVIEW
-        - TOILET
+        - TOILET_REVIEW
 
     JoinChallengeRequestCompanyJoinInfoDto:
       type: object
