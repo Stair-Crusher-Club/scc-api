@@ -967,9 +967,9 @@ paths:
               type: object
               properties:
                 placeId:
-                  depreacted: true
                   type: string
                   description: 신고할 장소의 아이디
+                  depreacted: true
                 # FIXME: 강업 후 non-null 로 만들기
                 targetType:
                   $ref: '#/components/schemas/ReportTargetType'
