@@ -2599,7 +2599,6 @@ components:
       enum:
         - PLACE_ACCESSIBILITY
         - BUILDING_ACCESSIBILITY
-        - PLACE_REVIEW
 
     ImageDto:
       type: object
