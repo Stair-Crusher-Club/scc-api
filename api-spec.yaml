@@ -266,23 +266,6 @@ paths:
                 items:
                   $ref: '#/components/schemas/ToiletReviewDto'
 
-  /listUpvotes:
-    post:
-      summary: 도움이 돼요 리스트를 조회한다.
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ListUpvotesRequestDto'
-        required: true
-      responses:
-        '200':
-          description: 조회된 도움이 돼요 리스트를 내려준다.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ListUpvotesResponseDto'
-
   /listPlaceReviews:
     post:
       summary: 실내 리뷰를 조회한다.
@@ -2013,35 +1996,6 @@ components:
             $ref: '#/components/schemas/SearchPlacePresetDto'
       required:
         - keywordPresets
-
-    ListUpvotesRequestDto:
-      type: object
-      properties:
-        targetType:
-          $ref: '#/components/schemas/UpvoteTargetTypeDto'
-      required:
-        - targetType
-
-    ListUpvotesResponseDto:
-      type: object
-      properties:
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/ListUpvotesItemDto'
-      required:
-        - items
-
-    ListUpvotesItemDto:
-      type: object
-      properties:
-        nickname:
-          type: string
-        mobilityTool:
-          $ref: '#/components/schemas/UserMobilityToolDto'
-      required:
-        - nickname
-        - mobilityTool
 
     Location:
       description: 위치를 위경도로 표현하기 위한 모델.
