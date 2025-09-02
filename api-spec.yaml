@@ -1018,37 +1018,14 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                searchText:
-                  type: string
-                currentLocation:
-                  $ref: '#/components/schemas/Location'
-                distanceMetersLimit:
-                  type: integer
-                siGunGuId:
-                  type: string
-                eupMyeonDongId:
-                  type: string
-                sort:
-                  $ref: '#/components/schemas/SearchPlaceSortDto'
-                filters:
-                  $ref: '#/components/schemas/SearchPlaceFilterDto'
-              required:
-                - searchText
-                - distanceMetersLimit
+              $ref: '#/components/schemas/SearchPlacesRequestDto'
       responses:
         '200':
           description: 검색된 장소의 리스트를 내려준다.
           content:
             application/json:
               schema:
-                properties:
-                  items:
-                    items:
-                      $ref: '#/components/schemas/PlaceListItem'
-                    type: array
-                type: object
+                $ref: '#/components/schemas/SearchPlacesResponseDto'
 
   /signUp:
     post:
@@ -2444,6 +2421,64 @@ components:
         - id
         - description
         - searchText
+
+    SearchPlacesRequestDto:
+      type: object
+      properties:
+        searchText:
+          type: string
+        # 하위 호환성을 위한 기존 필드들 (CircleSearchRegion 폴백용)
+        currentLocation:
+          $ref: '#/components/schemas/Location'
+        distanceMetersLimit:
+          type: integer
+        # 새로운 region 필드들 (optional)
+        circleRegion:
+          $ref: '#/components/schemas/CircleSearchRegionDto'
+        rectangleRegion:
+          $ref: '#/components/schemas/RectangleSearchRegionDto'
+        siGunGuId:
+          type: string
+        eupMyeonDongId:
+          type: string
+        sort:
+          $ref: '#/components/schemas/SearchPlaceSortDto'
+        filters:
+          $ref: '#/components/schemas/SearchPlaceFilterDto'
+      required:
+        - searchText
+
+    SearchPlacesResponseDto:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/PlaceListItem'
+      required:
+        - items
+
+    CircleSearchRegionDto:
+      type: object
+      properties:
+        currentLocation:
+          $ref: '#/components/schemas/Location'
+        distanceMetersLimit:
+          type: integer
+      required:
+        - currentLocation
+        - distanceMetersLimit
+
+    RectangleSearchRegionDto:
+      type: object
+      properties:
+        leftTopLocation:
+          $ref: '#/components/schemas/Location'
+        rightBottomLocation:
+          $ref: '#/components/schemas/Location'
+      required:
+        - leftTopLocation
+        - rightBottomLocation
 
     SearchPlaceSortDto:
       type: string
