@@ -22,6 +22,7 @@ security:
 paths:
   /cancelBuildingAccessibilityUpvote:
     post:
+      deprecated: true
       summary: "건물에 대해 '이 정보가 도움이 돼요'를 취소한다."
       security:
         - Identified: []
@@ -37,6 +38,7 @@ paths:
 
   /cancelPlaceAccessibilityUpvote:
     post:
+      deprecated: true
       summary: "장소에 대해 '이 정보가 도움이 돼요'를 취소한다."
       security:
         - Identified: []
@@ -45,6 +47,21 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/CancelPlaceAccessibilityUpvoteRequestDto'
+        required: true
+      responses:
+        '204':
+          $ref: '#/components/responses/NoContent'
+
+  /cancelUpvote:
+    post:
+      summary: "'도움이 돼요'를 취소한다."
+      security:
+        - Identified: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CancelUpvoteRequestDto'
         required: true
       responses:
         '204':
@@ -520,6 +537,7 @@ paths:
 
   /giveBuildingAccessibilityUpvote:
     post:
+      deprecated: true
       summary: "건물에 대해 '이 정보가 도움이 돼요'를 준다."
       security:
         - Identified: []
@@ -535,6 +553,7 @@ paths:
 
   /givePlaceAccessibilityUpvote:
     post:
+      deprecated: true
       summary: "장소에 대해 '이 정보가 도움이 돼요'를 준다."
       security:
         - Identified: []
@@ -544,6 +563,21 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/GivePlaceAccessibilityUpvoteRequestDto'
+      responses:
+        '204':
+          $ref: '#/components/responses/NoContent'
+
+  /giveUpvote:
+    post:
+      summary: "'도움이 돼요'를 준다."
+      security:
+        - Identified: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GiveUpvoteRequestDto'
       responses:
         '204':
           $ref: '#/components/responses/NoContent'
@@ -1428,6 +1462,17 @@ components:
         - placeAccessibilityId
       type: object
 
+    CancelUpvoteRequestDto:
+      type: object
+      properties:
+        targetType:
+          $ref: '#/components/schemas/UpvoteTargetTypeDto'
+        id:
+          type: string
+      required:
+        - targetType
+        - id
+
     ChallengeDto:
       type: object
       properties:
@@ -1744,6 +1789,17 @@ components:
           type: string
       required:
         - placeAccessibilityId
+
+    GiveUpvoteRequestDto:
+      type: object
+      properties:
+        targetType:
+          $ref: '#/components/schemas/UpvoteTargetTypeDto'
+        id:
+          type: string
+      required:
+        - targetType
+        - id
 
     JoinChallengeRequestDto:
       type: object
@@ -2572,6 +2628,12 @@ components:
         - CLUCH # 클러치(목발, 지팡이)
         - NONE # 해당사항없음
         - FRIEND_OF_TOOL_USER # 도구를 사용하는 사람의 친구
+
+    UpvoteTargetTypeDto:
+      type: string
+      enum:
+        - PLACE_ACCESSIBILITY
+        - BUILDING_ACCESSIBILITY
 
     ImageDto:
       type: object
