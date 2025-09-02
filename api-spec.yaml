@@ -2823,6 +2823,7 @@ components:
       type: string
       enum:
         - PLACE_ACCESSIBILITY
+        - BUILDING_ACCESSIBILITY
         - PLACE_REVIEW
         - TOILET
 
