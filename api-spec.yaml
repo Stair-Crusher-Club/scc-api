@@ -522,6 +522,25 @@ paths:
               schema:
                 $ref: '#/components/schemas/GetAccessibilityActivityReportResponseDto'
 
+  /getUpvoteDetails:
+    get:
+      summary: 도움이 되었어요를 누른 사람들과 통계를 받아온다
+      security:
+        - Identified: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GetUpvoteDetailsRequestDto'
+      responses:
+        '200':
+          description: 도움이 되었어요에 대한 자세한 정보를 내려준다.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetUpvoteDetailsResponseDto'
+
   /getUserInfo:
     get:
       summary: 유저 정보를 조회한다.
@@ -732,6 +751,44 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ListSearchPlacePresetsResponseDto'
+
+  /listSubmittedReviews:
+    post:
+      summary: 내가 작성한 리뷰를 모두 가져온다.
+      security:
+        - Identified: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ListSubmittedReviewsRequestDto'
+      responses:
+        '200':
+          description: 내가 작성한 리뷰를 페이징 해서 내려준다.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListSubmittedReviewsResponseDto'
+
+  /listUpvotedReviews:
+    post:
+      summary: 내가 작성한 리뷰 중 도움이 되었어요를 받은 리뷰를 가져온다.
+      security:
+        - Identified: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ListUpvotedReviewsRequestDto'
+      responses:
+        '200':
+          description: 내가 작성한 도움이 된 리뷰를 페이징 해서 내려준다.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListUpvotedReviewsResponseDto'
 
   /login:
     post:
@@ -1780,6 +1837,29 @@ components:
       required:
         - status
 
+    GetUpvoteDetailsRequestDto:
+      type: object
+      properties:
+        targetType:
+          $ref: '#/components/schemas/UpvoteTargetTypeDto'
+        id:
+          type: string
+      required:
+        - targetType
+        - id
+
+    GetUpvoteDetailsResponseDto:
+      type: object
+      properties:
+        upvotedUsers:
+          type: array
+          items:
+            $ref: '#/components/schemas/UpvotedUserDto'
+        upvotedUserStatistics:
+          type: array
+          items:
+            $ref: '#/components/schemas/UpvotedUserStatisticsEntryDto'
+
     GetUserInfoRequestDto:
       type: object
       properties: {}
@@ -1996,6 +2076,75 @@ components:
             $ref: '#/components/schemas/SearchPlacePresetDto'
       required:
         - keywordPresets
+
+    ListSubmittedReviewsRequestDto:
+      type: object
+      properties:
+        nextToken:
+          type: string
+          description: 페이지 정보. 없으면 첫 페이지 요소들을 내려준다.
+        limit:
+          type: integer
+          format: int64
+
+    ListSubmittedReviewsResponseDto:
+      type: object
+      properties:
+        totalNumberOfItems:
+          type: integer
+          format: int64
+          description:
+            지금까지 내가 작성한 리뷰 개수 (내부 공간 리뷰 + 화장실 리뷰)
+        nextToken:
+          type: string
+          description:
+            다음 페이지 정보. 없으면 더 이상 요청할 값이 없음을 의미한다.
+        placeReviews:
+          type: array
+          items:
+            $ref: '#/components/schemas/PlaceReviewDto'
+        toiletReviews:
+          type: array
+          items:
+            $ref: '#/components/schemas/ToiletReviewDto'
+      required:
+        - totalNumberOfItems
+        - placeReviews
+        - toiletReviews
+
+    ListUpvotedReviewsRequestDto:
+      type: object
+      properties:
+        nextToken:
+          type: string
+          description: 페이지 정보. 없으면 첫 페이지 요소들을 내려준다.
+        limit:
+          type: integer
+          format: int64
+
+    ListUpvotedReviewsResponseDto:
+      type: object
+      properties:
+        totalNumberOfUpvotes:
+          type: integer
+          format: int64
+          description: 도움이 되었어요 개수 (내부 공간 + 화장실 리뷰)
+        nextToken:
+          type: string
+          description:
+            다음 페이지 정보. 없으면 더 이상 요청할 값이 없음을 의미한다.
+        placeReviews:
+          type: array
+          items:
+            $ref: '#/components/schemas/PlaceReviewDto'
+        toiletReviews:
+          type: array
+          items:
+            $ref: '#/components/schemas/ToiletReviewDto'
+      required:
+        - totalNumberOfItems
+        - placeReviews
+        - toiletReviews
 
     Location:
       description: 위치를 위경도로 표현하기 위한 모델.
@@ -2599,6 +2748,8 @@ components:
       enum:
         - PLACE_ACCESSIBILITY
         - BUILDING_ACCESSIBILITY
+        - PLACE_REVIEW
+        - TOILET_REVIEW
 
     ImageDto:
       type: object
@@ -2852,6 +3003,28 @@ components:
         - POTION
         - RESTAURANT
         - REVIEW
+
+    UpvotedUserDto:
+      type: object
+      properties:
+        nickname:
+          type: string
+      required:
+        - nickname
+
+    UpvotedUserStatisticsEntryDto:
+      type: object
+      properties:
+        mobilityTool:
+          $ref: '#/components/schemas/UserMobilityToolDto'
+        percentage:
+          type: integer
+        totalCount:
+          type: integer
+      required:
+        - mobilityTool
+        - percentage
+        - totalCount
 
   responses:
     ApiFailure:
