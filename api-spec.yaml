@@ -2772,8 +2772,6 @@ components:
           $ref: '#/components/schemas/AccessibilityRegistererDto'
         isDeletable:
           type: boolean
-        isUpvoted:
-          type: boolean
         createdAt:
           $ref: '#/components/schemas/EpochMillisTimestamp'
       required:
