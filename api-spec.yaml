@@ -2124,7 +2124,7 @@ components:
           items:
             $ref: '#/components/schemas/ToiletReviewListItemDto'
       required:
-        - totalNumberOfItems
+        - totalNumberOfUpvotes
         - placeReviews
         - toiletReviews
 
