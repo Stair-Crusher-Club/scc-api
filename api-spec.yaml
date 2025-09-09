@@ -522,7 +522,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GetCurrentCrusherActivityResponseDto'
+                $ref: '#/components/schemas/RecordCrusherClubActivityResponseDto'
 
   /getClientVersionStatus:
     post:
@@ -3024,6 +3024,13 @@ components:
     GetCurrentCrusherActivityResponseDto:
       type: object
       properties:
+        currentCrusherActivity:
+          $ref: '#/components/schemas/CurrentCrusherActivityDto'
+      required: [ ]
+
+    CurrentCrusherActivityDto:
+      type: object
+      properties:
         crusherClub:
           $ref: '#/components/schemas/CrusherClubDto'
         quests:
@@ -3037,6 +3044,7 @@ components:
           description: 사용자의 활동 로그
       required:
         - crusherClub
+        - quests
         - activityLog
 
     RecordCrusherClubActivityRequestDto:
@@ -3046,6 +3054,13 @@ components:
           $ref: '#/components/schemas/CrusherClubQuestTypeDto'
       required:
         - questType
+
+    RecordCrusherClubActivityResponseDto:
+      type: object
+      properties:
+        currentCrusherActivity:
+          $ref: '#/components/schemas/CurrentCrusherActivityDto'
+      required: [ ]
 
     CrusherClubQuestTypeDto:
       type: string
