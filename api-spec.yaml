@@ -522,6 +522,19 @@ paths:
               schema:
                 $ref: '#/components/schemas/GetAccessibilityActivityReportResponseDto'
 
+  /getReviewActivityReport:
+    post:
+      summary: 유저의 리뷰 등록 활동을 조회한다
+      security:
+        - Identified: []
+      responses:
+        '200':
+          description: 리뷰 등록 리포트를 내려준다.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetReviewActivityReportResponseDto'
+
   /getUpvoteDetails:
     get:
       summary: 도움이 되었어요를 누른 사람들과 통계를 받아온다
@@ -752,9 +765,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/ListSearchPlacePresetsResponseDto'
 
-  /listSubmittedReviews:
+  /listSubmittedPlaceReviews:
     post:
-      summary: 내가 작성한 리뷰를 모두 가져온다.
+      summary: 내가 작성한 내부 공간 리뷰를 페이징 해서 가져온다.
       security:
         - Identified: []
       requestBody:
@@ -769,11 +782,32 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ListSubmittedReviewsResponseDto'
+                $ref: '#/components/schemas/ListSubmittedPlaceReviewsResponseDto'
 
-  /listUpvotedReviews:
+  /listSubmittedToiletReviews:
     post:
-      summary: 내가 작성한 리뷰 중 도움이 되었어요를 받은 리뷰를 가져온다.
+      summary: 내가 작성한 화장실 리뷰를 페이징 해서 가져온다.
+      security:
+        - Identified: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ListSubmittedReviewsRequestDto'
+      responses:
+        '200':
+          description: 내가 작성한 리뷰를 페이징 해서 내려준다.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListSubmittedToiletReviewsResponseDto'
+
+  /listUpvotedPlaceReviews:
+    post:
+      summary:
+        내가 작성한 내부 공간 리뷰 중 도움이 되었어요를 받은 리뷰 페이징를
+        가져온다.
       security:
         - Identified: []
       requestBody:
@@ -788,7 +822,28 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ListUpvotedReviewsResponseDto'
+                $ref: '#/components/schemas/ListUpvotedPlaceReviewsResponseDto'
+
+  /listUpvotedToiletReviews:
+    post:
+      summary:
+        내가 작성한 화장실 리뷰 중 도움이 되었어요를 받은 리뷰 페이징를
+        가져온다.
+      security:
+        - Identified: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ListUpvotedReviewsRequestDto'
+      responses:
+        '200':
+          description: 내가 작성한 도움이 된 리뷰를 페이징 해서 내려준다.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListUpvotedToiletReviewsResponseDto'
 
   /login:
     post:
@@ -1819,6 +1874,20 @@ components:
       required:
         - status
 
+    GetReviewActivityReportResponseDto:
+      type: object
+      properties:
+        todayReviewedCount:
+          description: 오늘 등록한 리뷰(내부 + 화장실) 수
+          type: integer
+          format: int32
+        thisWeekReviewedCount:
+          description: 이번주 등록한 리뷰(내부 + 화장실) 수
+          type: integer
+      required:
+        - todayReviewedCount
+        - thisWeekReviewedCount
+
     GetUpvoteDetailsRequestDto:
       type: object
       properties:
@@ -2069,14 +2138,13 @@ components:
           type: integer
           format: int64
 
-    ListSubmittedReviewsResponseDto:
+    ListSubmittedPlaceReviewsResponseDto:
       type: object
       properties:
         totalNumberOfItems:
           type: integer
           format: int64
-          description:
-            지금까지 내가 작성한 리뷰 개수 (내부 공간 리뷰 + 화장실 리뷰)
+          description: 지금까지 내가 작성한 내부 공간 리뷰 개수
         nextToken:
           type: string
           description:
@@ -2085,13 +2153,27 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/PlaceReviewListItemDto'
+      required:
+        - totalNumberOfItems
+        - placeReviews
+
+    ListSubmittedToiletReviewsResponseDto:
+      type: object
+      properties:
+        totalNumberOfItems:
+          type: integer
+          format: int64
+          description: 지금까지 내가 작성한 화장실 리뷰 개수
+        nextToken:
+          type: string
+          description:
+            다음 페이지 정보. 없으면 더 이상 요청할 값이 없음을 의미한다.
         toiletReviews:
           type: array
           items:
             $ref: '#/components/schemas/ToiletReviewListItemDto'
       required:
         - totalNumberOfItems
-        - placeReviews
         - toiletReviews
 
     ListUpvotedReviewsRequestDto:
@@ -2104,13 +2186,13 @@ components:
           type: integer
           format: int64
 
-    ListUpvotedReviewsResponseDto:
+    ListUpvotedPlaceReviewsResponseDto:
       type: object
       properties:
         totalNumberOfUpvotes:
           type: integer
           format: int64
-          description: 도움이 되었어요 개수 (내부 공간 + 화장실 리뷰)
+          description: 내부 공간 리뷰로 받은 도움이 되었어요 개수
         nextToken:
           type: string
           description:
@@ -2119,13 +2201,27 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/PlaceReviewListItemDto'
+      required:
+        - totalNumberOfUpvotes
+        - placeReviews
+
+    ListUpvotedToiletReviewsResponseDto:
+      type: object
+      properties:
+        totalNumberOfUpvotes:
+          type: integer
+          format: int64
+          description: 화장실 리뷰로 받은 도움이 되었어요 개수
+        nextToken:
+          type: string
+          description:
+            다음 페이지 정보. 없으면 더 이상 요청할 값이 없음을 의미한다.
         toiletReviews:
           type: array
           items:
             $ref: '#/components/schemas/ToiletReviewListItemDto'
       required:
         - totalNumberOfUpvotes
-        - placeReviews
         - toiletReviews
 
     Location:
