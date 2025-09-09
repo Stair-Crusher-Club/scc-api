@@ -2844,9 +2844,17 @@ components:
         participantName:
           type: string
           description: 본인의 이름
+        organizationName:
+          type: string
+          description: 조직명
+        employeeIdentificationNumber:
+          type: string
+          description: 사원번호
       required:
         - companyName
         - participantName
+        - organizationName
+        - employeeIdentificationNumber
 
     ChallengeQuestDto:
       type: object
