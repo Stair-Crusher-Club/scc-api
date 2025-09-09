@@ -505,6 +505,25 @@ paths:
               schema:
                 $ref: '#/components/schemas/GetCurrentCrusherActivityResponseDto'
 
+  /recordCrusherClubActivity:
+    post:
+      summary: 크러셔 활동을 기록한다.
+      security:
+        - Identified: [ ]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RecordCrusherClubActivityRequestDto'
+        required: true
+      responses:
+        '200':
+          description: 방금 기록된 크러셔 활동이 반영된 현재 크러셔 활동 내역을 내려준다.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetCurrentCrusherActivityResponseDto'
+
   /getClientVersionStatus:
     post:
       summary: 앱 버전에 따라 업데이트 상태를 알려준다
@@ -3019,6 +3038,26 @@ components:
       required:
         - crusherClub
         - activityLog
+
+    RecordCrusherClubActivityRequestDto:
+      type: object
+      properties:
+        questType:
+          $ref: '#/components/schemas/CrusherClubQuestTypeDto'
+      required:
+        - questType
+
+    CrusherClubQuestTypeDto:
+      type: string
+      enum:
+        - STARTING_DAY # 스타팅데이
+        - SHORT_REVIEW # 숏리뷰
+        - LONG_REVIEW # 롱리뷰
+        - APP_USAGE_REVIEW # 앱 사용리뷰
+        - CONQUER_QUEST # 정복 퀘스트
+        - WARMING_UP_CONQUER # 워밍업 정복활동
+        - CONQUER # 정복활동
+        - DAILY_LIFE_QUEST # 일상과 퀘스트
 
   responses:
     ApiFailure:
