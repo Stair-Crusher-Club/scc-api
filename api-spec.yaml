@@ -2473,24 +2473,95 @@ components:
     PlaceReviewListItemDto:
       type: object
       properties:
-        place:
-          $ref: '#/components/schemas/Place'
-        placeReview:
-          $ref: '#/components/schemas/PlaceReviewDto'
+        placeId:
+          type: string
+        placeName:
+          type: string
+        placeAddress:
+          type: string
+        placeReviewId:
+          type: string
+        recommendedMobilityTypes:
+          type: array
+          items:
+            $ref: '#/components/schemas/RecommendedMobilityTypeDto'
+        spaciousType:
+          $ref: '#/components/schemas/SpaciousTypeDto'
+        comment:
+          type: string
+        images:
+          type: array
+          items:
+            $ref: '#/components/schemas/ImageDto'
+        user:
+          $ref: '#/components/schemas/AccessibilityRegistererDto'
+        isDeletable:
+          type: boolean
+        isUpvoted:
+          type: boolean
+        totalUpvoteCount:
+          type: integer
+        createdAt:
+          $ref: '#/components/schemas/EpochMillisTimestamp'
       required:
-        - place
-        - placeReview
+        - placeId
+        - placeName
+        - placeAddress
+        - placeReviewId
+        - recommendedMobilityTypes
+        - spaciousType
+        - user
+        - isDeletable
+        - isUpvoted
+        - totalUpvoteCount
+        - createdAt
 
     ToiletReviewListItemDto:
       type: object
       properties:
-        place:
-          $ref: '#/components/schemas/Place'
-        toiletReview:
-          $ref: '#/components/schemas/ToiletReviewDto'
+        placeId:
+          type: string
+        placeName:
+          type: string
+        placeAddress:
+          type: string
+        toiletReviewId:
+          type: string
+        toiletLocationType:
+          $ref: '#/components/schemas/ToiletLocationTypeDto'
+        floor:
+          type: integer
+        entranceDoorTypes:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntranceDoorType'
+        comment:
+          type: string
+        images:
+          type: array
+          items:
+            $ref: '#/components/schemas/ImageDto'
+        user:
+          $ref: '#/components/schemas/AccessibilityRegistererDto'
+        isDeletable:
+          type: boolean
+        isUpvoted:
+          type: boolean
+        totalUpvoteCount:
+          type: integer
+        createdAt:
+          $ref: '#/components/schemas/EpochMillisTimestamp'
       required:
-        - place
-        - toiletReview
+        - placeId
+        - placeName
+        - placeAddress
+        - toiletReviewId
+        - toiletLocationType
+        - user
+        - isDeletable
+        - isUpvoted
+        - totalUpvoteCount
+        - createdAt
 
     CompactAccessibilityInfoDto:
       type: object
