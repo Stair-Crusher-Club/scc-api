@@ -2988,12 +2988,10 @@ components:
           description: '시즌 (예: 25년 가을)'
         startDate:
           type: string
-          format: date-time
-          description: 시작 일시
+          description: 시작 일시 (yyyy-MM-dd)
         endDate:
           type: string
-          format: date-time
-          description: 종료 일시
+          description: 종료 일시 (yyyy-MM-dd)
         crewType:
           $ref: '#/components/schemas/CrusherClubCrewTypeDto'
       required:
