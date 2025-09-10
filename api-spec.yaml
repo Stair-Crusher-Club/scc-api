@@ -1545,6 +1545,12 @@ components:
           type: string
         crusherGroup:
           $ref: '#/components/schemas/ChallengeCrusherGroupDto'
+        isB2B:
+          type: boolean
+          description: B2B 챌린지인지 여부
+        b2bFormSchema:
+          $ref: '#/components/schemas/ChallengeB2bFormSchemaDto'
+          description: B2B 챌린지 참여 시 보여줄 form에 대한 동적 스키마 (B2B 챌린지인 경우에만 존재)
       required:
         - id
         - name
@@ -1557,6 +1563,7 @@ components:
         - participationsCount
         - contributionsCount
         - description
+        - isB2b
 
     ChallengeRankDto:
       type: object
@@ -2867,8 +2874,7 @@ components:
     JoinChallengeRequestCompanyJoinInfoDto:
       type: object
       description:
-        B2B 챌린지 참여 시 회사명과 본인의 이름을 입력받는 DTO. 둘 다 존재하거나
-        둘 다 null이어야 함.
+        B2B 챌린지 참여 시 회사 정보를 입력 받는 DTO.
       properties:
         companyName:
           type: string
@@ -2882,11 +2888,7 @@ components:
         employeeIdentificationNumber:
           type: string
           description: 사원번호
-      required:
-        - companyName
-        - participantName
-        - organizationName
-        - employeeIdentificationNumber
+      required: [ ]
 
     ChallengeQuestDto:
       type: object
@@ -3059,6 +3061,60 @@ components:
         currentCrusherActivity:
           $ref: '#/components/schemas/CurrentCrusherActivityDto'
       required: [ ]
+
+    ChallengeB2bFormSchemaDto:
+      type: object
+      description: B2B 챌린지의 동적 폼 설정
+      properties:
+        availableFields:
+          type: array
+          items:
+            $ref: '#/components/schemas/ChallengeB2bFormAvailableFieldDto'
+          description: 표시할 폼 필드 목록
+      required:
+        - fields
+
+    ChallengeB2bFormAvailableFieldDto:
+      type: object
+      description: B2B 챌린지 입장 시 받아야 하는 폼의 개별 필드 정의
+      properties:
+        name:
+          $ref: '#/components/schemas/ChallengeB2bFormAvailableFieldNameTypeDto'
+        options:
+          type: array
+          items:
+            type: string
+          description: SELECT 타입 필드의 선택 옵션 목록 (SELECT 타입인 경우에만 존재)
+      required:
+        - name
+
+    ChallengeB2bFormAvailableFieldNameTypeDto:
+      type: string
+      enum:
+        - participantName
+        - companyName
+        - organizationName
+        - employeeIdentificationNumber
+
+    ChallengeFormFieldTypeDto:
+      type: string
+      enum:
+        - TEXT # 텍스트 입력
+        - SELECT # 옵션 선택
+
+    ChallengeFormFieldOptionDto:
+      type: object
+      description: 선택형 필드의 옵션
+      properties:
+        value:
+          type: string
+          description: 실제 저장될 값
+        label:
+          type: string
+          description: 사용자에게 표시될 라벨
+      required:
+        - value
+        - label
 
     CrusherClubQuestTypeDto:
       type: string
