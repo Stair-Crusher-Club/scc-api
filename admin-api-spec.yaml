@@ -1150,6 +1150,8 @@ components:
           format: int64
         description:
           type: string
+        isB2B:
+          type: boolean
         crusherGroup:
           $ref: '#/components/schemas/AdminCrusherGroupDto'
       required:
@@ -1231,6 +1233,8 @@ components:
             $ref: '#/components/schemas/AdminChallengeConditionDTO'
         description:
           type: string
+        isB2B:
+          type: boolean
         crusherGroup:
           $ref: '#/components/schemas/AdminCrusherGroupDto'
       required:
@@ -1286,6 +1290,8 @@ components:
           format: int64
         description:
           type: string
+        isB2B:
+          type: boolean
         crusherGroup:
           $ref: '#/components/schemas/AdminCrusherGroupDto'
       required:
