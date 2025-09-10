@@ -3012,6 +3012,8 @@ components:
           description: 활동 제목
         activityDoneAt:
           $ref: '#/components/schemas/EpochMillisTimestamp'
+        canceledAt:
+          $ref: '#/components/schemas/EpochMillisTimestamp'
       required:
         - id
         - title
