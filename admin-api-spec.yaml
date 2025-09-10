@@ -1152,6 +1152,8 @@ components:
           type: string
         isB2B:
           type: boolean
+        b2bFormSchema:
+          $ref: '#/components/schemas/AdminChallengeB2bFormSchemaDTO'
         crusherGroup:
           $ref: '#/components/schemas/AdminCrusherGroupDto'
       required:
@@ -1235,6 +1237,8 @@ components:
           type: string
         isB2B:
           type: boolean
+        b2bFormSchema:
+          $ref: '#/components/schemas/AdminChallengeB2bFormSchemaDTO'
         crusherGroup:
           $ref: '#/components/schemas/AdminCrusherGroupDto'
       required:
@@ -1299,6 +1303,8 @@ components:
           type: string
         isB2B:
           type: boolean
+        b2bFormSchema:
+          $ref: '#/components/schemas/AdminChallengeB2bFormSchemaDTO'
         crusherGroup:
           $ref: '#/components/schemas/AdminCrusherGroupDto'
       required:
@@ -1769,6 +1775,36 @@ components:
       required:
         - scheduledAt
         - body
+
+    AdminChallengeB2bFormSchemaDTO:
+      type: object
+      properties:
+        availableFields:
+          type: array
+          items:
+            $ref: '#/components/schemas/AdminChallengeB2bFormSchemaAvailableFieldDTO'
+      required:
+        - availableFields
+
+    AdminChallengeB2bFormSchemaAvailableFieldDTO:
+      type: object
+      properties:
+        name:
+          $ref: '#/components/schemas/AdminChallengeB2bFormSchemaAvailableFieldNameEnumDTO'
+        options:
+          type: array
+          items:
+            type: string
+      required:
+        - name
+
+    AdminChallengeB2bFormSchemaAvailableFieldNameEnumDTO:
+      type: string
+      enum:
+        - PARTICIPANT_NAME
+        - COMPANY_NAME
+        - ORGANIZATION_NAME
+        - EMPLOYEE_IDENTIFICATION_NUMBER
 
   responses:
     NoContent:
