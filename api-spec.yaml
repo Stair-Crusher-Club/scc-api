@@ -3011,9 +3011,7 @@ components:
           type: string
           description: 활동 제목
         activityDoneAt:
-          type: string
-          format: date-time
-          description: 활동 완료 일시
+          $ref: '#/components/schemas/EpochMillisTimestamp'
       required:
         - id
         - title
