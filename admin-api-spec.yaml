@@ -1285,6 +1285,13 @@ components:
       properties:
         name:
           type: string
+        invitationCode:
+          type: string
+        passcode:
+          type: string
+        startsAtMillis:
+          type: integer
+          format: int64
         endsAtMillis:
           type: integer
           format: int64
