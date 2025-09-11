@@ -1299,6 +1299,18 @@ components:
         endsAtMillis:
           type: integer
           format: int64
+        goal:
+          type: integer
+          format: int32
+        milestones:
+          type: array
+          items:
+            type: integer
+            format: int32
+        conditions:
+          type: array
+          items:
+            $ref: '#/components/schemas/AdminChallengeConditionDTO'
         description:
           type: string
         isB2B:
