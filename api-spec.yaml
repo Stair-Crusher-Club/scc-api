@@ -2937,8 +2937,8 @@ components:
     CrusherClubCrewTypeDto:
       type: string
       enum:
-        - EDITOR_CREW
-        - CRUSHER_CREW
+        - EDITOR_CREW # 에디터 크루
+        - CONQUER_CREW # 정복 크루
 
     CrusherClubQuestDto:
       type: object
