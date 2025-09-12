@@ -1150,6 +1150,10 @@ components:
           format: int64
         description:
           type: string
+        isB2B:
+          type: boolean
+        b2bFormSchema:
+          $ref: '#/components/schemas/AdminChallengeB2bFormSchemaDTO'
         crusherGroup:
           $ref: '#/components/schemas/AdminCrusherGroupDto'
       required:
@@ -1231,6 +1235,10 @@ components:
             $ref: '#/components/schemas/AdminChallengeConditionDTO'
         description:
           type: string
+        isB2B:
+          type: boolean
+        b2bFormSchema:
+          $ref: '#/components/schemas/AdminChallengeB2bFormSchemaDTO'
         crusherGroup:
           $ref: '#/components/schemas/AdminCrusherGroupDto'
       required:
@@ -1281,11 +1289,34 @@ components:
       properties:
         name:
           type: string
+        invitationCode:
+          type: string
+        passcode:
+          type: string
+        startsAtMillis:
+          type: integer
+          format: int64
         endsAtMillis:
           type: integer
           format: int64
+        goal:
+          type: integer
+          format: int32
+        milestones:
+          type: array
+          items:
+            type: integer
+            format: int32
+        conditions:
+          type: array
+          items:
+            $ref: '#/components/schemas/AdminChallengeConditionDTO'
         description:
           type: string
+        isB2B:
+          type: boolean
+        b2bFormSchema:
+          $ref: '#/components/schemas/AdminChallengeB2bFormSchemaDTO'
         crusherGroup:
           $ref: '#/components/schemas/AdminCrusherGroupDto'
       required:
@@ -1756,6 +1787,36 @@ components:
       required:
         - scheduledAt
         - body
+
+    AdminChallengeB2bFormSchemaDTO:
+      type: object
+      properties:
+        availableFields:
+          type: array
+          items:
+            $ref: '#/components/schemas/AdminChallengeB2bFormSchemaAvailableFieldDTO'
+      required:
+        - availableFields
+
+    AdminChallengeB2bFormSchemaAvailableFieldDTO:
+      type: object
+      properties:
+        name:
+          $ref: '#/components/schemas/AdminChallengeB2bFormSchemaAvailableFieldNameEnumDTO'
+        options:
+          type: array
+          items:
+            type: string
+      required:
+        - name
+
+    AdminChallengeB2bFormSchemaAvailableFieldNameEnumDTO:
+      type: string
+      enum:
+        - PARTICIPANT_NAME
+        - COMPANY_NAME
+        - ORGANIZATION_NAME
+        - EMPLOYEE_IDENTIFICATION_NUMBER
 
   responses:
     NoContent:

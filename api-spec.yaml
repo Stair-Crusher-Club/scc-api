@@ -492,6 +492,39 @@ paths:
               schema:
                 $ref: '#/components/schemas/GetChallengeResponseDto'
 
+  /getCurrentCrusherActivity:
+    post:
+      summary: 현재 진행 중인 크러셔 활동 내역을 조회한다.
+      security:
+        - Identified: []
+      responses:
+        '200':
+          description: 현재 크러셔 활동 내역을 내려준다.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetCurrentCrusherActivityResponseDto'
+
+  /recordCrusherClubActivity:
+    post:
+      summary: 크러셔 활동을 기록한다.
+      security:
+        - Identified: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RecordCrusherClubActivityRequestDto'
+        required: true
+      responses:
+        '200':
+          description:
+            방금 기록된 크러셔 활동이 반영된 현재 크러셔 활동 내역을 내려준다.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecordCrusherClubActivityResponseDto'
+
   /getClientVersionStatus:
     post:
       summary: 앱 버전에 따라 업데이트 상태를 알려준다
@@ -1625,6 +1658,14 @@ components:
           type: string
         crusherGroup:
           $ref: '#/components/schemas/ChallengeCrusherGroupDto'
+        isB2B:
+          type: boolean
+          description: B2B 챌린지인지 여부
+        b2bFormSchema:
+          $ref: '#/components/schemas/ChallengeB2bFormSchemaDto'
+          description:
+            B2B 챌린지 참여 시 보여줄 form에 대한 동적 스키마 (B2B 챌린지인
+            경우에만 존재)
       required:
         - id
         - name
@@ -1637,6 +1678,7 @@ components:
         - participationsCount
         - contributionsCount
         - description
+        - isB2b
 
     ChallengeRankDto:
       type: object
@@ -3191,9 +3233,7 @@ components:
 
     JoinChallengeRequestCompanyJoinInfoDto:
       type: object
-      description:
-        B2B 챌린지 참여 시 회사명과 본인의 이름을 입력받는 DTO. 둘 다 존재하거나
-        둘 다 null이어야 함.
+      description: B2B 챌린지 참여 시 회사 정보를 입력 받는 DTO.
       properties:
         companyName:
           type: string
@@ -3201,9 +3241,13 @@ components:
         participantName:
           type: string
           description: 본인의 이름
-      required:
-        - companyName
-        - participantName
+        organizationName:
+          type: string
+          description: 조직명
+        employeeIdentificationNumber:
+          type: string
+          description: 사원번호
+      required: []
 
     ChallengeQuestDto:
       type: object
@@ -3250,6 +3294,199 @@ components:
         - POTION
         - RESTAURANT
         - REVIEW
+
+    CrusherClubCrewTypeDto:
+      type: string
+      enum:
+        - EDITOR_CREW # 에디터 크루
+        - CONQUER_CREW # 정복 크루
+
+    CrusherClubQuestDto:
+      type: object
+      properties:
+        id:
+          type: string
+          description: 퀘스트 ID
+        title:
+          type: string
+          description: 퀘스트 제목
+        completeStampType:
+          $ref: '#/components/schemas/CrusherClubQuestCompleteStampTypeDto'
+        completedAt:
+          $ref: '#/components/schemas/EpochMillisTimestamp'
+      required:
+        - id
+        - title
+        - description
+        - completeStampType
+
+    CrusherClubQuestCompleteStampTypeDto:
+      type: string
+      enum:
+        - STARTING_DAY # 스타팅데이
+        - SHORT_REVIEW_1 # 숏리뷰 1
+        - SHORT_REVIEW_2 # 숏리뷰 2
+        - SHORT_REVIEW_3 # 숏리뷰 3
+        - SHORT_REVIEW_4 # 숏리뷰 4
+        - SHORT_REVIEW_5 # 숏리뷰 5
+        - SHORT_REVIEW_6 # 숏리뷰 6
+        - LONG_REVIEW_1 # 롱리뷰 1
+        - LONG_REVIEW_2 # 롱리뷰 2
+        - APP_USAGE_REVIEW # 앱 사용리뷰
+        - CONQUER_QUEST # 정복 퀘스트
+        - WARMING_UP_CONQUER # 워밍업 정복활동
+        - CONQUER_1 # 정복활동 1
+        - CONQUER_2 # 정복활동 2
+        - CONQUER_3 # 정복활동 3
+        - CONQUER_4 # 정복활동 4
+        - DAILY_LIFE_QUEST # 일상과 퀘스트
+
+    CrusherClubDto:
+      type: object
+      properties:
+        season:
+          type: string
+          description: '시즌 (예: 25년 가을)'
+        startDate:
+          type: string
+          description: 시작 일시 (yyyy-MM-dd)
+        endDate:
+          type: string
+          description: 종료 일시 (yyyy-MM-dd)
+        crewType:
+          $ref: '#/components/schemas/CrusherClubCrewTypeDto'
+      required:
+        - season
+        - startDate
+        - endDate
+        - crewType
+        - quests
+
+    CrusherClubActivityLogDto:
+      type: object
+      properties:
+        id:
+          type: string
+          description: 활동 ID
+        title:
+          type: string
+          description: 활동 제목
+        activityDoneAt:
+          $ref: '#/components/schemas/EpochMillisTimestamp'
+        canceledAt:
+          $ref: '#/components/schemas/EpochMillisTimestamp'
+      required:
+        - id
+        - title
+        - activityDoneAt
+
+    GetCurrentCrusherActivityResponseDto:
+      type: object
+      properties:
+        currentCrusherActivity:
+          $ref: '#/components/schemas/CurrentCrusherActivityDto'
+      required: []
+
+    CurrentCrusherActivityDto:
+      type: object
+      properties:
+        crusherClub:
+          $ref: '#/components/schemas/CrusherClubDto'
+        quests:
+          type: array
+          items:
+            $ref: '#/components/schemas/CrusherClubQuestDto'
+        activityLogs:
+          type: array
+          items:
+            $ref: '#/components/schemas/CrusherClubActivityLogDto'
+          description: 사용자의 활동 로그
+      required:
+        - crusherClub
+        - quests
+        - activityLog
+
+    RecordCrusherClubActivityRequestDto:
+      type: object
+      properties:
+        questType:
+          $ref: '#/components/schemas/CrusherClubQuestTypeDto'
+      required:
+        - questType
+
+    RecordCrusherClubActivityResponseDto:
+      type: object
+      properties:
+        currentCrusherActivity:
+          $ref: '#/components/schemas/CurrentCrusherActivityDto'
+      required: []
+
+    ChallengeB2bFormSchemaDto:
+      type: object
+      description: B2B 챌린지의 동적 폼 설정
+      properties:
+        availableFields:
+          type: array
+          items:
+            $ref: '#/components/schemas/ChallengeB2bFormAvailableFieldDto'
+          description: 표시할 폼 필드 목록
+      required:
+        - fields
+
+    ChallengeB2bFormAvailableFieldDto:
+      type: object
+      description: B2B 챌린지 입장 시 받아야 하는 폼의 개별 필드 정의
+      properties:
+        name:
+          $ref: '#/components/schemas/ChallengeB2bFormAvailableFieldNameTypeDto'
+        options:
+          type: array
+          items:
+            type: string
+          description:
+            SELECT 타입 필드의 선택 옵션 목록 (SELECT 타입인 경우에만 존재)
+      required:
+        - name
+
+    ChallengeB2bFormAvailableFieldNameTypeDto:
+      type: string
+      enum:
+        - participantName
+        - companyName
+        - organizationName
+        - employeeIdentificationNumber
+
+    ChallengeFormFieldTypeDto:
+      type: string
+      enum:
+        - TEXT # 텍스트 입력
+        - SELECT # 옵션 선택
+
+    ChallengeFormFieldOptionDto:
+      type: object
+      description: 선택형 필드의 옵션
+      properties:
+        value:
+          type: string
+          description: 실제 저장될 값
+        label:
+          type: string
+          description: 사용자에게 표시될 라벨
+      required:
+        - value
+        - label
+
+    CrusherClubQuestTypeDto:
+      type: string
+      enum:
+        - STARTING_DAY # 스타팅데이
+        - SHORT_REVIEW # 숏리뷰
+        - LONG_REVIEW # 롱리뷰
+        - APP_USAGE_REVIEW # 앱 사용리뷰
+        - CONQUER_QUEST # 정복 퀘스트
+        - WARMING_UP_CONQUER # 워밍업 정복활동
+        - CONQUER # 정복활동
+        - DAILY_LIFE_QUEST # 일상과 퀘스트
 
     UpvotedUserDto:
       type: object
