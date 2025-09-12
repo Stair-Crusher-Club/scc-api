@@ -3499,7 +3499,9 @@ components:
         mobilityTool:
           $ref: '#/components/schemas/UserMobilityToolDto'
         percentage:
-          type: integer
+          description: 소수점 한자리까지 표기
+          type: number
+          format: double
         totalCount:
           type: integer
       required:
