@@ -3247,7 +3247,6 @@ components:
         employeeIdentificationNumber:
           type: string
           description: 사원번호
-      required: []
 
     ChallengeQuestDto:
       type: object
@@ -3385,7 +3384,6 @@ components:
       properties:
         currentCrusherActivity:
           $ref: '#/components/schemas/CurrentCrusherActivityDto'
-      required: []
 
     CurrentCrusherActivityDto:
       type: object
@@ -3419,7 +3417,6 @@ components:
       properties:
         currentCrusherActivity:
           $ref: '#/components/schemas/CurrentCrusherActivityDto'
-      required: []
 
     ChallengeB2bFormSchemaDto:
       type: object
