@@ -839,7 +839,7 @@ paths:
   /listUpvotedPlaceReviews:
     post:
       summary:
-        내가 작성한 내부 공간 리뷰 중 도움이 되었어요를 받은 리뷰 페이징를
+        내가 작성한 내부 공간 리뷰 중 도움이 되었어요를 받은 리뷰를 페이징 해서
         가져온다.
       security:
         - Identified: []
@@ -860,7 +860,7 @@ paths:
   /listUpvotedToiletReviews:
     post:
       summary:
-        내가 작성한 화장실 리뷰 중 도움이 되었어요를 받은 리뷰 페이징를
+        내가 작성한 화장실 리뷰 중 도움이 되었어요를 받은 리뷰를 페이징 해서
         가져온다.
       security:
         - Identified: []
@@ -1924,7 +1924,7 @@ components:
           type: integer
           format: int32
         thisMonthReviewedCount:
-          description: 이번주 등록한 리뷰(내부 + 화장실) 수
+          description: 이번달 등록한 리뷰(내부 + 화장실) 수
           type: integer
       required:
         - todayReviewedCount
