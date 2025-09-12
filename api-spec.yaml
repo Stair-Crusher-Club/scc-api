@@ -1923,12 +1923,12 @@ components:
           description: 오늘 등록한 리뷰(내부 + 화장실) 수
           type: integer
           format: int32
-        thisWeekReviewedCount:
+        thisMonthReviewedCount:
           description: 이번주 등록한 리뷰(내부 + 화장실) 수
           type: integer
       required:
         - todayReviewedCount
-        - thisWeekReviewedCount
+        - thisMonthReviewedCount
 
     GetUpvoteDetailsRequestDto:
       type: object
