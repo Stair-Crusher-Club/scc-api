@@ -1211,6 +1211,25 @@ paths:
               schema:
                 $ref: '#/components/schemas/SearchPlacesResponseDto'
 
+  /searchPlacesByNaturalLanguage:
+    post:
+      summary: 자연어로 장소를 검색한다.
+      description:
+        ChatGPT나 Claude Desktop App처럼 자연어를 분석하여 장소를 검색한다.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SearchPlacesByNaturalLanguageRequestDto'
+      responses:
+        '200':
+          description: 자연어 검색 결과
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SearchPlacesByNaturalLanguageResponseDto'
+
   /signUp:
     post:
       summary: 회원가입을 한다.
@@ -2901,6 +2920,44 @@ components:
             $ref: '#/components/schemas/PlaceListItem'
       required:
         - items
+
+    SearchPlacesByNaturalLanguageRequestDto:
+      type: object
+      properties:
+        text:
+          type: string
+          description:
+            자연어 검색 텍스트 (예 - 휠체어로 혼자 갈 수 있는 근처 카페)
+        circleRegion:
+          $ref: '#/components/schemas/CircleSearchRegionDto'
+        rectangleRegion:
+          $ref: '#/components/schemas/RectangleSearchRegionDto'
+      required:
+        - text
+
+    SearchPlacesByNaturalLanguageResponseDto:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/SearchPlacesByNaturalLanguageResultItemDto'
+      required:
+        - items
+
+    SearchPlacesByNaturalLanguageResultItemDto:
+      allOf:
+        - $ref: '#/components/schemas/PlaceListItem'
+        - type: object
+          properties: {}
+            # 여기에 추가 필드들을 나중에 추가할 수 있음
+            # searchRelevanceScore:
+            #   type: number
+            #   description: 검색 쿼리와의 관련성 점수
+            # aiAnalysisResult:
+            #   type: string
+            #   description: AI 분석 결과 요약
+          # required: []
 
     CircleSearchRegionDto:
       type: object
