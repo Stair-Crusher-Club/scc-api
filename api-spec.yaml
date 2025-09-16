@@ -1662,10 +1662,8 @@ components:
           type: boolean
           description: B2B 챌린지인지 여부
         b2bFormSchema:
+          # B2B 챌린지 참여 시 보여줄 form에 대한 동적 스키마 (B2B 챌린지인 경우에만 존재)
           $ref: '#/components/schemas/ChallengeB2bFormSchemaDto'
-          description:
-            B2B 챌린지 참여 시 보여줄 form에 대한 동적 스키마 (B2B 챌린지인
-            경우에만 존재)
       required:
         - id
         - name
