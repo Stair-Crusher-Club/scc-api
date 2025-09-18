@@ -475,6 +475,54 @@ paths:
               schema:
                 $ref: '#/components/schemas/AdminSearchAccessibilitiesResultDTO'
 
+  /accessibility-inspection-results/search:
+    get:
+      parameters:
+        - in: query
+          name: accessibilityType
+          schema:
+            $ref: '#/components/schemas/AccessibilityTypeDTO'
+          required: false
+        - in: query
+          name: isPassed
+          schema:
+            type: boolean
+          required: false
+        - in: query
+          name: createdAtFromLocalDate
+          description: yyyy-MM-dd 형식
+          schema:
+            type: string
+          required: false
+        - in: query
+          name: createdAtToLocalDate
+          description: yyyy-MM-dd 형식
+          schema:
+            type: string
+          required: false
+        - in: query
+          name: cursor
+          schema:
+            type: string
+          required: false
+        - in: query
+          name: limit
+          description: default 값은 20으로 설정된다.
+          schema:
+            type: string
+          required: false
+      operationId: searchAccessibilityInspectionResults
+      summary: 접근성 이미지 검증 결과를 검색한다.
+      tags:
+        - accessibility
+      responses:
+        '200':
+          description: 검색 성공
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminSearchAccessibilityInspectionResultsDTO'
+
   /place-accessibilities/{id}:
     parameters:
       - in: path
@@ -1283,6 +1331,131 @@ components:
           description: 없으면 다음 페이지가 없다는 의미.
       required:
         - items
+
+    AdminSearchAccessibilityInspectionResultsDTO:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/AdminAccessibilityInspectionResultDTO'
+        cursor:
+          type: string
+          description: 없으면 다음 페이지가 없다는 의미.
+      required:
+        - items
+
+    AdminAccessibilityInspectionResultDTO:
+      type: object
+      properties:
+        id:
+          type: string
+        accessibilityId:
+          type: string
+        accessibilityType:
+          $ref: '#/components/schemas/AccessibilityTypeDTO'
+        isPassed:
+          type: boolean
+        imageInspectionResult:
+          $ref: '#/components/schemas/ImageInspectionResultDTO'
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - accessibilityId
+        - accessibilityType
+        - isPassed
+        - imageInspectionResult
+        - createdAt
+        - updatedAt
+
+    ImageInspectionResultDTO:
+      type: object
+      properties:
+        isPassed:
+          type: boolean
+        description:
+          type: string
+        overallCodes:
+          type: array
+          items:
+            $ref: '#/components/schemas/OverallReasonCodeDTO'
+        images:
+          type: array
+          items:
+            $ref: '#/components/schemas/ImageDetailDTO'
+      required:
+        - isPassed
+        - description
+        - overallCodes
+        - images
+
+    ImageDetailDTO:
+      type: object
+      properties:
+        url:
+          type: string
+        individualCodes:
+          type: array
+          items:
+            $ref: '#/components/schemas/IndividualReasonCodeDTO'
+        detectedObjects:
+          type: array
+          items:
+            $ref: '#/components/schemas/DetectedObjectDTO'
+        rotation:
+          $ref: '#/components/schemas/RotationDTO'
+      required:
+        - url
+        - individualCodes
+        - detectedObjects
+        - rotation
+
+    AccessibilityTypeDTO:
+      type: string
+      enum:
+        - Place
+        - Building
+        - PlaceReview
+        - ToiletReview
+
+    OverallReasonCodeDTO:
+      type: string
+      enum:
+        - NO_ENTRANCE_IN_SET
+        - NO_DOORSILL_STAIR_IN_SET
+        - NO_PLACE_INDICATION_IN_SET
+        - UNKNOWN
+
+    IndividualReasonCodeDTO:
+      type: string
+      enum:
+        - IMAGE_UNCLEAR_BLURRY
+        - IMAGE_ROTATED
+        - HARMFUL_CONTENT
+        - UNKNOWN
+
+    DetectedObjectDTO:
+      type: string
+      enum:
+        - Entrance
+        - Stair
+        - Elevator
+        - Signboard
+        - UNKNOWN
+
+    RotationDTO:
+      type: string
+      enum:
+        - D0
+        - D90
+        - D180
+        - D270
+        - UNKNOWN
 
     AdminUpdateChallengeRequestDTO:
       type: object
