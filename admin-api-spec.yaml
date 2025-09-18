@@ -1358,20 +1358,25 @@ components:
           type: boolean
         imageInspectionResult:
           $ref: '#/components/schemas/ImageInspectionResultDTO'
-        createdAt:
-          type: string
-          format: date-time
-        updatedAt:
-          type: string
-          format: date-time
+        images:
+          type: array
+          items:
+            $ref: '#/components/schemas/AdminImageDTO'
+        createdAtMillis:
+          type: integer
+          format: int64
+        updatedAtMillis:
+          type: integer
+          format: int64
       required:
         - id
         - accessibilityId
         - accessibilityType
         - isPassed
         - imageInspectionResult
-        - createdAt
-        - updatedAt
+        - images
+        - createdAtMillis
+        - updatedAtMillis
 
     ImageInspectionResultDTO:
       type: object
@@ -1990,6 +1995,7 @@ components:
         - COMPANY_NAME
         - ORGANIZATION_NAME
         - EMPLOYEE_IDENTIFICATION_NUMBER
+
 
   responses:
     NoContent:
