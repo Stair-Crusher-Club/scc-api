@@ -587,6 +587,41 @@ paths:
         '204':
           $ref: '#/components/responses/NoContent'
 
+  /accessibility/run-image-pipeline:
+    post:
+      operationId: runAccessibilityImagePipeline
+      summary: 접근성 정보의 이미지 파이프라인을 실행한다.
+      tags:
+        - accessibility
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                items:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      accessibilityId:
+                        type: string
+                      accessibilityType:
+                        $ref: '#/components/schemas/AccessibilityTypeDTO'
+                    required:
+                      - accessibilityId
+                      - accessibilityType
+              required:
+                - items
+      responses:
+        '204':
+          $ref: '#/components/responses/NoContent'
+        '400':
+          description: 잘못된 요청 (빈 배열 등)
+        '404':
+          description: 일부 접근성 정보를 찾을 수 없음
+
   /places/startCrawling:
     post:
       operationId: startPlaceCrawling
