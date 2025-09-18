@@ -509,7 +509,7 @@ paths:
     post:
       summary: 크러셔 활동을 기록한다.
       security:
-        - Identified: [ ]
+        - Identified: []
       requestBody:
         content:
           application/json:
@@ -518,7 +518,8 @@ paths:
         required: true
       responses:
         '200':
-          description: 방금 기록된 크러셔 활동이 반영된 현재 크러셔 활동 내역을 내려준다.
+          description:
+            방금 기록된 크러셔 활동이 반영된 현재 크러셔 활동 내역을 내려준다.
           content:
             application/json:
               schema:
@@ -553,6 +554,38 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/GetAccessibilityActivityReportResponseDto'
+
+  /getReviewActivityReport:
+    post:
+      summary: 유저의 리뷰 등록 활동을 조회한다
+      security:
+        - Identified: []
+      responses:
+        '200':
+          description: 리뷰 등록 리포트를 내려준다.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetReviewActivityReportResponseDto'
+
+  /getUpvoteDetails:
+    get:
+      summary: 도움이 되었어요를 누른 사람들과 통계를 받아온다
+      security:
+        - Identified: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GetUpvoteDetailsRequestDto'
+      responses:
+        '200':
+          description: 도움이 되었어요에 대한 자세한 정보를 내려준다.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetUpvoteDetailsResponseDto'
 
   /getUserInfo:
     get:
@@ -764,6 +797,86 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ListSearchPlacePresetsResponseDto'
+
+  /listRegisteredPlaceReviews:
+    post:
+      summary: 내가 작성한 내부 공간 리뷰를 페이징 해서 가져온다.
+      security:
+        - Identified: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ListRegisteredReviewsRequestDto'
+      responses:
+        '200':
+          description: 내가 작성한 리뷰를 페이징 해서 내려준다.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListRegisteredPlaceReviewsResponseDto'
+
+  /listRegisteredToiletReviews:
+    post:
+      summary: 내가 작성한 화장실 리뷰를 페이징 해서 가져온다.
+      security:
+        - Identified: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ListRegisteredReviewsRequestDto'
+      responses:
+        '200':
+          description: 내가 작성한 리뷰를 페이징 해서 내려준다.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListRegisteredToiletReviewsResponseDto'
+
+  /listUpvotedPlaceReviews:
+    post:
+      summary:
+        내가 작성한 내부 공간 리뷰 중 도움이 되었어요를 받은 리뷰를 페이징 해서
+        가져온다.
+      security:
+        - Identified: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ListUpvotedReviewsRequestDto'
+      responses:
+        '200':
+          description: 내가 작성한 도움이 된 리뷰를 페이징 해서 내려준다.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListUpvotedPlaceReviewsResponseDto'
+
+  /listUpvotedToiletReviews:
+    post:
+      summary:
+        내가 작성한 화장실 리뷰 중 도움이 되었어요를 받은 리뷰를 페이징 해서
+        가져온다.
+      security:
+        - Identified: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ListUpvotedReviewsRequestDto'
+      responses:
+        '200':
+          description: 내가 작성한 도움이 된 리뷰를 페이징 해서 내려준다.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListUpvotedToiletReviewsResponseDto'
 
   /login:
     post:
@@ -1549,8 +1662,8 @@ components:
           type: boolean
           description: B2B 챌린지인지 여부
         b2bFormSchema:
+          # B2B 챌린지 참여 시 보여줄 form에 대한 동적 스키마 (B2B 챌린지인 경우에만 존재)
           $ref: '#/components/schemas/ChallengeB2bFormSchemaDto'
-          description: B2B 챌린지 참여 시 보여줄 form에 대한 동적 스키마 (B2B 챌린지인 경우에만 존재)
       required:
         - id
         - name
@@ -1801,6 +1914,43 @@ components:
       required:
         - status
 
+    GetReviewActivityReportResponseDto:
+      type: object
+      properties:
+        todayReviewedCount:
+          description: 오늘 등록한 리뷰(내부 + 화장실) 수
+          type: integer
+          format: int32
+        thisMonthReviewedCount:
+          description: 이번달 등록한 리뷰(내부 + 화장실) 수
+          type: integer
+      required:
+        - todayReviewedCount
+        - thisMonthReviewedCount
+
+    GetUpvoteDetailsRequestDto:
+      type: object
+      properties:
+        targetType:
+          $ref: '#/components/schemas/UpvoteTargetTypeDto'
+        id:
+          type: string
+      required:
+        - targetType
+        - id
+
+    GetUpvoteDetailsResponseDto:
+      type: object
+      properties:
+        upvotedUsers:
+          type: array
+          items:
+            $ref: '#/components/schemas/UpvotedUserDto'
+        upvotedUserStatistics:
+          type: array
+          items:
+            $ref: '#/components/schemas/UpvotedUserStatisticsEntryDto'
+
     GetUserInfoRequestDto:
       type: object
       properties: {}
@@ -2018,6 +2168,102 @@ components:
       required:
         - keywordPresets
 
+    ListRegisteredReviewsRequestDto:
+      type: object
+      properties:
+        nextToken:
+          type: string
+          description: 페이지 정보. 없으면 첫 페이지 요소들을 내려준다.
+        limit:
+          type: integer
+          format: int64
+
+    ListRegisteredPlaceReviewsResponseDto:
+      type: object
+      properties:
+        totalNumberOfItems:
+          type: integer
+          format: int64
+          description: 지금까지 내가 작성한 내부 공간 리뷰 개수
+        nextToken:
+          type: string
+          description:
+            다음 페이지 정보. 없으면 더 이상 요청할 값이 없음을 의미한다.
+        placeReviews:
+          type: array
+          items:
+            $ref: '#/components/schemas/PlaceReviewListItemDto'
+      required:
+        - totalNumberOfItems
+        - placeReviews
+
+    ListRegisteredToiletReviewsResponseDto:
+      type: object
+      properties:
+        totalNumberOfItems:
+          type: integer
+          format: int64
+          description: 지금까지 내가 작성한 화장실 리뷰 개수
+        nextToken:
+          type: string
+          description:
+            다음 페이지 정보. 없으면 더 이상 요청할 값이 없음을 의미한다.
+        toiletReviews:
+          type: array
+          items:
+            $ref: '#/components/schemas/ToiletReviewListItemDto'
+      required:
+        - totalNumberOfItems
+        - toiletReviews
+
+    ListUpvotedReviewsRequestDto:
+      type: object
+      properties:
+        nextToken:
+          type: string
+          description: 페이지 정보. 없으면 첫 페이지 요소들을 내려준다.
+        limit:
+          type: integer
+          format: int64
+
+    ListUpvotedPlaceReviewsResponseDto:
+      type: object
+      properties:
+        totalNumberOfUpvotes:
+          type: integer
+          format: int64
+          description: 내부 공간 리뷰로 받은 도움이 되었어요 개수
+        nextToken:
+          type: string
+          description:
+            다음 페이지 정보. 없으면 더 이상 요청할 값이 없음을 의미한다.
+        placeReviews:
+          type: array
+          items:
+            $ref: '#/components/schemas/PlaceReviewListItemDto'
+      required:
+        - totalNumberOfUpvotes
+        - placeReviews
+
+    ListUpvotedToiletReviewsResponseDto:
+      type: object
+      properties:
+        totalNumberOfUpvotes:
+          type: integer
+          format: int64
+          description: 화장실 리뷰로 받은 도움이 되었어요 개수
+        nextToken:
+          type: string
+          description:
+            다음 페이지 정보. 없으면 더 이상 요청할 값이 없음을 의미한다.
+        toiletReviews:
+          type: array
+          items:
+            $ref: '#/components/schemas/ToiletReviewListItemDto'
+      required:
+        - totalNumberOfUpvotes
+        - toiletReviews
+
     Location:
       description: 위치를 위경도로 표현하기 위한 모델.
       type: object
@@ -2127,6 +2373,9 @@ components:
         isUpvoted:
           type: boolean
           description: 유저가 이 접근성 정보에 '도움이 돼요'를 표시했는지 여부.
+        totalUpvoteCount:
+          type: integer
+          description: 총 몇개의 도움이 돼요가 눌렸는지.
         createdAt:
           $ref: '#/components/schemas/EpochMillisTimestamp'
       required:
@@ -2137,6 +2386,8 @@ components:
         - hasSlope
         - isFirstFloor
         - isDeletable
+        - isUpvoted
+        - totalUpvoteCount
         - createdAt
 
     PlaceAccessibilityComment:
@@ -2258,6 +2509,99 @@ components:
         - hasBuildingAccessibility
         - hasPlaceAccessibility
         - isAccessibilityRegistrable
+
+    PlaceReviewListItemDto:
+      type: object
+      properties:
+        placeId:
+          type: string
+        placeName:
+          type: string
+        placeAddress:
+          type: string
+        placeReviewId:
+          type: string
+        recommendedMobilityTypes:
+          type: array
+          items:
+            $ref: '#/components/schemas/RecommendedMobilityTypeDto'
+        spaciousType:
+          $ref: '#/components/schemas/SpaciousTypeDto'
+        comment:
+          type: string
+        images:
+          type: array
+          items:
+            $ref: '#/components/schemas/ImageDto'
+        user:
+          $ref: '#/components/schemas/AccessibilityRegistererDto'
+        isDeletable:
+          type: boolean
+        isUpvoted:
+          type: boolean
+        totalUpvoteCount:
+          type: integer
+        createdAt:
+          $ref: '#/components/schemas/EpochMillisTimestamp'
+      required:
+        - placeId
+        - placeName
+        - placeAddress
+        - placeReviewId
+        - recommendedMobilityTypes
+        - spaciousType
+        - user
+        - isDeletable
+        - isUpvoted
+        - totalUpvoteCount
+        - createdAt
+
+    ToiletReviewListItemDto:
+      type: object
+      properties:
+        placeId:
+          type: string
+        placeName:
+          type: string
+        placeAddress:
+          type: string
+        toiletReviewId:
+          type: string
+        toiletLocationType:
+          $ref: '#/components/schemas/ToiletLocationTypeDto'
+        floor:
+          type: integer
+        entranceDoorTypes:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntranceDoorType'
+        comment:
+          type: string
+        images:
+          type: array
+          items:
+            $ref: '#/components/schemas/ImageDto'
+        user:
+          $ref: '#/components/schemas/AccessibilityRegistererDto'
+        isDeletable:
+          type: boolean
+        isUpvoted:
+          type: boolean
+        totalUpvoteCount:
+          type: integer
+        createdAt:
+          $ref: '#/components/schemas/EpochMillisTimestamp'
+      required:
+        - placeId
+        - placeName
+        - placeAddress
+        - toiletReviewId
+        - toiletLocationType
+        - user
+        - isDeletable
+        - isUpvoted
+        - totalUpvoteCount
+        - createdAt
 
     CompactAccessibilityInfoDto:
       type: object
@@ -2678,6 +3022,8 @@ components:
       enum:
         - PLACE_ACCESSIBILITY
         - BUILDING_ACCESSIBILITY
+        - PLACE_REVIEW
+        - TOILET_REVIEW
 
     ImageDto:
       type: object
@@ -2805,6 +3151,10 @@ components:
           $ref: '#/components/schemas/AccessibilityRegistererDto'
         isDeletable:
           type: boolean
+        isUpvoted:
+          type: boolean
+        totalUpvoteCount:
+          type: integer
         createdAt:
           $ref: '#/components/schemas/EpochMillisTimestamp'
       required:
@@ -2813,6 +3163,8 @@ components:
         - user
         - mobilityTool
         - isDeletable
+        - isUpvoted
+        - totalUpvoteCount
         - createdAt
 
     PlaceReviewDto:
@@ -2850,6 +3202,10 @@ components:
           $ref: '#/components/schemas/AccessibilityRegistererDto'
         isDeletable:
           type: boolean
+        isUpvoted:
+          type: boolean
+        totalUpvoteCount:
+          type: integer
         createdAt:
           $ref: '#/components/schemas/EpochMillisTimestamp'
       required:
@@ -2861,6 +3217,8 @@ components:
         - orderMethods
         - user
         - isDeletable
+        - isUpvoted
+        - totalUpvoteCount
         - createdAt
 
     ReportTargetTypeDto:
@@ -2873,8 +3231,7 @@ components:
 
     JoinChallengeRequestCompanyJoinInfoDto:
       type: object
-      description:
-        B2B 챌린지 참여 시 회사 정보를 입력 받는 DTO.
+      description: B2B 챌린지 참여 시 회사 정보를 입력 받는 DTO.
       properties:
         companyName:
           type: string
@@ -2888,7 +3245,6 @@ components:
         employeeIdentificationNumber:
           type: string
           description: 사원번호
-      required: [ ]
 
     ChallengeQuestDto:
       type: object
@@ -3026,7 +3382,6 @@ components:
       properties:
         currentCrusherActivity:
           $ref: '#/components/schemas/CurrentCrusherActivityDto'
-      required: [ ]
 
     CurrentCrusherActivityDto:
       type: object
@@ -3060,7 +3415,6 @@ components:
       properties:
         currentCrusherActivity:
           $ref: '#/components/schemas/CurrentCrusherActivityDto'
-      required: [ ]
 
     ChallengeB2bFormSchemaDto:
       type: object
@@ -3084,7 +3438,8 @@ components:
           type: array
           items:
             type: string
-          description: SELECT 타입 필드의 선택 옵션 목록 (SELECT 타입인 경우에만 존재)
+          description:
+            SELECT 타입 필드의 선택 옵션 목록 (SELECT 타입인 경우에만 존재)
       required:
         - name
 
@@ -3127,6 +3482,30 @@ components:
         - WARMING_UP_CONQUER # 워밍업 정복활동
         - CONQUER # 정복활동
         - DAILY_LIFE_QUEST # 일상과 퀘스트
+
+    UpvotedUserDto:
+      type: object
+      properties:
+        nickname:
+          type: string
+      required:
+        - nickname
+
+    UpvotedUserStatisticsEntryDto:
+      type: object
+      properties:
+        mobilityTool:
+          $ref: '#/components/schemas/UserMobilityToolDto'
+        percentage:
+          description: 소수점 한자리까지 표기
+          type: number
+          format: double
+        totalCount:
+          type: integer
+      required:
+        - mobilityTool
+        - percentage
+        - totalCount
 
   responses:
     ApiFailure:
