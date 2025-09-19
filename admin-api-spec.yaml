@@ -301,8 +301,8 @@ paths:
           schema:
             type: string
           required: true
-        - in: query # buildingId에 `/`가 들어가는 경우가 있어서 query parameter로 우회한다.
-          name: targetBuildingId
+        - in: query
+          name: buildingId
           schema:
             type: string
           required: true
