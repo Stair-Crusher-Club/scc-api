@@ -280,7 +280,7 @@ paths:
             type: string
           required: true
         - in: query # buildingId와 패턴을 맞춘다.
-          name: targetPlaceId
+          name: placeId
           schema:
             type: string
           required: true
