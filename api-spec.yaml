@@ -1984,6 +1984,9 @@ components:
           items:
             type: string
           description: 유저의 플래그들. ex) [ "MAP_VISIBLE" ]
+        isAlbumUploadAllowed:
+          type: boolean
+          description: 앨범에서 이미지 업로드가 허용되는지 여부
       required:
         - user
 
