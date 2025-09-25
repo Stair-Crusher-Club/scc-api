@@ -569,7 +569,7 @@ paths:
                 $ref: '#/components/schemas/GetReviewActivityReportResponseDto'
 
   /getUpvoteDetails:
-    get:
+    post:
       summary: 도움이 되었어요를 누른 사람들과 통계를 받아온다
       security:
         - Identified: []
@@ -2952,7 +2952,8 @@ components:
       allOf:
         - $ref: '#/components/schemas/PlaceListItem'
         - type: object
-          properties: {}
+          properties:
+            {}
             # 여기에 추가 필드들을 나중에 추가할 수 있음
             # searchRelevanceScore:
             #   type: number

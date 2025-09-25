@@ -2031,7 +2031,6 @@ components:
         - ORGANIZATION_NAME
         - EMPLOYEE_IDENTIFICATION_NUMBER
 
-
   responses:
     NoContent:
       description: successful operation
