@@ -3145,14 +3145,14 @@ components:
           $ref: '#/components/schemas/UpvoteTargetTypeDto'
         accessibilityId:
           type: string
-        conqueredAt:
+        upvotedAt: #가장 첫 좋아요가 눌린 시점
           $ref: '#/components/schemas/EpochMillisTimestamp'
       required:
         - name
         - address
         - isUpvoted
         - totalUpvoteCount
-        - conqueredAt
+        - upvotedAt
 
     UpvoteTargetTypeDto:
       type: string
