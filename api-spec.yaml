@@ -836,6 +836,27 @@ paths:
               schema:
                 $ref: '#/components/schemas/ListRegisteredToiletReviewsResponseDto'
 
+  /listUpvotedPlaces:
+    post:
+      summary:
+        내가 등록한 접근성 정보(건물/장소) 중 도움이 되었어요를 받은 장소를
+        페이징 해서 가져온다
+      security:
+        - Identified: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ListUpvotedPlacesRequestDto'
+      responses:
+        '200':
+          description: 내가 접그성 정보를 등록한 장소를 페이징 해서 내려준다.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListUpvotedPlacesResponseDto'
+
   /listUpvotedPlaceReviews:
     post:
       summary:
@@ -2238,6 +2259,35 @@ components:
         - totalNumberOfItems
         - toiletReviews
 
+    ListUpvotedPlacesRequestDto:
+      type: object
+      properties:
+        nextToken:
+          type: string
+          description: 페이지 정보. 없으면 첫 페이지 요소들을 내려준다.
+        limit:
+          type: integer
+          format: int64
+
+    ListUpvotedPlacesResponseDto:
+      type: object
+      properties:
+        totalNumberOfUpvotes:
+          type: integer
+          format: int64
+          description: 접근성 정보로 받은 도움이 되었어요 개수
+        nextToken:
+          type: string
+          description:
+            다음 페이지 정보. 없으면 더 이상 요청할 값이 없음을 의미한다.
+        places:
+          type: array
+          items:
+            $ref: '#/components/schemas/UpvotedPlaceDto'
+      required:
+        - totalNumberOfUpvotes
+        - places
+
     ListUpvotedReviewsRequestDto:
       type: object
       properties:
@@ -3077,6 +3127,32 @@ components:
         - CLUCH # 클러치(목발, 지팡이)
         - NONE # 해당사항없음
         - FRIEND_OF_TOOL_USER # 도구를 사용하는 사람의 친구
+
+    UpvotedPlaceDto:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        address:
+          type: string
+        isUpvoted:
+          type: boolean
+        totalUpvoteCount:
+          type: integer
+        accessibilityType:
+          $ref: '#/components/schemas/UpvoteTargetTypeDto'
+        accessibilityId:
+          type: string
+        upvotedAt: #가장 마지막 좋아요가 눌린 시점
+          $ref: '#/components/schemas/EpochMillisTimestamp'
+      required:
+        - name
+        - address
+        - isUpvoted
+        - totalUpvoteCount
+        - upvotedAt
 
     UpvoteTargetTypeDto:
       type: string
