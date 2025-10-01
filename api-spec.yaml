@@ -79,6 +79,25 @@ paths:
               schema:
                 $ref: '#/components/schemas/CreateAnonymousUserResponseDto'
 
+  /checkInToClubQuest:
+    post:
+      summary: 크러셔 클럽 퀘스트에 체크인한다.
+      security:
+        - Identified: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CheckInToClubQuestRequestDto'
+      responses:
+        '200':
+          description: 체크인 성공
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CheckInToClubQuestResponseDto'
+
   /createPlaceFavorite:
     post:
       summary: 장소를 즐겨찾기에 추가한다.
@@ -3552,6 +3571,24 @@ components:
       properties:
         currentCrusherActivity:
           $ref: '#/components/schemas/CurrentCrusherActivityDto'
+
+    CheckInToClubQuestRequestDto:
+      type: object
+      properties:
+        clubQuestId:
+          type: string
+          description: 체크인할 크러셔 클럽 퀘스트의 ID
+      required:
+        - clubQuestId
+
+    CheckInToClubQuestResponseDto:
+      type: object
+      properties:
+        success:
+          type: boolean
+          description: 체크인 성공 여부
+      required:
+        - success
 
     ChallengeB2bFormSchemaDto:
       type: object
