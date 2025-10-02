@@ -513,7 +513,8 @@ paths:
 
   /getCurrentCrusherActivity:
     post:
-      summary: 현재 진행 중인 크러셔 활동 내역을 조회한다.
+      deprecated: true
+      summary: /getCrusherActivityPage 로 대체됨
       security:
         - Identified: []
       responses:
@@ -523,6 +524,19 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/GetCurrentCrusherActivityResponseDto'
+
+  /getCrusherActivityPageData:
+    post:
+      summary: 크러셔 활동 페이지를 그리기 위한 데이터를 조회한다.
+      security:
+        - Identified: [ ]
+      responses:
+        '200':
+          description: 크러셔 활동 페이지를 그리기 위한 데이터를 내려준다.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetCrusherActivityPageDataResponseDto'
 
   /recordCrusherClubActivity:
     post:
@@ -3557,6 +3571,34 @@ components:
         - crusherClub
         - quests
         - activityLog
+
+    GetCrusherActivityPageDataResponseDto:
+      type: object
+      properties:
+        currentCrusherActivity:
+          $ref: '#/components/schemas/CurrentCrusherActivityDto'
+        crusherActivityHistories:
+          type: array
+          items:
+            $ref: '#/components/schemas/CrusherActivityHistorySummaryDto'
+
+    CrusherActivityHistorySummaryDto:
+      type: object
+      properties:
+        title:
+          type: string
+        startAt:
+          $ref: '#/components/schemas/EpochMillisTimestamp'
+        endAt:
+          $ref: '#/components/schemas/EpochMillisTimestamp'
+        historyType:
+          $ref: '#/components/schemas/CrusherActivityHistorySummaryTypeDto'
+
+    CrusherActivityHistorySummaryTypeDto:
+      type: string
+      enum:
+        - CREW
+        - CONQUER_ACTIVITY_GUEST
 
     RecordCrusherClubActivityRequestDto:
       type: object
