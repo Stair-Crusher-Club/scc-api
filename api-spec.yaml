@@ -79,6 +79,25 @@ paths:
               schema:
                 $ref: '#/components/schemas/CreateAnonymousUserResponseDto'
 
+  /checkInToClubQuest:
+    post:
+      summary: 크러셔 클럽 퀘스트에 체크인한다.
+      security:
+        - Identified: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CheckInToClubQuestRequestDto'
+      responses:
+        '200':
+          description: 체크인 성공
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CheckInToClubQuestResponseDto'
+
   /createPlaceFavorite:
     post:
       summary: 장소를 즐겨찾기에 추가한다.
@@ -494,7 +513,8 @@ paths:
 
   /getCurrentCrusherActivity:
     post:
-      summary: 현재 진행 중인 크러셔 활동 내역을 조회한다.
+      deprecated: true
+      summary: /getCrusherActivityPage 로 대체됨
       security:
         - Identified: []
       responses:
@@ -504,6 +524,19 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/GetCurrentCrusherActivityResponseDto'
+
+  /getCrusherActivityPageData:
+    post:
+      summary: 크러셔 활동 페이지를 그리기 위한 데이터를 조회한다.
+      security:
+        - Identified: [ ]
+      responses:
+        '200':
+          description: 크러셔 활동 페이지를 그리기 위한 데이터를 내려준다.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetCrusherActivityPageDataResponseDto'
 
   /recordCrusherClubActivity:
     post:
@@ -3539,6 +3572,30 @@ components:
         - quests
         - activityLog
 
+    GetCrusherActivityPageDataResponseDto:
+      type: object
+      properties:
+        currentCrusherActivity:
+          $ref: '#/components/schemas/CurrentCrusherActivityDto'
+        crusherActivityHistories:
+          type: array
+          items:
+            $ref: '#/components/schemas/CrusherActivityHistorySummaryDto'
+
+    CrusherActivityHistorySummaryDto:
+      type: object
+      properties:
+        title:
+          type: string
+        startAt:
+          $ref: '#/components/schemas/EpochMillisTimestamp'
+        endAt:
+          $ref: '#/components/schemas/EpochMillisTimestamp'
+      required:
+        - title
+        - startAt
+        - endAt
+
     RecordCrusherClubActivityRequestDto:
       type: object
       properties:
@@ -3552,6 +3609,24 @@ components:
       properties:
         currentCrusherActivity:
           $ref: '#/components/schemas/CurrentCrusherActivityDto'
+
+    CheckInToClubQuestRequestDto:
+      type: object
+      properties:
+        clubQuestId:
+          type: string
+          description: 체크인할 크러셔 클럽 퀘스트의 ID
+      required:
+        - clubQuestId
+
+    CheckInToClubQuestResponseDto:
+      type: object
+      properties:
+        success:
+          type: boolean
+          description: 체크인 성공 여부
+      required:
+        - success
 
     ChallengeB2bFormSchemaDto:
       type: object
