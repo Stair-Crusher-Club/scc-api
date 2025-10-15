@@ -3591,14 +3591,10 @@ components:
           $ref: '#/components/schemas/EpochMillisTimestamp'
         endAt:
           $ref: '#/components/schemas/EpochMillisTimestamp'
-        historyType:
-          $ref: '#/components/schemas/CrusherActivityHistorySummaryTypeDto'
-
-    CrusherActivityHistorySummaryTypeDto:
-      type: string
-      enum:
-        - CREW
-        - CONQUER_ACTIVITY_GUEST
+      required:
+        - title
+        - startAt
+        - endAt
 
     RecordCrusherClubActivityRequestDto:
       type: object
