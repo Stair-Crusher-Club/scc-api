@@ -1213,6 +1213,11 @@ components:
         endsAtMillis:
           type: integer
           format: int64
+        joinStartAtMillis:
+          type: integer
+          format: int64
+        challengeGroupId:
+          type: string
         goal:
           type: integer
           format: int32
@@ -1304,6 +1309,11 @@ components:
         endsAtMillis:
           type: integer
           format: int64
+        joinStartAtMillis:
+          type: integer
+          format: int64
+        challengeGroupId:
+          type: string
         goal:
           type: integer
           format: int32
@@ -1512,6 +1522,11 @@ components:
         endsAtMillis:
           type: integer
           format: int64
+        joinStartAtMillis:
+          type: integer
+          format: int64
+        challengeGroupId:
+          type: string
         goal:
           type: integer
           format: int32
