@@ -1216,7 +1216,7 @@ components:
         joinStartAtMillis:
           type: integer
           format: int64
-        challengeGroupId:
+        b2bGroupId:
           type: string
         goal:
           type: integer
@@ -1312,7 +1312,7 @@ components:
         joinStartAtMillis:
           type: integer
           format: int64
-        challengeGroupId:
+        b2bGroupId:
           type: string
         goal:
           type: integer
@@ -1525,7 +1525,7 @@ components:
         joinStartAtMillis:
           type: integer
           format: int64
-        challengeGroupId:
+        b2bGroupId:
           type: string
         goal:
           type: integer
