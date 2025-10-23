@@ -971,6 +971,12 @@ components:
         - CIRCLE
         - POLYGON
 
+    ChallengeAggregationPeriodTypeEnum:
+      type: string
+      enum:
+        - ALL_TIME
+        - MONTHLY
+
     QuestTargetPlaceCategoryEnumDTO:
       type: string
       enum:
@@ -1245,7 +1251,7 @@ components:
         crusherGroup:
           $ref: '#/components/schemas/AdminCrusherGroupDto'
         aggregationPeriodType:
-          type: string
+          $ref: '#/components/schemas/ChallengeAggregationPeriodTypeEnum'
         lastMonthRankImageUrl:
           type: string
         modalImageUrl:
@@ -1341,7 +1347,7 @@ components:
         crusherGroup:
           $ref: '#/components/schemas/AdminCrusherGroupDto'
         aggregationPeriodType:
-          type: string
+          $ref: '#/components/schemas/ChallengeAggregationPeriodTypeEnum'
         lastMonthRankImageUrl:
           type: string
         modalImageUrl:
@@ -1560,7 +1566,7 @@ components:
         crusherGroup:
           $ref: '#/components/schemas/AdminCrusherGroupDto'
         aggregationPeriodType:
-          type: string
+          $ref: '#/components/schemas/ChallengeAggregationPeriodTypeEnum'
         lastMonthRankImageUrl:
           type: string
         modalImageUrl:
