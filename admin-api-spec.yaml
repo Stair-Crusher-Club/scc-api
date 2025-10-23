@@ -484,9 +484,9 @@ paths:
             $ref: '#/components/schemas/AccessibilityTypeDTO'
           required: false
         - in: query
-          name: isPassed
+          name: resultType
           schema:
-            type: boolean
+            $ref: '#/components/schemas/ResultTypeDTO'
           required: false
         - in: query
           name: createdAtFromLocalDate
@@ -1417,14 +1417,23 @@ components:
           type: string
         accessibilityType:
           $ref: '#/components/schemas/AccessibilityTypeDTO'
-        isPassed:
-          type: boolean
-        imageInspectionResult:
-          $ref: '#/components/schemas/ImageInspectionResultDTO'
+        inspectorId:
+          type: string
+        inspectorType:
+          $ref: '#/components/schemas/InspectorTypeDTO'
+        resultType:
+          $ref: '#/components/schemas/ResultTypeDTO'
+        contents:
+          type: string
+          description: "검증 결과 내용 (JSON)"
         images:
           type: array
           items:
             $ref: '#/components/schemas/AdminImageDTO'
+        handledAtMillis:
+          type: integer
+          format: int64
+          nullable: true
         createdAtMillis:
           type: integer
           format: int64
@@ -1435,53 +1444,26 @@ components:
         - id
         - accessibilityId
         - accessibilityType
-        - isPassed
-        - imageInspectionResult
+        - inspectorId
+        - inspectorType
+        - resultType
+        - contents
         - images
         - createdAtMillis
         - updatedAtMillis
 
-    ImageInspectionResultDTO:
-      type: object
-      properties:
-        isPassed:
-          type: boolean
-        description:
-          type: string
-        overallCodes:
-          type: array
-          items:
-            $ref: '#/components/schemas/OverallReasonCodeDTO'
-        images:
-          type: array
-          items:
-            $ref: '#/components/schemas/ImageDetailDTO'
-      required:
-        - isPassed
-        - description
-        - overallCodes
-        - images
+    InspectorTypeDTO:
+      type: string
+      enum:
+        - HUMAN
+        - AI
 
-    ImageDetailDTO:
-      type: object
-      properties:
-        url:
-          type: string
-        individualCodes:
-          type: array
-          items:
-            $ref: '#/components/schemas/IndividualReasonCodeDTO'
-        detectedObjects:
-          type: array
-          items:
-            $ref: '#/components/schemas/DetectedObjectDTO'
-        rotation:
-          $ref: '#/components/schemas/RotationDTO'
-      required:
-        - url
-        - individualCodes
-        - detectedObjects
-        - rotation
+    ResultTypeDTO:
+      type: string
+      enum:
+        - OK
+        - MODIFY
+        - DELETE
 
     AccessibilityTypeDTO:
       type: string
@@ -1491,39 +1473,6 @@ components:
         - PlaceReview
         - ToiletReview
 
-    OverallReasonCodeDTO:
-      type: string
-      enum:
-        - NO_ENTRANCE_IN_SET
-        - NO_DOORSILL_STAIR_IN_SET
-        - NO_PLACE_INDICATION_IN_SET
-        - UNKNOWN
-
-    IndividualReasonCodeDTO:
-      type: string
-      enum:
-        - IMAGE_UNCLEAR_BLURRY
-        - IMAGE_ROTATED
-        - HARMFUL_CONTENT
-        - UNKNOWN
-
-    DetectedObjectDTO:
-      type: string
-      enum:
-        - Entrance
-        - Stair
-        - Elevator
-        - Signboard
-        - UNKNOWN
-
-    RotationDTO:
-      type: string
-      enum:
-        - D0
-        - D90
-        - D180
-        - D270
-        - UNKNOWN
 
     AdminUpdateChallengeRequestDTO:
       type: object
