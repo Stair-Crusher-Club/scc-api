@@ -971,6 +971,12 @@ components:
         - CIRCLE
         - POLYGON
 
+    ChallengeAggregationPeriodTypeEnum:
+      type: string
+      enum:
+        - ALL_TIME
+        - MONTHLY
+
     QuestTargetPlaceCategoryEnumDTO:
       type: string
       enum:
@@ -1244,6 +1250,12 @@ components:
           $ref: '#/components/schemas/AdminChallengeB2bFormSchemaDTO'
         crusherGroup:
           $ref: '#/components/schemas/AdminCrusherGroupDto'
+        aggregationPeriodType:
+          $ref: '#/components/schemas/ChallengeAggregationPeriodTypeEnum'
+        lastMonthRankImageUrl:
+          type: string
+        modalImageUrl:
+          type: string
       required:
         - id
         - name
@@ -1334,6 +1346,12 @@ components:
           $ref: '#/components/schemas/AdminChallengeB2bFormSchemaDTO'
         crusherGroup:
           $ref: '#/components/schemas/AdminCrusherGroupDto'
+        aggregationPeriodType:
+          $ref: '#/components/schemas/ChallengeAggregationPeriodTypeEnum'
+        lastMonthRankImageUrl:
+          type: string
+        modalImageUrl:
+          type: string
       required:
         - name
         - isPublic
@@ -1547,6 +1565,12 @@ components:
           $ref: '#/components/schemas/AdminChallengeB2bFormSchemaDTO'
         crusherGroup:
           $ref: '#/components/schemas/AdminCrusherGroupDto'
+        aggregationPeriodType:
+          $ref: '#/components/schemas/ChallengeAggregationPeriodTypeEnum'
+        lastMonthRankImageUrl:
+          type: string
+        modalImageUrl:
+          type: string
       required:
         - name
         - description
