@@ -479,14 +479,29 @@ paths:
     get:
       parameters:
         - in: query
+          name: id
+          schema:
+            type: string
+          required: false
+        - in: query
           name: accessibilityType
           schema:
             $ref: '#/components/schemas/AccessibilityTypeDTO'
           required: false
         - in: query
+          name: inspectorType
+          schema:
+            $ref: '#/components/schemas/InspectorTypeDTO'
+          required: false
+        - in: query
           name: resultType
           schema:
             $ref: '#/components/schemas/ResultTypeDTO'
+          required: false
+        - in: query
+          name: isHandled
+          schema:
+            type: boolean
           required: false
         - in: query
           name: createdAtFromLocalDate
