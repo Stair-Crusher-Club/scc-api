@@ -1445,6 +1445,10 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/AdminImageDTO'
+        accessibilityName:
+          type: string
+          nullable: true
+          description: "접근성 대상의 이름 (Place인 경우 장소명, Building인 경우 건물명)"
         handledAtMillis:
           type: integer
           format: int64
