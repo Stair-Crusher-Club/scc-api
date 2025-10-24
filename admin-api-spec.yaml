@@ -1476,6 +1476,7 @@ components:
       enum:
         - HUMAN
         - AI
+        - UNKNOWN
 
     ResultTypeDTO:
       type: string
@@ -1483,6 +1484,7 @@ components:
         - OK
         - MODIFY
         - DELETE
+        - UNKNOWN
 
     AccessibilityTypeDTO:
       type: string
@@ -1491,6 +1493,7 @@ components:
         - Building
         - PlaceReview
         - ToiletReview
+        - UNKNOWN
 
 
     AdminUpdateChallengeRequestDTO:
