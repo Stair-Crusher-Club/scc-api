@@ -2087,6 +2087,12 @@ components:
           description: 참여코드를 입력해야만 참여가 가능한 챌린지에 한해서 필요
         companyInfo:
           $ref: '#/components/schemas/JoinChallengeRequestCompanyJoinInfoDto'
+        b2bCustomFormResponse:
+          type: array
+          items:
+            $ref: '#/components/schemas/ChallengeB2bCustomFormResponseItemDto'
+          nullable: true
+          description: Custom 질문에 대한 응답 (Array<{key, answer}>)
       required:
         - challengeId
 
@@ -3682,6 +3688,9 @@ components:
           $ref: '#/components/schemas/ChallengeB2bFormAvailableFieldNameTypeDto'
           nullable: true
           description: built-in 질문 타입 (null이면 custom 질문)
+        key:
+          type: string
+          description: 불변 key (built-in은 participantName 등, custom은 camelCase)
         displayName:
           type: string
           description: 화면에 표시될 질문명 (built-in 질문도 커스터마이징 가능)
@@ -3692,6 +3701,7 @@ components:
           nullable: true
           description: 객관식 옵션 목록 (null이면 주관식)
       required:
+        - key
         - displayName
 
     ChallengeB2bFormAvailableFieldNameTypeDto:
