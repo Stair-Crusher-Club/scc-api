@@ -3421,19 +3421,25 @@ components:
         employeeIdentificationNumber:
           type: string
           description: 사원번호 (built-in 필드)
-        customFormResponse:
+        b2bCustomFormResponse:
           type: array
-          description: Custom 질문에 대한 응답 (Map<displayName, answer>)
           items:
-            type: object
-            properties:
-              displayName:
-                type: string
-              answer:
-                type: string
-            required:
-              - displayName
-              - answer
+            $ref: '#/components/schemas/ChallengeB2bCustomFormResponseItemDto'
+          nullable: true
+          description: Custom 질문에 대한 응답 (Array<{key, answer}>)
+
+    ChallengeB2bCustomFormResponseItemDto:
+      type: object
+      required:
+        - key
+        - answer
+      properties:
+        key:
+          type: string
+          description: 불변 key (camelCase, e.g. participantRank, department)
+        answer:
+          type: string
+          description: 질문에 대한 답변
 
     ChallengeQuestDto:
       type: object
