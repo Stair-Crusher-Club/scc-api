@@ -2026,12 +2026,22 @@ components:
       properties:
         name:
           $ref: '#/components/schemas/AdminChallengeB2bFormSchemaAvailableFieldNameEnumDTO'
+          nullable: true
+          description: built-in 질문 타입 (null이면 custom 질문)
+        key:
+          type: string
+          nullable: true
+          description: Custom 질문의 불변 key (camelCase, built-in인 경우 null)
+        customDisplayName:
+          type: string
+          nullable: true
+          description: 질문명 override (built-in인 경우 선택, custom인 경우 필수)
         options:
           type: array
           items:
             type: string
-      required:
-        - name
+          nullable: true
+          description: 객관식 옵션 (null이면 주관식)
 
     AdminChallengeB2bFormSchemaAvailableFieldNameEnumDTO:
       type: string

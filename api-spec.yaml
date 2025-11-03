@@ -3411,16 +3411,35 @@ components:
       properties:
         companyName:
           type: string
-          description: 회사명
+          description: 회사명 (built-in 필드)
         participantName:
           type: string
-          description: 본인의 이름
+          description: 본인의 이름 (built-in 필드)
         organizationName:
           type: string
-          description: 조직명
+          description: 조직명 (built-in 필드)
         employeeIdentificationNumber:
           type: string
-          description: 사원번호
+          description: 사원번호 (built-in 필드)
+        b2bCustomFormResponse:
+          type: array
+          items:
+            $ref: '#/components/schemas/ChallengeB2bCustomFormResponseItemDto'
+          nullable: true
+          description: Custom 질문에 대한 응답 (Array<{key, answer}>)
+
+    ChallengeB2bCustomFormResponseItemDto:
+      type: object
+      required:
+        - key
+        - answer
+      properties:
+        key:
+          type: string
+          description: 불변 key (camelCase, e.g. participantRank, department)
+        answer:
+          type: string
+          description: 질문에 대한 답변
 
     ChallengeQuestDto:
       type: object
@@ -3661,14 +3680,23 @@ components:
       properties:
         name:
           $ref: '#/components/schemas/ChallengeB2bFormAvailableFieldNameTypeDto'
+          nullable: true
+          description: built-in 질문 타입 (null이면 custom 질문)
+        key:
+          type: string
+          description: 불변 key (built-in은 participantName 등, custom은 camelCase)
+        displayName:
+          type: string
+          description: 화면에 표시될 질문명 (built-in 질문도 커스터마이징 가능)
         options:
           type: array
           items:
             type: string
-          description:
-            SELECT 타입 필드의 선택 옵션 목록 (SELECT 타입인 경우에만 존재)
+          nullable: true
+          description: 객관식 옵션 목록 (null이면 주관식)
       required:
-        - name
+        - key
+        - displayName
 
     ChallengeB2bFormAvailableFieldNameTypeDto:
       type: string
