@@ -1108,7 +1108,7 @@ paths:
                   placeAccessibilityComment:
                     $ref: '#/components/schemas/PlaceAccessibilityComment'
 
-  /registerPlaceEntranceAccessibilityV2:
+  /registerPlaceAccessibilityV2:
     post:
       summary: 장소 입구 접근성 정보를 등록한다. (v2 - 클로즈 베타)
       security:
@@ -1120,18 +1120,18 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/RegisterPlaceEntranceAccessibilityRequestV2'
+              $ref: '#/components/schemas/RegisterPlaceAccessibilityRequestDtoV2'
       responses:
         '200':
           description: 접근성 정보 등록 성공.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/RegisterPlaceEntranceAccessibilityResponseV2'
+                $ref: '#/components/schemas/RegisterPlaceAccessibilityResponseDtoV2'
         '400':
           $ref: '#/components/responses/ApiFailure'
 
-  /registerBuildingEntranceAndElevatorAccessibilityV2:
+  /registerBuildingAccessibilityV2:
     post:
       summary: 건물 입구 및 엘리베이터 접근성 정보를 등록한다. (v2 - 클로즈 베타)
       security:
@@ -1143,14 +1143,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/RegisterBuildingEntranceAndElevatorAccessibilityRequestV2'
+              $ref: '#/components/schemas/RegisterBuildingAccessibilityRequestDtoV2'
       responses:
         '200':
           description: 접근성 정보 등록 성공.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/RegisterBuildingEntranceAndElevatorAccessibilityResponseV2'
+                $ref: '#/components/schemas/RegisterBuildingAccessibilityResponseDtoV2'
         '400':
           $ref: '#/components/responses/ApiFailure'
 
@@ -2899,23 +2899,21 @@ components:
         - accessibilityInfo
         - registeredUserOrder
 
-    RegisterPlaceEntranceAccessibilityRequestV2:
+    RegisterPlaceAccessibilityRequestDtoV2:
       type: object
       description: 장소 입구 접근성 정보 등록 요청 (v2 - 클로즈 베타)
       properties:
         placeId:
           type: string
+        isStandaloneBuilding:
+          type: boolean
+          description: 단독 건물 여부 (해당 장소가 건물 전체를 차지하는지)
+        doorDirectionType:
+          $ref: '#/components/schemas/PlaceDoorDirectionTypeDto'
         floors:
           type: array
           items:
             type: integer
-        isStairOnlyOption:
-          type: boolean
-          description: '다른 층으로 가는 방법이 계단만 있는지 여부'
-        isFirstFloor:
-          type: boolean
-          deprecated: true
-          description: '1층인지 여부. 240401 출시한 버전부터 이 필드는 사용하지 않고, floors 필드를 사용하도록 한다.'
         imageUrls:
           type: array
           items:
@@ -2930,15 +2928,32 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/EntranceDoorType'
-        comment:
+        features:
+          description: 장소 입구 특이사항
+          type: array
+          items:
+            type: string
+        entranceComment:
+          type: string
+        floorMovingMethodType:
+          $ref: '#/components/schemas/FloorMovingMethodTypeDto'
+        floorMovingMethodComment:
+          type: string
+        floorMovingElevatorAccessibility:
+          $ref: '#/components/schemas/ElevatorAccessibilityDto'
+        floorMovingElevatorComment:
           type: string
       required:
         - placeId
+        - isStandaloneBuilding
+        - doorDirectionType
+        - floors
         - imageUrls
         - stairInfo
         - hasSlope
+        - entranceDoorTypes
 
-    RegisterPlaceEntranceAccessibilityResponseV2:
+    RegisterPlaceAccessibilityResponseDtoV2:
       type: object
       description: 장소 입구 접근성 정보 등록 응답 (v2 - 클로즈 베타)
       properties:
@@ -2956,12 +2971,14 @@ components:
         - accessibilityInfo
         - registeredUserOrder
 
-    RegisterBuildingEntranceAndElevatorAccessibilityRequestV2:
+    RegisterBuildingAccessibilityRequestDtoV2:
       type: object
       description: 건물 입구 및 엘리베이터 접근성 정보 등록 요청 (v2 - 클로즈 베타). 각 건물에 대해 1번만 등록될 수 있다.
       properties:
         buildingId:
           type: string
+        doorDirectionType:
+          $ref: '#/components/schemas/BuildingDoorDirectionTypeDto'
         entranceStairInfo:
           $ref: '#/components/schemas/StairInfo'
         entranceStairHeightLevel:
@@ -2978,26 +2995,20 @@ components:
           type: boolean
         hasElevator:
           type: boolean
-        elevatorStairInfo:
-          $ref: '#/components/schemas/StairInfo'
-        elevatorStairHeightLevel:
-          $ref: '#/components/schemas/StairHeightLevel'
-        elevatorImageUrls:
-          type: array
-          items:
-            type: string
+        elevatorAccessibility:
+          $ref: '#/components/schemas/ElevatorAccessibilityDto'
         comment:
           type: string
       required:
         - buildingId
+        - doorDirectionType
         - entranceStairInfo
         - entranceImageUrls
+        - entranceDoorTypes
         - hasSlope
         - hasElevator
-        - elevatorStairInfo
-        - elevatorImageUrls
 
-    RegisterBuildingEntranceAndElevatorAccessibilityResponseV2:
+    RegisterBuildingAccessibilityResponseDtoV2:
       type: object
       description: 건물 입구 및 엘리베이터 접근성 정보 등록 응답 (v2 - 클로즈 베타)
       properties:
@@ -3282,6 +3293,55 @@ components:
         - ONE
         - TWO_TO_FIVE
         - OVER_SIX
+
+    PlaceDoorDirectionTypeDto:
+      type: string
+      description: 장소 입구 문이 건물 외부로 향하는지 내부로 향하는지
+      enum:
+        - OUTSIDE_BUILDING
+        - INSIDE_BUILDING
+
+    BuildingDoorDirectionTypeDto:
+      type: string
+      description: 건물 입구 문의 방향 (도로쪽, 주차장쪽, 기타)
+      enum:
+        - ROAD_DIRECTION
+        - PARKING_DIRECTION
+        - ETC
+
+    FloorMovingMethodTypeDto:
+      type: string
+      description: 층간 이동 방법
+      enum:
+        # 여러 층 장소일 때의 옵션
+        - INTERNAL_ELEVATOR # 매장 내부 엘리베이터
+        - INTERNAL_STAIRS # 매장 내부 계단
+        - INTERNAL_ESCALATOR # 매장 내부 에스컬레이터
+        - EXTERNAL_ELEVATOR # 매장 외부 엘리베이터
+        - EXTERNAL_STAIRS # 매장 외부 계단
+        - EXTERNAL_ESCALATOR # 매장 외부 에스컬레이터
+        # 단독 건물 여러층일 때의 옵션
+        - ELEVATOR # 엘리베이터
+        - STAIRS # 계단
+        - ESCALATOR # 에스컬레이터
+        # 공통
+        - UNKNOWN # 모르겠음
+
+    ElevatorAccessibilityDto:
+      type: object
+      description: 엘리베이터 접근성 정보
+      properties:
+        imageUrls:
+          type: array
+          items:
+            type: string
+        stairInfo:
+          $ref: '#/components/schemas/StairInfo'
+        stairHeightLevel:
+          $ref: '#/components/schemas/StairHeightLevel'
+        hasSlope:
+          type: boolean
+          description: 엘리베이터까지 가는 경사로 유무
 
     User:
       description: 유저 정보.
