@@ -3313,17 +3313,15 @@ components:
       type: string
       description: 층간 이동 방법
       enum:
-        # 여러 층 장소일 때의 옵션
-        - INTERNAL_ELEVATOR # 매장 내부 엘리베이터
-        - INTERNAL_STAIRS # 매장 내부 계단
-        - INTERNAL_ESCALATOR # 매장 내부 에스컬레이터
-        - EXTERNAL_ELEVATOR # 매장 외부 엘리베이터
-        - EXTERNAL_STAIRS # 매장 외부 계단
-        - EXTERNAL_ESCALATOR # 매장 외부 에스컬레이터
-        # 단독 건물 여러층일 때의 옵션
-        - ELEVATOR # 엘리베이터
-        - STAIRS # 계단
-        - ESCALATOR # 에스컬레이터
+        # 매장 내부 층간 이동 시설
+        # 단독건물일 경우 PLACE_ prefix가 붙은 항목을 사용하면 된다.
+        - PLACE_ELEVATOR # 매장 내부 엘리베이터 / 엘리베이터
+        - PLACE_STAIRS # 매장 내부 계단 / 계단
+        - PLACE_ESCALATOR # 매장 내부 에스컬레이터 / 에스컬레이터
+        # 매장 외부 층간 이동 시설
+        - BUILDING_ELEVATOR # 매장 외부, 즉 건물 엘리베이터
+        - BUILDING_STAIRS # 매장 외부, 즉 건물 계단
+        - BUILDING_ESCALATOR # 매장 외부, 즉 건물 에스컬레이터
         # 공통
         - UNKNOWN # 모르겠음
 
