@@ -3635,8 +3635,18 @@ components:
       properties:
         questType:
           $ref: '#/components/schemas/CrusherClubQuestTypeDto'
-      required:
-        - questType
+          deprecated: true
+          description: |
+            (Deprecated) questTypeOrActivityId를 사용하세요.
+            questType과 questTypeOrActivityId 중 하나만 제공해야 합니다.
+        questTypeOrActivityId:
+          type: string
+          description: |
+            활동 ID. 다음 중 하나가 될 수 있음:
+            1. CrusherClubQuestTypeDto의 enum 값 (예: STARTING_DAY, SHORT_REVIEW 등)
+            2. 하드코딩된 활동 ID (예: impactSession → '임팩트 세션')
+            3. 직접 입력한 활동 제목 (그대로 사용됨)
+            questType과 questTypeOrActivityId 중 하나만 제공해야 합니다.
 
     RecordCrusherClubActivityResponseDto:
       type: object
