@@ -1059,6 +1059,25 @@ paths:
                 required:
                   - buildingAccessibilityComment
 
+  /registerHumanInspectionResult:
+    post:
+      summary: 사람이 검수한 접근성 정보 결과를 등록한다.
+      security:
+        - Identified: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterHumanInspectionResultRequestDto'
+      responses:
+        '200':
+          description: 검수 결과 등록 성공
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegisterHumanInspectionResultResponseDto'
+
   /registerPlaceAccessibility:
     post:
       summary: 점포의 접근성 정보를 등록한다.
@@ -2794,6 +2813,116 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ContributedChallengeInfoDto'
+
+    RegisterHumanInspectionResultRequestDto:
+      type: object
+      properties:
+        accessibilityId:
+          type: string
+          description: PlaceAccessibility 또는 BuildingAccessibility의 ID
+        accessibilityType:
+          type: string
+          enum:
+            - PLACE_ACCESSIBILITY
+            - BUILDING_ACCESSIBILITY
+          description: 접근성 정보 유형
+        inspectorName:
+          type: string
+          description: 검수자 이름
+        inspectionResult:
+          $ref: '#/components/schemas/HumanInspectionResultDto'
+      required:
+        - accessibilityId
+        - accessibilityType
+        - inspectorName
+        - inspectionResult
+
+    RegisterHumanInspectionResultResponseDto:
+      type: object
+      properties:
+        accessibilityInspectionResultId:
+          type: string
+          description: 생성된 검수 결과의 ID
+      required:
+        - accessibilityInspectionResultId
+
+    HumanInspectionResultDto:
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/InspectionStatusDto'
+        comment:
+          type: string
+          description: 전체 검수 코멘트
+        reason:
+          type: string
+          description: 검수 사유
+        imageReasons:
+          type: array
+          items:
+            $ref: '#/components/schemas/ImageReasonDto'
+          description: 이미지별 검수 사유
+        modificationRequest:
+          $ref: '#/components/schemas/ModificationRequestDto'
+          description: 수정 요청 사항 (status가 MODIFY일 때만 사용)
+      required:
+        - status
+        - comment
+        - reason
+
+    InspectionStatusDto:
+      type: string
+      enum:
+        - PASS
+        - FAIL
+        - MODIFY
+      description: |
+        검수 상태
+        - PASS: 접근성 정보 승인
+        - FAIL: 접근성 정보 삭제 필요
+        - MODIFY: 수정 필요
+
+    ImageReasonDto:
+      type: object
+      properties:
+        imageIndex:
+          type: integer
+          description: 이미지 순서 (0부터 시작)
+        imageUrl:
+          type: string
+          description: 이미지 URL (optional)
+        reason:
+          type: string
+          description: 해당 이미지에 대한 검수 사유
+      required:
+        - imageIndex
+        - reason
+
+    ModificationRequestDto:
+      type: object
+      properties:
+        isFirstFloor:
+          type: boolean
+          description: 1층 여부 수정 요청
+        floors:
+          type: array
+          items:
+            type: integer
+          description: 층수 수정 요청
+        stairInfo:
+          $ref: '#/components/schemas/StairInfo'
+          description: 계단 정보 수정 요청
+        stairHeightLevel:
+          $ref: '#/components/schemas/StairHeightLevel'
+          description: 계단 높이 수정 요청
+        hasSlope:
+          type: boolean
+          description: 경사로 유무 수정 요청
+        entranceDoorTypes:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntranceDoorType'
+          description: 출입문 유형 수정 요청
 
     RegisterPlaceAccessibilityRequestDto:
       type: object
