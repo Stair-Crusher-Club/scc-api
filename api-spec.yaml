@@ -1126,8 +1126,52 @@ paths:
                 properties:
                   placeAccessibilityComment:
                     $ref: '#/components/schemas/PlaceAccessibilityComment'
-                required:
-                  - placeAccessibilityComment
+
+  /registerPlaceAccessibilityV2:
+    post:
+      summary: 장소 입구 접근성 정보를 등록한다. (v2 - 클로즈 베타)
+      security:
+        - Identified: []
+      parameters:
+        - $ref: '#/components/parameters/SccCommonHeaders'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterPlaceAccessibilityRequestDtoV2'
+      responses:
+        '200':
+          description: 접근성 정보 등록 성공.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegisterPlaceAccessibilityResponseDtoV2'
+        '400':
+          $ref: '#/components/responses/ApiFailure'
+
+  /registerBuildingAccessibilityV2:
+    post:
+      summary: 건물 입구 및 엘리베이터 접근성 정보를 등록한다. (v2 - 클로즈 베타)
+      security:
+        - Identified: []
+      parameters:
+        - $ref: '#/components/parameters/SccCommonHeaders'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterBuildingAccessibilityRequestDtoV2'
+      responses:
+        '200':
+          description: 접근성 정보 등록 성공.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegisterBuildingAccessibilityResponseDtoV2'
+        '400':
+          $ref: '#/components/responses/ApiFailure'
 
   /registerPlaceReview:
     post:
@@ -1457,7 +1501,10 @@ components:
       required: false
       schema:
         type: string
-      description: Optional request ID header used for tracing and logging.
+      description: |
+        Optional request ID header used for tracing, logging, and idempotency.
+        클라이언트에서 동일한 요청을 여러 번 보내도 한 번만 처리되도록 보장합니다.
+        같은 X-SCC-REQUEST-ID로 요청이 오면 이전 결과를 반환합니다.
 
   # Security schemes
   securitySchemes:
@@ -2978,6 +3025,125 @@ components:
         - accessibilityInfo
         - registeredUserOrder
 
+    RegisterPlaceAccessibilityRequestDtoV2:
+      type: object
+      description: 장소 입구 접근성 정보 등록 요청 (v2 - 클로즈 베타)
+      properties:
+        placeId:
+          type: string
+        isStandaloneBuilding:
+          type: boolean
+          description: 단독 건물 여부 (해당 장소가 건물 전체를 차지하는지)
+        doorDirectionType:
+          $ref: '#/components/schemas/PlaceDoorDirectionTypeDto'
+        floors:
+          type: array
+          items:
+            type: integer
+        imageUrls:
+          type: array
+          items:
+            type: string
+        stairInfo:
+          $ref: '#/components/schemas/StairInfo'
+        stairHeightLevel:
+          $ref: '#/components/schemas/StairHeightLevel'
+        hasSlope:
+          type: boolean
+        entranceDoorTypes:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntranceDoorType'
+        features:
+          description: 장소 입구 특이사항
+          type: array
+          items:
+            type: string
+        entranceComment:
+          type: string
+        floorMovingMethodType:
+          $ref: '#/components/schemas/FloorMovingMethodTypeDto'
+        floorMovingMethodComment:
+          type: string
+        floorMovingElevatorAccessibility:
+          $ref: '#/components/schemas/ElevatorAccessibilityDto'
+        floorMovingElevatorComment:
+          type: string
+      required:
+        - placeId
+        - isStandaloneBuilding
+        - doorDirectionType
+        - floors
+        - imageUrls
+        - stairInfo
+        - hasSlope
+        - entranceDoorTypes
+
+    RegisterPlaceAccessibilityResponseDtoV2:
+      type: object
+      description: 장소 입구 접근성 정보 등록 응답 (v2 - 클로즈 베타)
+      properties:
+        accessibilityInfo:
+          $ref: '#/components/schemas/AccessibilityInfoDto'
+        registeredUserOrder:
+          type: integer
+          description: "'n번째 정복자'를 표시해주기 위한 값."
+        contributedChallengeInfos:
+          description: 이 정보 등록으로 인해 기여한 챌린지 목록
+          type: array
+          items:
+            $ref: '#/components/schemas/ContributedChallengeInfoDto'
+      required:
+        - accessibilityInfo
+        - registeredUserOrder
+
+    RegisterBuildingAccessibilityRequestDtoV2:
+      type: object
+      description: 건물 입구 및 엘리베이터 접근성 정보 등록 요청 (v2 - 클로즈 베타). 각 건물에 대해 1번만 등록될 수 있다.
+      properties:
+        buildingId:
+          type: string
+        doorDirectionType:
+          $ref: '#/components/schemas/BuildingDoorDirectionTypeDto'
+        entranceStairInfo:
+          $ref: '#/components/schemas/StairInfo'
+        entranceStairHeightLevel:
+          $ref: '#/components/schemas/StairHeightLevel'
+        entranceImageUrls:
+          type: array
+          items:
+            type: string
+        entranceDoorTypes:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntranceDoorType'
+        hasSlope:
+          type: boolean
+        hasElevator:
+          type: boolean
+        elevatorAccessibility:
+          $ref: '#/components/schemas/ElevatorAccessibilityDto'
+        comment:
+          type: string
+      required:
+        - buildingId
+        - doorDirectionType
+        - entranceStairInfo
+        - entranceImageUrls
+        - entranceDoorTypes
+        - hasSlope
+        - hasElevator
+
+    RegisterBuildingAccessibilityResponseDtoV2:
+      type: object
+      description: 건물 입구 및 엘리베이터 접근성 정보 등록 응답 (v2 - 클로즈 베타)
+      properties:
+        contributedChallengeInfos:
+          description: 이 정보 등록으로 인해 기여한 챌린지 목록
+          type: array
+          items:
+            $ref: '#/components/schemas/ContributedChallengeInfoDto'
+
     ContributedChallengeInfoDto:
       type: object
       properties:
@@ -3253,6 +3419,53 @@ components:
         - ONE
         - TWO_TO_FIVE
         - OVER_SIX
+
+    PlaceDoorDirectionTypeDto:
+      type: string
+      description: 장소 입구 문이 건물 외부로 향하는지 내부로 향하는지
+      enum:
+        - OUTSIDE_BUILDING
+        - INSIDE_BUILDING
+
+    BuildingDoorDirectionTypeDto:
+      type: string
+      description: 건물 입구 문의 방향 (도로쪽, 주차장쪽, 기타)
+      enum:
+        - ROAD_DIRECTION
+        - PARKING_DIRECTION
+        - ETC
+
+    FloorMovingMethodTypeDto:
+      type: string
+      description: 층간 이동 방법
+      enum:
+        # 매장 내부 층간 이동 시설
+        # 단독건물일 경우 PLACE_ prefix가 붙은 항목을 사용하면 된다.
+        - PLACE_ELEVATOR # 매장 내부 엘리베이터 / 엘리베이터
+        - PLACE_STAIRS # 매장 내부 계단 / 계단
+        - PLACE_ESCALATOR # 매장 내부 에스컬레이터 / 에스컬레이터
+        # 매장 외부 층간 이동 시설
+        - BUILDING_ELEVATOR # 매장 외부, 즉 건물 엘리베이터
+        - BUILDING_STAIRS # 매장 외부, 즉 건물 계단
+        - BUILDING_ESCALATOR # 매장 외부, 즉 건물 에스컬레이터
+        # 공통
+        - UNKNOWN # 모르겠음
+
+    ElevatorAccessibilityDto:
+      type: object
+      description: 엘리베이터 접근성 정보
+      properties:
+        imageUrls:
+          type: array
+          items:
+            type: string
+        stairInfo:
+          $ref: '#/components/schemas/StairInfo'
+        stairHeightLevel:
+          $ref: '#/components/schemas/StairHeightLevel'
+        hasSlope:
+          type: boolean
+          description: 엘리베이터까지 가는 경사로 유무
 
     User:
       description: 유저 정보.
