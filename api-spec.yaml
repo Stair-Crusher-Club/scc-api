@@ -2888,9 +2888,6 @@ components:
         imageIndex:
           type: integer
           description: 이미지 순서 (0부터 시작)
-        imageUrl:
-          type: string
-          description: 이미지 URL (optional)
         reason:
           type: string
           description: 해당 이미지에 대한 검수 사유
