@@ -179,6 +179,25 @@ paths:
               schema:
                 $ref: '#/components/schemas/CreateAndNotifyDailyClubQuestResponseDTO'
 
+  /clubQuests/byGroup/{groupId}:
+    get:
+      summary: groupId로 해당 그룹의 모든 퀘스트를 조회한다.
+      operationId: getClubQuestsByGroupId
+      parameters:
+        - in: path
+          name: groupId
+          schema:
+            type: string
+          required: true
+          description: 퀘스트 그룹 식별자
+      responses:
+        '200':
+          description: 조회 성공
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetClubQuestsByGroupIdResult'
+
   /clubQuests/{clubQuestId}:
     get:
       summary: 퀘스트를 조회한다.
@@ -291,6 +310,31 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ClubQuestDTO'
+
+  /clubQuests/{clubQuestId}/targetPlaces/move:
+    post:
+      summary: 특정 장소들을 다른 퀘스트로 이동한다.
+      operationId: moveClubQuestTargetPlace
+      parameters:
+        - in: path
+          name: clubQuestId
+          schema:
+            type: string
+          required: true
+          description: 원본 퀘스트 ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MoveClubQuestTargetPlaceRequest'
+      responses:
+        '200':
+          description: 장소 이동 성공
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MoveClubQuestTargetPlaceResponse'
 
   /clubQuests/{clubQuestId}/targetBuildings:
     delete:
@@ -1055,6 +1099,8 @@ components:
           $ref: '#/components/schemas/EpochMillisTimestamp'
         shortenedUrl:
           type: string
+        groupId:
+          type: string
       required:
         - id
         - name
@@ -1069,6 +1115,9 @@ components:
           type: string
         name:
           type: string
+        groupId:
+          type: string
+          description: 퀘스트 그룹 식별자 (dryRun 배치 단위). 같은 groupId를 가진 퀘스트들은 동일한 배치로 생성됨.
         purposeType:
           $ref: '#/components/schemas/ClubQuestPurposeTypeEnumDTO'
         startAt:
@@ -1143,6 +1192,44 @@ components:
         - isClosedExpected
         - isClosed
         - isNotAccessible
+
+    GetClubQuestsByGroupIdResult:
+      description: groupId로 조회한 퀘스트 목록
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ClubQuestDTO'
+      required:
+        - items
+
+    MoveClubQuestTargetPlaceRequest:
+      description: 장소 이동 요청
+      properties:
+        targetQuestId:
+          type: string
+          description: 이동 대상 퀘스트 ID
+        placeIds:
+          type: array
+          items:
+            type: string
+          description: 이동할 장소 ID 목록
+      required:
+        - targetQuestId
+        - placeIds
+
+    MoveClubQuestTargetPlaceResponse:
+      description: 장소 이동 응답
+      properties:
+        sourceQuest:
+          $ref: '#/components/schemas/ClubQuestDTO'
+          description: 원본 퀘스트 (장소가 제거됨)
+        targetQuest:
+          $ref: '#/components/schemas/ClubQuestDTO'
+          description: 대상 퀘스트 (장소가 추가됨)
+      required:
+        - sourceQuest
+        - targetQuest
 
     CreateClubQuestResponseDTO:
       properties:
