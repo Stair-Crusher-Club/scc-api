@@ -529,7 +529,7 @@ paths:
     post:
       summary: 크러셔 활동 페이지를 그리기 위한 데이터를 조회한다.
       security:
-        - Identified: [ ]
+        - Identified: []
       responses:
         '200':
           description: 크러셔 활동 페이지를 그리기 위한 데이터를 내려준다.
@@ -1152,7 +1152,8 @@ paths:
 
   /registerBuildingAccessibilityV2:
     post:
-      summary: 건물 입구 및 엘리베이터 접근성 정보를 등록한다. (v2 - 클로즈 베타)
+      summary:
+        건물 입구 및 엘리베이터 접근성 정보를 등록한다. (v2 - 클로즈 베타)
       security:
         - Identified: []
       parameters:
@@ -3099,7 +3100,9 @@ components:
 
     RegisterBuildingAccessibilityRequestDtoV2:
       type: object
-      description: 건물 입구 및 엘리베이터 접근성 정보 등록 요청 (v2 - 클로즈 베타). 각 건물에 대해 1번만 등록될 수 있다.
+      description:
+        건물 입구 및 엘리베이터 접근성 정보 등록 요청 (v2 - 클로즈 베타). 각
+        건물에 대해 1번만 등록될 수 있다.
       properties:
         buildingId:
           type: string
@@ -3136,7 +3139,8 @@ components:
 
     RegisterBuildingAccessibilityResponseDtoV2:
       type: object
-      description: 건물 입구 및 엘리베이터 접근성 정보 등록 응답 (v2 - 클로즈 베타)
+      description:
+        건물 입구 및 엘리베이터 접근성 정보 등록 응답 (v2 - 클로즈 베타)
       properties:
         contributedChallengeInfos:
           description: 이 정보 등록으로 인해 기여한 챌린지 목록
@@ -4033,7 +4037,8 @@ components:
           description: built-in 질문 타입 (null이면 custom 질문)
         key:
           type: string
-          description: 불변 key (built-in은 participantName 등, custom은 camelCase)
+          description:
+            불변 key (built-in은 participantName 등, custom은 camelCase)
         displayName:
           type: string
           description: 화면에 표시될 질문명 (built-in 질문도 커스터마이징 가능)

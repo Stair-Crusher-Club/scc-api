@@ -681,6 +681,53 @@ paths:
         '404':
           description: 일부 접근성 정보를 찾을 수 없음
 
+  /accessibility-inspection-results/human/bulk-import:
+    post:
+      operationId: bulkImportHumanInspections
+      summary: CSV 파일을 업로드하여 인간 검수 결과를 일괄 등록한다.
+      description: |
+        Korean inspection sheet format (30 columns) CSV 파일을 업로드하여 인간 검수 결과를 일괄로 등록합니다.
+        100개 이하의 레코드는 동기 처리되며, 100개 초과시 비동기로 처리됩니다.
+
+        CSV 포맷:
+        - 30개 컬럼의 한국어 검수 시트 형식
+        - Column 0: 장소 id (accessibilityId)
+        - Column 15: 판정 (status: "정상"=PASS, "삭제 대상"=FAIL, "수정 대상"=MODIFY)
+        - Column 16: (선택) 추가 의견 (comment)
+        - Column 9: 코멘트 (reason - original comment)
+        - Columns 20-25: Modification request (1층 여부, 층 수, 계단 개수, 계단 높이, 경사로 유무, 문 유형)
+        - Column 29: 검수자 (inspector name)
+      tags:
+        - accessibility
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+                  description: CSV 파일
+              required:
+                - file
+      responses:
+        '200':
+          description: 동기 처리 완료 (100개 이하의 레코드)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BulkImportHumanInspectionResponseDTO'
+        '202':
+          description: 비동기 처리 시작됨 (100개 초과의 레코드)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BulkImportHumanInspectionResponseDTO'
+        '400':
+          description: 잘못된 요청 (빈 파일, CSV 형식 오류 등)
+
   /places/startCrawling:
     post:
       operationId: startPlaceCrawling
@@ -1117,7 +1164,9 @@ components:
           type: string
         groupId:
           type: string
-          description: 퀘스트 그룹 식별자 (dryRun 배치 단위). 같은 groupId를 가진 퀘스트들은 동일한 배치로 생성됨.
+          description:
+            퀘스트 그룹 식별자 (dryRun 배치 단위). 같은 groupId를 가진
+            퀘스트들은 동일한 배치로 생성됨.
         purposeType:
           $ref: '#/components/schemas/ClubQuestPurposeTypeEnumDTO'
         startAt:
@@ -1527,7 +1576,7 @@ components:
           $ref: '#/components/schemas/ResultTypeDTO'
         contents:
           type: string
-          description: "검증 결과 내용 (JSON)"
+          description: '검증 결과 내용 (JSON)'
         images:
           type: array
           items:
@@ -1535,7 +1584,8 @@ components:
         accessibilityName:
           type: string
           nullable: true
-          description: "접근성 대상의 이름 (Place인 경우 장소명, Building인 경우 건물명)"
+          description:
+            '접근성 대상의 이름 (Place인 경우 장소명, Building인 경우 건물명)'
         handledAtMillis:
           type: integer
           format: int64
@@ -1557,6 +1607,45 @@ components:
         - images
         - createdAtMillis
         - updatedAtMillis
+
+    BulkImportHumanInspectionResponseDTO:
+      type: object
+      properties:
+        message:
+          type: string
+          description: 처리 상태 메시지
+        totalRecords:
+          type: integer
+          description: CSV 파일의 전체 레코드 수
+        parsedCount:
+          type: integer
+          description: 파싱에 성공한 레코드 수
+        parseErrors:
+          type: integer
+          description: 파싱에 실패한 레코드 수
+        successCount:
+          type: integer
+          nullable: true
+          description: 등록에 성공한 레코드 수 (비동기 처리시 null)
+        failureCount:
+          type: integer
+          nullable: true
+          description: 등록에 실패한 레코드 수 (비동기 처리시 null)
+        errors:
+          type: array
+          nullable: true
+          items:
+            type: string
+          description: 실패한 레코드의 에러 메시지 목록 (비동기 처리시 null)
+        asyncProcessing:
+          type: boolean
+          description: 비동기 처리 여부 (true면 백그라운드 처리중)
+      required:
+        - message
+        - totalRecords
+        - parsedCount
+        - parseErrors
+        - asyncProcessing
 
     InspectorTypeDTO:
       type: string
@@ -1581,7 +1670,6 @@ components:
         - PlaceReview
         - ToiletReview
         - UNKNOWN
-
 
     AdminUpdateChallengeRequestDTO:
       type: object
@@ -2122,7 +2210,8 @@ components:
         customDisplayName:
           type: string
           nullable: true
-          description: 질문명 override (built-in인 경우 선택, custom인 경우 필수)
+          description:
+            질문명 override (built-in인 경우 선택, custom인 경우 필수)
         options:
           type: array
           items:
