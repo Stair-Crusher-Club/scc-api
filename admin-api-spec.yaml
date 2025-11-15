@@ -23,6 +23,7 @@ tags:
   - name: challenge
   - name: accessibility
   - name: banner
+  - name: bbucle-road
 
 paths:
   /login:
@@ -1077,6 +1078,90 @@ paths:
           schema:
             type: string
           required: true
+      responses:
+        '204':
+          $ref: '#/components/responses/NoContent'
+
+  /bbucle-road-pages:
+    get:
+      summary: 뿌클로드 페이지 목록을 조회한다.
+      operationId: listBbucleRoadPages
+      tags:
+        - bbucle-road
+      responses:
+        '200':
+          description: 조회 성공
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BbucleRoadPageDTO'
+
+    post:
+      summary: 뿌클로드 페이지를 생성한다.
+      operationId: createBbucleRoadPage
+      tags:
+        - bbucle-road
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateBbucleRoadPageRequestDTO'
+      responses:
+        '200':
+          description: 생성 성공
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BbucleRoadPageDTO'
+
+  /bbucle-road-pages/{id}:
+    parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+
+    get:
+      summary: 뿌클로드 페이지를 조회한다.
+      operationId: getBbucleRoadPage
+      tags:
+        - bbucle-road
+      responses:
+        '200':
+          description: 조회 성공
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BbucleRoadPageDTO'
+
+    put:
+      summary: 뿌클로드 페이지를 수정한다.
+      operationId: updateBbucleRoadPage
+      tags:
+        - bbucle-road
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateBbucleRoadPageRequestDTO'
+      responses:
+        '200':
+          description: 수정 성공
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BbucleRoadPageDTO'
+
+    delete:
+      summary: 뿌클로드 페이지를 삭제한다.
+      operationId: deleteBbucleRoadPage
+      tags:
+        - bbucle-road
       responses:
         '204':
           $ref: '#/components/responses/NoContent'
@@ -2148,6 +2233,8 @@ components:
       enum:
         - BANNER
         - CRUSHER_LABEL
+        - BBUCLE_ROAD_MARKER
+        - BBUCLE_ROAD_DESCRIPTION
 
     AdminCreateImageUploadUrlsResponseDTO:
       type: object
@@ -2307,6 +2394,275 @@ components:
         - COMPANY_NAME
         - ORGANIZATION_NAME
         - EMPLOYEE_IDENTIFICATION_NUMBER
+
+    BbucleRoadPageDTO:
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        titleImageUrl:
+          type: string
+        summary:
+          type: array
+          items:
+            type: string
+        sections:
+          type: array
+          items:
+            $ref: '#/components/schemas/BbucleRoadSectionDTO'
+        createdAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - title
+        - titleImageUrl
+        - summary
+        - sections
+        - createdAt
+
+    BbucleRoadSectionDTO:
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          $ref: '#/components/schemas/BbucleRoadSectionTypeDTO'
+        title:
+          type: string
+        mapConfig:
+          $ref: '#/components/schemas/MapConfigDTO'
+          nullable: true
+        markers:
+          type: array
+          items:
+            $ref: '#/components/schemas/MapMarkerDTO'
+          nullable: true
+        imageUrls:
+          type: array
+          items:
+            type: string
+          description: 이미지 URL 목록
+        accessibilityTips:
+          type: string
+        order:
+          type: integer
+      required:
+        - id
+        - type
+        - title
+        - order
+
+    BbucleRoadSectionTypeDTO:
+      type: string
+      enum:
+        - MAP_OVERVIEW
+        - TRAFFIC
+        - TICKETING
+        - WHEELCHAIR_VIEW
+        - NEARBY_RESTAURANTS
+        - NEARBY_CAFES
+
+    MapConfigDTO:
+      type: object
+      properties:
+        center:
+          $ref: '#/components/schemas/LocationDTO'
+        level:
+          type: integer
+          description: 지도 확대 레벨 (1-14)
+      required: []
+
+    MapMarkerDTO:
+      type: object
+      properties:
+        id:
+          type: string
+        category:
+          $ref: '#/components/schemas/MarkerCategoryDTO'
+        position:
+          $ref: '#/components/schemas/LocationDTO'
+        tooltipText:
+          type: string
+        size:
+          $ref: '#/components/schemas/MarkerSizeDTO'
+        customImageUrl:
+          type: string
+      required:
+        - id
+        - category
+        - position
+        - tooltipText
+
+    MarkerCategoryDTO:
+      type: string
+      enum:
+        - RESTAURANT
+        - CAFE
+        - ACCESSIBLE_TOILET
+        - ACCESSIBILITY_INFO
+        - TICKET_BOOTH
+        - ENTRANCE
+        - ELEVATOR
+        - SUBWAY_EXIT
+        - BUS_STOP
+        - PARKING
+        - CUSTOM
+
+    MarkerSizeDTO:
+      type: object
+      properties:
+        width:
+          type: integer
+        height:
+          type: integer
+      required:
+        - width
+        - height
+
+    CreateBbucleRoadPageRequestDTO:
+      type: object
+      properties:
+        title:
+          type: string
+        titleImageUrl:
+          type: string
+        summary:
+          type: array
+          items:
+            type: string
+        sections:
+          type: array
+          items:
+            $ref: '#/components/schemas/CreateBbucleRoadSectionDTO'
+      required:
+        - title
+        - titleImageUrl
+        - summary
+        - sections
+
+    CreateBbucleRoadSectionDTO:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/BbucleRoadSectionTypeDTO'
+        title:
+          type: string
+        mapConfig:
+          $ref: '#/components/schemas/MapConfigDTO'
+          nullable: true
+        markers:
+          type: array
+          items:
+            $ref: '#/components/schemas/CreateMapMarkerDTO'
+          nullable: true
+        imageUrls:
+          type: array
+          items:
+            type: string
+          description: 이미지 URL 목록
+        accessibilityTips:
+          type: string
+        order:
+          type: integer
+      required:
+        - type
+        - title
+        - order
+
+    CreateMapMarkerDTO:
+      type: object
+      properties:
+        category:
+          $ref: '#/components/schemas/MarkerCategoryDTO'
+        position:
+          $ref: '#/components/schemas/LocationDTO'
+        tooltipText:
+          type: string
+        size:
+          $ref: '#/components/schemas/MarkerSizeDTO'
+        customImageUrl:
+          type: string
+      required:
+        - category
+        - position
+        - tooltipText
+
+    UpdateBbucleRoadPageRequestDTO:
+      type: object
+      properties:
+        title:
+          type: string
+        titleImageUrl:
+          type: string
+        summary:
+          type: array
+          items:
+            type: string
+        sections:
+          type: array
+          items:
+            $ref: '#/components/schemas/UpdateBbucleRoadSectionDTO'
+      required:
+        - title
+        - titleImageUrl
+        - summary
+        - sections
+
+    UpdateBbucleRoadSectionDTO:
+      type: object
+      properties:
+        id:
+          type: string
+          description: 기존 섹션은 id가 있고, 새 섹션은 null
+        type:
+          $ref: '#/components/schemas/BbucleRoadSectionTypeDTO'
+        title:
+          type: string
+        mapConfig:
+          $ref: '#/components/schemas/MapConfigDTO'
+          nullable: true
+        markers:
+          type: array
+          items:
+            $ref: '#/components/schemas/UpdateMapMarkerDTO'
+          nullable: true
+        imageUrls:
+          type: array
+          items:
+            type: string
+          description: 이미지 URL 목록
+        accessibilityTips:
+          type: string
+        order:
+          type: integer
+      required:
+        - type
+        - title
+        - order
+
+    UpdateMapMarkerDTO:
+      type: object
+      properties:
+        id:
+          type: string
+          description: 기존 마커는 id가 있고, 새 마커는 null
+        category:
+          $ref: '#/components/schemas/MarkerCategoryDTO'
+        position:
+          $ref: '#/components/schemas/LocationDTO'
+        tooltipText:
+          type: string
+        size:
+          $ref: '#/components/schemas/MarkerSizeDTO'
+        customImageUrl:
+          type: string
+      required:
+        - category
+        - position
+        - tooltipText
 
   responses:
     NoContent:
