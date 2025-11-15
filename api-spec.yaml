@@ -1455,6 +1455,24 @@ paths:
               schema:
                 $ref: '#/components/schemas/GetHomeBannersResponseDto'
 
+  /getBbucleRoadPage:
+    post:
+      summary: 뿌클로드 페이지 정보를 조회한다.
+      operationId: getBbucleRoadPage
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GetBbucleRoadPageRequestDto'
+      responses:
+        '200':
+          description: 뿌클로드 페이지 조회 성공
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetBbucleRoadPageResponseDto'
+
   /validateUserProfile:
     post:
       summary: 유저 프로필 정보의 유효성을 검사한다.
@@ -4115,6 +4133,115 @@ components:
         - mobilityTool
         - percentage
         - totalCount
+
+    GetBbucleRoadPageRequestDto:
+      type: object
+      properties:
+        bbucleRoadId:
+          type: string
+      required:
+        - bbucleRoadId
+
+    GetBbucleRoadPageResponseDto:
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        iconImageUrl:
+          type: string
+        location:
+          $ref: '#/components/schemas/Location'
+        summaryItems:
+          type: array
+          items:
+            type: string
+        sections:
+          type: array
+          items:
+            $ref: '#/components/schemas/BbucleRoadSectionDto'
+      required:
+        - id
+        - title
+        - iconImageUrl
+        - location
+        - summaryItems
+        - sections
+
+    BbucleRoadSectionDto:
+      type: object
+      properties:
+        sectionType:
+          $ref: '#/components/schemas/BbucleRoadSectionTypeDto'
+        mapCenter:
+          $ref: '#/components/schemas/Location'
+        mapZoomLevel:
+          type: integer
+        markers:
+          type: array
+          items:
+            $ref: '#/components/schemas/BbucleRoadMarkerDto'
+        availableMarkerCategories:
+          type: array
+          items:
+            $ref: '#/components/schemas/BbucleRoadMarkerTypeDto'
+          description: 지도로 한 눈에 보기 섹션에만 존재. 필터 가능한 마커 카테고리 목록
+        imageUrls:
+          type: array
+          items:
+            type: string
+          description: 이미지 URL 목록. 단일 이미지 섹션은 1개, 카드 리스트 섹션은 여러 개
+      required:
+        - sectionType
+        - markers
+
+    BbucleRoadSectionTypeDto:
+      type: string
+      enum:
+        - HEADER
+        - SUMMARY
+        - MAP_OVERVIEW
+        - TRAFFIC
+        - TICKETING
+        - WHEELCHAIR_VIEW
+        - NEARBY_RESTAURANTS
+        - NEARBY_CAFES
+
+    BbucleRoadMarkerDto:
+      type: object
+      properties:
+        markerType:
+          $ref: '#/components/schemas/BbucleRoadMarkerTypeDto'
+        location:
+          $ref: '#/components/schemas/Location'
+        tooltipName:
+          type: string
+        customImageUrl:
+          type: string
+        customImageWidth:
+          type: integer
+        customImageHeight:
+          type: integer
+      required:
+        - markerType
+        - location
+        - tooltipName
+
+    BbucleRoadMarkerTypeDto:
+      type: string
+      enum:
+        - RESTAURANT
+        - CAFE
+        - ACCESSIBLE_TOILET
+        - ACCESSIBILITY_INFO
+        - TICKET_BOOTH
+        - ENTRANCE
+        - ELEVATOR
+        - SUBWAY_EXIT
+        - BUS_STOP
+        - PARKING
+        - CUSTOM
 
   responses:
     ApiFailure:
