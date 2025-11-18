@@ -179,6 +179,25 @@ paths:
               schema:
                 $ref: '#/components/schemas/CreateAndNotifyDailyClubQuestResponseDTO'
 
+  /clubQuests/byGroup/{groupId}:
+    get:
+      summary: groupId로 해당 그룹의 모든 퀘스트를 조회한다.
+      operationId: getClubQuestsByGroupId
+      parameters:
+        - in: path
+          name: groupId
+          schema:
+            type: string
+          required: true
+          description: 퀘스트 그룹 식별자
+      responses:
+        '200':
+          description: 조회 성공
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetClubQuestsByGroupIdResult'
+
   /clubQuests/{clubQuestId}:
     get:
       summary: 퀘스트를 조회한다.
@@ -291,6 +310,31 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ClubQuestDTO'
+
+  /clubQuests/{clubQuestId}/targetPlaces/move:
+    post:
+      summary: 특정 장소들을 다른 퀘스트로 이동한다.
+      operationId: moveClubQuestTargetPlace
+      parameters:
+        - in: path
+          name: clubQuestId
+          schema:
+            type: string
+          required: true
+          description: 원본 퀘스트 ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MoveClubQuestTargetPlaceRequest'
+      responses:
+        '200':
+          description: 장소 이동 성공
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MoveClubQuestTargetPlaceResponse'
 
   /clubQuests/{clubQuestId}/targetBuildings:
     delete:
@@ -479,12 +523,27 @@ paths:
     get:
       parameters:
         - in: query
+          name: id
+          schema:
+            type: string
+          required: false
+        - in: query
           name: accessibilityType
           schema:
             $ref: '#/components/schemas/AccessibilityTypeDTO'
           required: false
         - in: query
-          name: isPassed
+          name: inspectorType
+          schema:
+            $ref: '#/components/schemas/InspectorTypeDTO'
+          required: false
+        - in: query
+          name: resultType
+          schema:
+            $ref: '#/components/schemas/ResultTypeDTO'
+          required: false
+        - in: query
+          name: isHandled
           schema:
             type: boolean
           required: false
@@ -621,6 +680,53 @@ paths:
           description: 잘못된 요청 (빈 배열 등)
         '404':
           description: 일부 접근성 정보를 찾을 수 없음
+
+  /accessibility-inspection-results/human/bulk-import:
+    post:
+      operationId: bulkImportHumanInspections
+      summary: CSV 파일을 업로드하여 인간 검수 결과를 일괄 등록한다.
+      description: |
+        Korean inspection sheet format (30 columns) CSV 파일을 업로드하여 인간 검수 결과를 일괄로 등록합니다.
+        100개 이하의 레코드는 동기 처리되며, 100개 초과시 비동기로 처리됩니다.
+
+        CSV 포맷:
+        - 30개 컬럼의 한국어 검수 시트 형식
+        - Column 0: 장소 id (accessibilityId)
+        - Column 15: 판정 (status: "정상"=PASS, "삭제 대상"=FAIL, "수정 대상"=MODIFY)
+        - Column 16: (선택) 추가 의견 (comment)
+        - Column 9: 코멘트 (reason - original comment)
+        - Columns 20-25: Modification request (1층 여부, 층 수, 계단 개수, 계단 높이, 경사로 유무, 문 유형)
+        - Column 29: 검수자 (inspector name)
+      tags:
+        - accessibility
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+                  description: CSV 파일
+              required:
+                - file
+      responses:
+        '200':
+          description: 동기 처리 완료 (100개 이하의 레코드)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BulkImportHumanInspectionResponseDTO'
+        '202':
+          description: 비동기 처리 시작됨 (100개 초과의 레코드)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BulkImportHumanInspectionResponseDTO'
+        '400':
+          description: 잘못된 요청 (빈 파일, CSV 형식 오류 등)
 
   /places/startCrawling:
     post:
@@ -971,6 +1077,12 @@ components:
         - CIRCLE
         - POLYGON
 
+    ChallengeAggregationPeriodTypeEnum:
+      type: string
+      enum:
+        - ALL_TIME
+        - MONTHLY
+
     QuestTargetPlaceCategoryEnumDTO:
       type: string
       enum:
@@ -1034,6 +1146,8 @@ components:
           $ref: '#/components/schemas/EpochMillisTimestamp'
         shortenedUrl:
           type: string
+        groupId:
+          type: string
       required:
         - id
         - name
@@ -1048,6 +1162,11 @@ components:
           type: string
         name:
           type: string
+        groupId:
+          type: string
+          description:
+            퀘스트 그룹 식별자 (dryRun 배치 단위). 같은 groupId를 가진
+            퀘스트들은 동일한 배치로 생성됨.
         purposeType:
           $ref: '#/components/schemas/ClubQuestPurposeTypeEnumDTO'
         startAt:
@@ -1122,6 +1241,44 @@ components:
         - isClosedExpected
         - isClosed
         - isNotAccessible
+
+    GetClubQuestsByGroupIdResult:
+      description: groupId로 조회한 퀘스트 목록
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ClubQuestDTO'
+      required:
+        - items
+
+    MoveClubQuestTargetPlaceRequest:
+      description: 장소 이동 요청
+      properties:
+        targetQuestId:
+          type: string
+          description: 이동 대상 퀘스트 ID
+        placeIds:
+          type: array
+          items:
+            type: string
+          description: 이동할 장소 ID 목록
+      required:
+        - targetQuestId
+        - placeIds
+
+    MoveClubQuestTargetPlaceResponse:
+      description: 장소 이동 응답
+      properties:
+        sourceQuest:
+          $ref: '#/components/schemas/ClubQuestDTO'
+          description: 원본 퀘스트 (장소가 제거됨)
+        targetQuest:
+          $ref: '#/components/schemas/ClubQuestDTO'
+          description: 대상 퀘스트 (장소가 추가됨)
+      required:
+        - sourceQuest
+        - targetQuest
 
     CreateClubQuestResponseDTO:
       properties:
@@ -1213,6 +1370,11 @@ components:
         endsAtMillis:
           type: integer
           format: int64
+        joinStartAtMillis:
+          type: integer
+          format: int64
+        b2bGroupId:
+          type: string
         goal:
           type: integer
           format: int32
@@ -1239,6 +1401,12 @@ components:
           $ref: '#/components/schemas/AdminChallengeB2bFormSchemaDTO'
         crusherGroup:
           $ref: '#/components/schemas/AdminCrusherGroupDto'
+        aggregationPeriodType:
+          $ref: '#/components/schemas/ChallengeAggregationPeriodTypeEnum'
+        lastMonthRankImageUrl:
+          type: string
+        modalImageUrl:
+          type: string
       required:
         - id
         - name
@@ -1304,6 +1472,11 @@ components:
         endsAtMillis:
           type: integer
           format: int64
+        joinStartAtMillis:
+          type: integer
+          format: int64
+        b2bGroupId:
+          type: string
         goal:
           type: integer
           format: int32
@@ -1324,6 +1497,12 @@ components:
           $ref: '#/components/schemas/AdminChallengeB2bFormSchemaDTO'
         crusherGroup:
           $ref: '#/components/schemas/AdminCrusherGroupDto'
+        aggregationPeriodType:
+          $ref: '#/components/schemas/ChallengeAggregationPeriodTypeEnum'
+        lastMonthRankImageUrl:
+          type: string
+        modalImageUrl:
+          type: string
       required:
         - name
         - isPublic
@@ -1389,14 +1568,28 @@ components:
           type: string
         accessibilityType:
           $ref: '#/components/schemas/AccessibilityTypeDTO'
-        isPassed:
-          type: boolean
-        imageInspectionResult:
-          $ref: '#/components/schemas/ImageInspectionResultDTO'
+        inspectorId:
+          type: string
+        inspectorType:
+          $ref: '#/components/schemas/InspectorTypeDTO'
+        resultType:
+          $ref: '#/components/schemas/ResultTypeDTO'
+        contents:
+          type: string
+          description: '검증 결과 내용 (JSON)'
         images:
           type: array
           items:
             $ref: '#/components/schemas/AdminImageDTO'
+        accessibilityName:
+          type: string
+          nullable: true
+          description:
+            '접근성 대상의 이름 (Place인 경우 장소명, Building인 경우 건물명)'
+        handledAtMillis:
+          type: integer
+          format: int64
+          nullable: true
         createdAtMillis:
           type: integer
           format: int64
@@ -1407,53 +1600,67 @@ components:
         - id
         - accessibilityId
         - accessibilityType
-        - isPassed
-        - imageInspectionResult
+        - inspectorId
+        - inspectorType
+        - resultType
+        - contents
         - images
         - createdAtMillis
         - updatedAtMillis
 
-    ImageInspectionResultDTO:
+    BulkImportHumanInspectionResponseDTO:
       type: object
       properties:
-        isPassed:
+        message:
+          type: string
+          description: 처리 상태 메시지
+        totalRecords:
+          type: integer
+          description: CSV 파일의 전체 레코드 수
+        parsedCount:
+          type: integer
+          description: 파싱에 성공한 레코드 수
+        parseErrors:
+          type: integer
+          description: 파싱에 실패한 레코드 수
+        successCount:
+          type: integer
+          nullable: true
+          description: 등록에 성공한 레코드 수 (비동기 처리시 null)
+        failureCount:
+          type: integer
+          nullable: true
+          description: 등록에 실패한 레코드 수 (비동기 처리시 null)
+        errors:
+          type: array
+          nullable: true
+          items:
+            type: string
+          description: 실패한 레코드의 에러 메시지 목록 (비동기 처리시 null)
+        asyncProcessing:
           type: boolean
-        description:
-          type: string
-        overallCodes:
-          type: array
-          items:
-            $ref: '#/components/schemas/OverallReasonCodeDTO'
-        images:
-          type: array
-          items:
-            $ref: '#/components/schemas/ImageDetailDTO'
+          description: 비동기 처리 여부 (true면 백그라운드 처리중)
       required:
-        - isPassed
-        - description
-        - overallCodes
-        - images
+        - message
+        - totalRecords
+        - parsedCount
+        - parseErrors
+        - asyncProcessing
 
-    ImageDetailDTO:
-      type: object
-      properties:
-        url:
-          type: string
-        individualCodes:
-          type: array
-          items:
-            $ref: '#/components/schemas/IndividualReasonCodeDTO'
-        detectedObjects:
-          type: array
-          items:
-            $ref: '#/components/schemas/DetectedObjectDTO'
-        rotation:
-          $ref: '#/components/schemas/RotationDTO'
-      required:
-        - url
-        - individualCodes
-        - detectedObjects
-        - rotation
+    InspectorTypeDTO:
+      type: string
+      enum:
+        - HUMAN
+        - AI
+        - UNKNOWN
+
+    ResultTypeDTO:
+      type: string
+      enum:
+        - OK
+        - MODIFY
+        - DELETE
+        - UNKNOWN
 
     AccessibilityTypeDTO:
       type: string
@@ -1462,39 +1669,6 @@ components:
         - Building
         - PlaceReview
         - ToiletReview
-
-    OverallReasonCodeDTO:
-      type: string
-      enum:
-        - NO_ENTRANCE_IN_SET
-        - NO_DOORSILL_STAIR_IN_SET
-        - NO_PLACE_INDICATION_IN_SET
-        - UNKNOWN
-
-    IndividualReasonCodeDTO:
-      type: string
-      enum:
-        - IMAGE_UNCLEAR_BLURRY
-        - IMAGE_ROTATED
-        - HARMFUL_CONTENT
-        - UNKNOWN
-
-    DetectedObjectDTO:
-      type: string
-      enum:
-        - Entrance
-        - Stair
-        - Elevator
-        - Signboard
-        - UNKNOWN
-
-    RotationDTO:
-      type: string
-      enum:
-        - D0
-        - D90
-        - D180
-        - D270
         - UNKNOWN
 
     AdminUpdateChallengeRequestDTO:
@@ -1512,6 +1686,11 @@ components:
         endsAtMillis:
           type: integer
           format: int64
+        joinStartAtMillis:
+          type: integer
+          format: int64
+        b2bGroupId:
+          type: string
         goal:
           type: integer
           format: int32
@@ -1532,6 +1711,12 @@ components:
           $ref: '#/components/schemas/AdminChallengeB2bFormSchemaDTO'
         crusherGroup:
           $ref: '#/components/schemas/AdminCrusherGroupDto'
+        aggregationPeriodType:
+          $ref: '#/components/schemas/ChallengeAggregationPeriodTypeEnum'
+        lastMonthRankImageUrl:
+          type: string
+        modalImageUrl:
+          type: string
       required:
         - name
         - description
@@ -2016,12 +2201,23 @@ components:
       properties:
         name:
           $ref: '#/components/schemas/AdminChallengeB2bFormSchemaAvailableFieldNameEnumDTO'
+          nullable: true
+          description: built-in 질문 타입 (null이면 custom 질문)
+        key:
+          type: string
+          nullable: true
+          description: Custom 질문의 불변 key (camelCase, built-in인 경우 null)
+        customDisplayName:
+          type: string
+          nullable: true
+          description:
+            질문명 override (built-in인 경우 선택, custom인 경우 필수)
         options:
           type: array
           items:
             type: string
-      required:
-        - name
+          nullable: true
+          description: 객관식 옵션 (null이면 주관식)
 
     AdminChallengeB2bFormSchemaAvailableFieldNameEnumDTO:
       type: string
