@@ -143,6 +143,10 @@ paths:
                   $ref: '#/components/schemas/EpochMillisTimestamp'
                 endAt:
                   $ref: '#/components/schemas/EpochMillisTimestamp'
+                isAttendanceCheckEnabled:
+                  type: boolean
+                  description: 출석체크 가능 여부
+                  default: true
                 dryRunResults:
                   items:
                     $ref: '#/components/schemas/ClubQuestCreateDryRunResultItemDTO'
@@ -1306,6 +1310,9 @@ components:
             $ref: '#/components/schemas/ClubQuestTargetBuildingDTO'
         shortenedUrl:
           type: string
+        isAttendanceCheckEnabled:
+          type: boolean
+          description: 출석체크 가능 여부
       required:
         - id
         - name
