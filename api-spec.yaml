@@ -604,8 +604,6 @@ paths:
   /getUpvoteDetails:
     post:
       summary: 도움이 되었어요를 누른 사람들과 통계를 받아온다
-      security:
-        - Identified: []
       requestBody:
         required: true
         content:
