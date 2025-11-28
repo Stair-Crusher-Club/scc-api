@@ -1541,6 +1541,9 @@ components:
           type: string
         modalImageUrl:
           type: string
+        isRetroactiveContributionEnabled:
+          type: boolean
+          description: When enabled, past contributions within challenge period are applied on join
       required:
         - id
         - name
@@ -1637,6 +1640,9 @@ components:
           type: string
         modalImageUrl:
           type: string
+        isRetroactiveContributionEnabled:
+          type: boolean
+          description: When enabled, past contributions within challenge period are applied on join
       required:
         - name
         - isPublic
@@ -1851,6 +1857,9 @@ components:
           type: string
         modalImageUrl:
           type: string
+        isRetroactiveContributionEnabled:
+          type: boolean
+          description: When enabled, past contributions within challenge period are applied on join
       required:
         - name
         - description
