@@ -1510,6 +1510,24 @@ paths:
         '400':
           $ref: '#/components/responses/ApiFailure'
 
+  /getPlaceGroup:
+    post:
+      summary: PlaceGroup을 조회한다.
+      operationId: getPlaceGroup
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GetPlaceGroupRequestDto'
+      responses:
+        '200':
+          description: 조회 성공
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetPlaceGroupResponseDto'
+
 components:
   parameters:
     SccCommonHeaders:
@@ -1962,6 +1980,52 @@ components:
           format: int64
       required:
         - value
+
+    PlaceGroup:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        type:
+          $ref: '#/components/schemas/PlaceGroupType'
+        placeIds:
+          type: array
+          items:
+            type: string
+        createdAt:
+          $ref: '#/components/schemas/EpochMillisTimestamp'
+        updatedAt:
+          $ref: '#/components/schemas/EpochMillisTimestamp'
+      required:
+        - id
+        - name
+        - type
+        - placeIds
+        - createdAt
+        - updatedAt
+
+    PlaceGroupType:
+      type: string
+      enum:
+        - BBUCLE_ROAD
+
+    GetPlaceGroupRequestDto:
+      type: object
+      properties:
+        placeGroupId:
+          type: string
+      required:
+        - placeGroupId
+
+    GetPlaceGroupResponseDto:
+      type: object
+      properties:
+        placeGroup:
+          $ref: '#/components/schemas/PlaceGroup'
+      required:
+        - placeGroup
 
     PlaceFavorite:
       type: object
