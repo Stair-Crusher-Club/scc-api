@@ -4227,12 +4227,97 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/BbucleRoadSectionDto'
+        routeSection:
+          $ref: '#/components/schemas/BbucleRoadRouteSectionDto'
+          nullable: true
       required:
         - id
         - title
         - titleImageUrl
         - summaryItems
         - sections
+
+    BbucleRoadRouteSectionDto:
+      type: object
+      properties:
+        title:
+          type: string
+        routes:
+          type: array
+          items:
+            $ref: '#/components/schemas/BbucleRoadRouteDto'
+      required:
+        - title
+        - routes
+
+    BbucleRoadRouteDto:
+      type: object
+      properties:
+        id:
+          type: string
+        tabLabel:
+          type: string
+        tabIconType:
+          $ref: '#/components/schemas/BbucleRoadRouteIconTypeDto'
+        descriptionImageUrl:
+          type: string
+        interactiveImage:
+          $ref: '#/components/schemas/BbucleRoadInteractiveImageDto'
+      required:
+        - id
+        - tabLabel
+        - tabIconType
+        - descriptionImageUrl
+        - interactiveImage
+
+    BbucleRoadRouteIconTypeDto:
+      type: string
+      enum:
+        - SUBWAY
+        - TAXI
+        - CAR
+        - BUS
+
+    BbucleRoadInteractiveImageDto:
+      type: object
+      properties:
+        url:
+          type: string
+        clickableRegions:
+          type: array
+          items:
+            $ref: '#/components/schemas/BbucleRoadClickableRegionDto'
+      required:
+        - url
+
+    BbucleRoadPolygonPointDto:
+      type: object
+      properties:
+        x:
+          type: number
+        y:
+          type: number
+      required:
+        - x
+        - y
+
+    BbucleRoadClickableRegionDto:
+      type: object
+      properties:
+        id:
+          type: string
+        polygon:
+          type: array
+          items:
+            $ref: '#/components/schemas/BbucleRoadPolygonPointDto'
+        modalImageUrls:
+          type: array
+          items:
+            type: string
+      required:
+        - id
+        - polygon
+        - modalImageUrls
 
     BbucleRoadSectionDto:
       type: object
