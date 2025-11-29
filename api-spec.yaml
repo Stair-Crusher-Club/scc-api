@@ -2024,8 +2024,13 @@ components:
       properties:
         placeGroup:
           $ref: '#/components/schemas/PlaceGroup'
+        places:
+          type: array
+          items:
+            $ref: '#/components/schemas/PlaceListItem'
       required:
         - placeGroup
+        - places
 
     PlaceFavorite:
       type: object
