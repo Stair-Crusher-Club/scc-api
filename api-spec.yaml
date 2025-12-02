@@ -4341,7 +4341,8 @@ components:
           type: array
           items:
             type: string
-          description: 이미지 URL 목록. 단일 이미지 섹션은 1개, 카드 리스트 섹션은 여러 개
+          description:
+            이미지 URL 목록. 단일 이미지 섹션은 1개, 카드 리스트 섹션은 여러 개
       required:
         - sectionType
 
