@@ -1543,7 +1543,9 @@ components:
           type: string
         isRetroactiveContributionEnabled:
           type: boolean
-          description: When enabled, past contributions within challenge period are applied on join
+          description:
+            When enabled, past contributions within challenge period are applied
+            on join
       required:
         - id
         - name
@@ -1642,7 +1644,9 @@ components:
           type: string
         isRetroactiveContributionEnabled:
           type: boolean
-          description: When enabled, past contributions within challenge period are applied on join
+          description:
+            When enabled, past contributions within challenge period are applied
+            on join
       required:
         - name
         - isPublic
@@ -1859,7 +1863,9 @@ components:
           type: string
         isRetroactiveContributionEnabled:
           type: boolean
-          description: When enabled, past contributions within challenge period are applied on join
+          description:
+            When enabled, past contributions within challenge period are applied
+            on join
       required:
         - name
         - description
@@ -2133,26 +2139,37 @@ components:
       properties:
         id:
           type: string
-        currentBuildingId:
+        building1Id:
           type: string
-        newBuildingId:
+        building2Id:
           type: string
-        buildingName:
+        distanceInMeters:
+          type: number
+          format: double
+        building1Name:
           type: string
-        roadAddress:
+        building2Name:
           type: string
-        location:
+        normalizedAddress:
+          type: string
+        building1Location:
+          $ref: '#/components/schemas/LocationDTO'
+        building2Location:
           $ref: '#/components/schemas/LocationDTO'
         acceptedAt:
           $ref: '#/components/schemas/EpochMillisTimestamp'
         ignoredAt:
           $ref: '#/components/schemas/EpochMillisTimestamp'
+        canonicalBuildingId:
+          type: string
       required:
         - id
-        - currentBuildingId
-        - newBuildingId
-        - roadAddress
-        - location
+        - building1Id
+        - building2Id
+        - distanceInMeters
+        - normalizedAddress
+        - building1Location
+        - building2Location
 
     AdminListAllBannersResponseDTO:
       type: object
