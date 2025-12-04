@@ -1327,6 +1327,26 @@ paths:
               schema:
                 $ref: '#/components/schemas/SearchPlacesResponseDto'
 
+  /searchUnconqueredPlacesNearby:
+    post:
+      summary: 정복 안 된 장소를 검색한다.
+      description: |
+        우리 DB에 있는 장소 중 정복 안 된 장소만 검색한다.
+        서드파티 API를 호출하지 않고 우리 DB만 조회하므로, 정보 등록할 장소를 찾을 때 사용한다.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SearchUnconqueredPlacesNearbyRequestDto'
+      responses:
+        '200':
+          description: 정복 안 된 장소의 리스트를 거리순으로 내려준다.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SearchPlacesResponseDto'
+
   /searchPlacesByNaturalLanguage:
     post:
       summary: 자연어로 장소를 검색한다.
@@ -3393,6 +3413,19 @@ components:
             $ref: '#/components/schemas/PlaceListItem'
       required:
         - items
+
+    SearchUnconqueredPlacesNearbyRequestDto:
+      type: object
+      properties:
+        circleRegion:
+          $ref: '#/components/schemas/CircleSearchRegionDto'
+        rectangleRegion:
+          $ref: '#/components/schemas/RectangleSearchRegionDto'
+        limit:
+          type: integer
+          description: 최대 반환 개수
+      required:
+        - limit
 
     SearchPlacesByNaturalLanguageRequestDto:
       type: object
