@@ -686,6 +686,36 @@ paths:
         '404':
           description: 일부 접근성 정보를 찾을 수 없음
 
+  /accessibility-inspection-results/{id}/apply:
+    parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+        description: 접근성 검수 결과 ID
+    post:
+      operationId: applyAccessibilityInspectionResult
+      summary: 접근성 이미지 검증 결과를 실제로 반영한다.
+      description: |
+        검수 결과를 실제 접근성 정보에 반영합니다.
+        - DELETE: 접근성 정보를 hard delete (관련 데이터 및 도메인 이벤트 포함)
+        - MODIFY: PlaceAccessibility를 수정 요청에 따라 업데이트
+        - OK: 아무 작업도 하지 않음
+
+        이미 반영된 검수 결과(handledAt != null)는 중복 처리하지 않습니다.
+      tags:
+        - accessibility
+      responses:
+        '200':
+          description: 검수 결과 반영 완료
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApplyAccessibilityInspectionResultResponseDto'
+        '404':
+          description: 검수 결과를 찾을 수 없음
+
   /accessibility-inspection-results/human/bulk-import:
     post:
       operationId: bulkImportHumanInspections
@@ -1805,6 +1835,30 @@ components:
         - MODIFY
         - DELETE
         - UNKNOWN
+
+    ApplyAccessibilityInspectionResultResponseDto:
+      type: object
+      description: 접근성 검수 결과 반영 응답
+      properties:
+        appliedInspectionResultId:
+          type: string
+          description: 반영된 검수 결과 ID
+        resultType:
+          $ref: '#/components/schemas/ResultTypeDTO'
+        appliedAction:
+          $ref: '#/components/schemas/AppliedActionDto'
+      required:
+        - appliedInspectionResultId
+        - resultType
+        - appliedAction
+
+    AppliedActionDto:
+      type: string
+      description: 검수 결과 반영 시 수행된 작업
+      enum:
+        - DELETED
+        - MODIFIED
+        - NO_ACTION_NEEDED
 
     AccessibilityTypeDTO:
       type: string
