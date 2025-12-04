@@ -1773,6 +1773,11 @@ components:
           type: integer
           format: int64
           nullable: true
+        handledAction:
+          allOf:
+            - $ref: '#/components/schemas/HandledActionDto'
+          nullable: true
+          description: 검수 결과 반영 시 실제로 수행된 작업 (DELETED, MODIFIED, NO_ACTION_NEEDED)
         createdAtMillis:
           type: integer
           format: int64
@@ -1844,6 +1849,14 @@ components:
         - MODIFY
         - DELETE
         - UNKNOWN
+
+    HandledActionDto:
+      type: string
+      description: 검수 결과 반영 시 실제로 수행된 작업
+      enum:
+        - DELETED
+        - MODIFIED
+        - NO_ACTION_NEEDED
 
     ApplyAccessibilityInspectionResultResponseDto:
       type: object
