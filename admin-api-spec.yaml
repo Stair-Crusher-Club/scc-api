@@ -686,35 +686,44 @@ paths:
         '404':
           description: 일부 접근성 정보를 찾을 수 없음
 
-  /accessibility-inspection-results/{id}/apply:
-    parameters:
-      - in: path
-        name: id
-        schema:
-          type: string
-        required: true
-        description: 접근성 검수 결과 ID
+  /accessibility-inspection-results/apply:
     post:
-      operationId: applyAccessibilityInspectionResult
-      summary: 접근성 이미지 검증 결과를 실제로 반영한다.
+      operationId: applyAccessibilityInspectionResults
+      summary: 접근성 이미지 검증 결과를 일괄로 반영한다.
       description: |
-        검수 결과를 실제 접근성 정보에 반영합니다.
+        검수 결과 목록을 실제 접근성 정보에 일괄 반영합니다.
         - DELETE: 접근성 정보를 hard delete (관련 데이터 및 도메인 이벤트 포함)
         - MODIFY: PlaceAccessibility를 수정 요청에 따라 업데이트
         - OK: 아무 작업도 하지 않음
 
         이미 반영된 검수 결과(handledAt != null)는 중복 처리하지 않습니다.
+        각 검수 결과는 개별 트랜잭션으로 처리되어, 일부 실패해도 다른 결과는 계속 처리됩니다.
       tags:
         - accessibility
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                inspectionResultIds:
+                  type: array
+                  items:
+                    type: string
+                  description: 반영할 검수 결과 ID 목록
+                  minItems: 1
+              required:
+                - inspectionResultIds
       responses:
         '200':
-          description: 검수 결과 반영 완료
+          description: 검수 결과 일괄 반영 완료
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ApplyAccessibilityInspectionResultResponseDto'
-        '404':
-          description: 검수 결과를 찾을 수 없음
+                $ref: '#/components/schemas/ApplyAccessibilityInspectionResultBatchResponseDto'
+        '400':
+          description: 잘못된 요청 (빈 배열 등)
 
   /accessibility-inspection-results/human/bulk-import:
     post:
@@ -1859,6 +1868,40 @@ components:
         - DELETED
         - MODIFIED
         - NO_ACTION_NEEDED
+
+    ApplyAccessibilityInspectionResultBatchResponseDto:
+      type: object
+      description: 접근성 검수 결과 일괄 반영 응답
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApplyAccessibilityInspectionResultItemDto'
+          description: 각 검수 결과 처리 결과 목록
+      required:
+        - results
+
+    ApplyAccessibilityInspectionResultItemDto:
+      type: object
+      description: 개별 검수 결과 처리 결과
+      properties:
+        appliedInspectionResultId:
+          type: string
+          description: 반영된 검수 결과 ID
+        resultType:
+          $ref: '#/components/schemas/ResultTypeDTO'
+        appliedAction:
+          $ref: '#/components/schemas/AppliedActionDto'
+        success:
+          type: boolean
+          description: 처리 성공 여부
+        errorMessage:
+          type: string
+          nullable: true
+          description: 실패한 경우 에러 메시지
+      required:
+        - appliedInspectionResultId
+        - success
 
     AccessibilityTypeDTO:
       type: string
