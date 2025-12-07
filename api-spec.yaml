@@ -55,8 +55,6 @@ paths:
   /cancelUpvote:
     post:
       summary: "'도움이 돼요'를 취소한다."
-      security:
-        - Identified: []
       requestBody:
         content:
           application/json:
@@ -666,8 +664,6 @@ paths:
   /giveUpvote:
     post:
       summary: "'도움이 돼요'를 준다."
-      security:
-        - Identified: []
       requestBody:
         required: true
         content:
@@ -4216,8 +4212,11 @@ components:
       properties:
         nickname:
           type: string
+        userId:
+          type: string
       required:
         - nickname
+        - userId
 
     UpvotedUserStatisticsEntryDto:
       type: object
