@@ -2488,11 +2488,11 @@ components:
         buildingDivisionId:
           type: string
           description: 소속된 Building Division ID
-        distinguishedName:
+        subBuildingName:
           type: string
           description: |
-            서브 건물을 구분하기 위한 이름
-            예: 연세대학교 백양관, 연세대학교 공학원
+            서브 건물 이름
+            예: 연세대학교 신촌캠퍼스 대강당, 연세대학교 신촌캠퍼스 백양관
         centerLocation:
           $ref: '#/components/schemas/LocationDTO'
           description: 서브 건물 중심 위치
@@ -2516,7 +2516,7 @@ components:
       required:
         - id
         - buildingDivisionId
-        - distinguishedName
+        - subBuildingName
         - centerLocation
         - boundaryWkt
         - createdAt
@@ -2526,9 +2526,9 @@ components:
       type: object
       description: SubBuilding 생성 요청
       properties:
-        distinguishedName:
+        subBuildingName:
           type: string
-          description: 서브 건물을 구분하기 위한 이름
+          description: 서브 건물 이름
         centerLng:
           type: number
           format: double
@@ -2546,7 +2546,7 @@ components:
           type: string
           description: 메모
       required:
-        - distinguishedName
+        - subBuildingName
         - centerLng
         - centerLat
         - boundaryWkt
