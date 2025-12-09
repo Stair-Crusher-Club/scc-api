@@ -2459,9 +2459,9 @@ components:
           items:
             $ref: '#/components/schemas/AdminBuildingDivisionWithCountDTO'
           description: Building Division 목록
-        nextCursor:
+        cursor:
           type: string
-          description: 다음 페이지 커서 값
+          description: 없으면 다음 페이지가 없다는 의미.
       required:
         - items
 
