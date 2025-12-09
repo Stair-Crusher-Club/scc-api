@@ -24,6 +24,7 @@ tags:
   - name: accessibility
   - name: banner
   - name: bbucle-road
+  - name: building-division
 
 paths:
   /login:
@@ -919,47 +920,174 @@ paths:
               schema:
                 $ref: '#/components/schemas/AdminClosedPlaceCandidateDTO'
 
-  /building-deduplication-candidates:
+  /building-divisions:
     get:
-      operationId: listBuildingDeduplicationCandidates
-      summary: 건물 중복 제거 후보 목록을 조회한다.
+      summary: Building Division 목록을 조회한다.
+      operationId: listBuildingDivisions
+      tags:
+        - building-division
       parameters:
         - in: query
-          name: limit
+          name: status
+          schema:
+            $ref: '#/components/schemas/AdminBuildingDivisionStatusDTO'
           required: false
+          description: 상태별 필터링 (미지정시 전체)
+        - in: query
+          name: limit
           schema:
             type: integer
-        - in: query
-          name: cursor
           required: false
+          description: 페이지당 항목 수 (기본값 20)
+        - in: query
+          name: cursorCreatedAt
           schema:
             type: string
+          required: false
+          description: 커서 페이지네이션용 createdAt (ISO 8601 형식)
+        - in: query
+          name: cursorId
+          schema:
+            type: string
+          required: false
+          description: 커서 페이지네이션용 ID
       responses:
         '200':
-          description: 목록 조회 성공
+          description: Building Division 목록 조회 성공
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AdminListBuildingDeduplicationCandidatesResponseDTO'
+                $ref: '#/components/schemas/AdminListBuildingDivisionsResponseDTO'
 
-  /building-deduplication-candidates/{id}:
-    parameters:
-      - in: path
-        name: id
-        schema:
-          type: string
+    post:
+      summary: 새로운 Building Division을 생성한다.
+      operationId: createBuildingDivision
+      tags:
+        - building-division
+      requestBody:
         required: true
-
-    get:
-      operationId: getBuildingDeduplicationCandidate
-      summary: 건물 중복 제거 후보를 조회한다.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdminCreateBuildingDivisionRequestDTO'
       responses:
         '200':
-          description: 조회 성공
+          description: Building Division 생성 성공
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AdminBuildingDeduplicationCandidateDTO'
+                $ref: '#/components/schemas/AdminBuildingDivisionDTO'
+
+  /building-divisions/{divisionId}:
+    get:
+      summary: Building Division 상세 정보를 조회한다.
+      operationId: getBuildingDivision
+      tags:
+        - building-division
+      parameters:
+        - in: path
+          name: divisionId
+          required: true
+          schema:
+            type: string
+          description: Building Division ID
+      responses:
+        '200':
+          description: Building Division 상세 조회 성공
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminBuildingDivisionDetailDTO'
+
+  /building-divisions/{divisionId}/sub-buildings:
+    post:
+      summary: Building Division에 SubBuilding을 추가한다.
+      operationId: createSubBuilding
+      tags:
+        - building-division
+      parameters:
+        - in: path
+          name: divisionId
+          required: true
+          schema:
+            type: string
+          description: Building Division ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdminCreateSubBuildingRequestDTO'
+      responses:
+        '200':
+          description: SubBuilding 생성 성공
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminSubBuildingDTO'
+
+  /building-divisions/{divisionId}/confirm:
+    post:
+      summary: Building Division을 확정한다.
+      operationId: confirmBuildingDivision
+      tags:
+        - building-division
+      parameters:
+        - in: path
+          name: divisionId
+          required: true
+          schema:
+            type: string
+          description: Building Division ID
+      responses:
+        '200':
+          description: Building Division 확정 성공
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminBuildingDivisionDTO'
+
+  /building-divisions/{divisionId}/ignore:
+    post:
+      summary: Building Division을 무시한다.
+      operationId: ignoreBuildingDivision
+      tags:
+        - building-division
+      parameters:
+        - in: path
+          name: divisionId
+          required: true
+          schema:
+            type: string
+          description: Building Division ID
+      responses:
+        '200':
+          description: Building Division 무시 성공
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminBuildingDivisionDTO'
+
+  /building-divisions/{divisionId}/assign-places-to-sub-buildings:
+    post:
+      summary: Building Division의 Place들을 SubBuilding에 할당한다.
+      operationId: assignPlacesToSubBuildings
+      tags:
+        - building-division
+      parameters:
+        - in: path
+          name: divisionId
+          required: true
+          schema:
+            type: string
+          description: Building Division ID
+      responses:
+        '200':
+          description: Place 할당 성공
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminAssignPlacesToSubBuildingsResponseDTO'
 
   /banners:
     get:
@@ -2231,55 +2359,228 @@ components:
         - id
         - placeId
 
-    AdminListBuildingDeduplicationCandidatesResponseDTO:
+    AdminBuildingDivisionStatusDTO:
+      type: string
+      enum:
+        - PENDING
+        - CONFIRMED
+        - IGNORED
+      description: |
+        Building Division 상태
+        - PENDING: 대기 중 (관리자가 SubBuilding 생성 및 확정 필요)
+        - CONFIRMED: 확정됨 (SubBuilding 구성 완료 및 확정)
+        - IGNORED: 무시됨 (ID 충돌이 실제로는 문제가 아님을 확인)
+
+    AdminBuildingDivisionDTO:
       type: object
+      description: Building Division 정보
+      properties:
+        id:
+          type: string
+          description: Building Division ID
+        buildingId:
+          type: string
+          description: 충돌이 발생한 Building ID
+        roadAddress:
+          type: string
+          description: 도로명 주소
+        status:
+          $ref: '#/components/schemas/AdminBuildingDivisionStatusDTO'
+        divisionReason:
+          type: string
+          description: 분할 사유
+        confirmedAt:
+          $ref: '#/components/schemas/EpochMillisTimestamp'
+          description: 확정 시각
+        ignoredAt:
+          $ref: '#/components/schemas/EpochMillisTimestamp'
+          description: 무시 시각
+        createdAt:
+          $ref: '#/components/schemas/EpochMillisTimestamp'
+          description: 생성 시각
+        updatedAt:
+          $ref: '#/components/schemas/EpochMillisTimestamp'
+          description: 수정 시각
+      required:
+        - id
+        - buildingId
+        - roadAddress
+        - status
+        - createdAt
+        - updatedAt
+
+    AdminBuildingDivisionWithCountDTO:
+      type: object
+      description: SubBuilding 개수가 포함된 Building Division 정보
+      properties:
+        id:
+          type: string
+          description: Building Division ID
+        buildingId:
+          type: string
+          description: 충돌이 발생한 Building ID
+        roadAddress:
+          type: string
+          description: 도로명 주소
+        status:
+          $ref: '#/components/schemas/AdminBuildingDivisionStatusDTO'
+        subBuildingsCount:
+          type: integer
+          description: 생성된 SubBuilding 개수
+        createdAt:
+          $ref: '#/components/schemas/EpochMillisTimestamp'
+          description: 생성 시각
+        confirmedAt:
+          $ref: '#/components/schemas/EpochMillisTimestamp'
+          description: 확정 시각
+      required:
+        - id
+        - buildingId
+        - roadAddress
+        - status
+        - subBuildingsCount
+        - createdAt
+
+    AdminBuildingDivisionDetailDTO:
+      type: object
+      description: Building Division 상세 정보 (SubBuilding 목록 포함)
+      properties:
+        division:
+          $ref: '#/components/schemas/AdminBuildingDivisionDTO'
+        subBuildings:
+          type: array
+          items:
+            $ref: '#/components/schemas/AdminSubBuildingDTO'
+          description: SubBuilding 목록
+      required:
+        - division
+        - subBuildings
+
+    AdminListBuildingDivisionsResponseDTO:
+      type: object
+      description: Building Division 목록 조회 응답
       properties:
         items:
           type: array
           items:
-            $ref: '#/components/schemas/AdminBuildingDeduplicationCandidateDTO'
-        cursor:
+            $ref: '#/components/schemas/AdminBuildingDivisionWithCountDTO'
+          description: Building Division 목록
+        nextCursorCreatedAt:
           type: string
-          description: 없으면 다음 페이지가 없다는 의미.
+          description: 다음 페이지 커서 createdAt (ISO 8601 형식)
+        nextCursorId:
+          type: string
+          description: 다음 페이지 커서 ID
       required:
         - items
 
-    AdminBuildingDeduplicationCandidateDTO:
+    AdminCreateBuildingDivisionRequestDTO:
       type: object
+      description: Building Division 생성 요청
+      properties:
+        buildingId:
+          type: string
+          description: 충돌이 발생한 Building ID
+        divisionReason:
+          type: string
+          description: 분할 사유
+      required:
+        - buildingId
+
+    AdminSubBuildingDTO:
+      type: object
+      description: SubBuilding 정보
       properties:
         id:
           type: string
-        building1Id:
+          description: SubBuilding ID
+        buildingDivisionId:
           type: string
-        building2Id:
+          description: 소속된 Building Division ID
+        distinguishedName:
           type: string
-        distanceInMeters:
-          type: number
-          format: double
-        building1Name:
-          type: string
-        building2Name:
-          type: string
-        normalizedAddress:
-          type: string
-        building1Location:
+          description: |
+            서브 건물을 구분하기 위한 이름
+            예: 연세대학교 백양관, 연세대학교 공학원
+        centerLocation:
           $ref: '#/components/schemas/LocationDTO'
-        building2Location:
-          $ref: '#/components/schemas/LocationDTO'
-        acceptedAt:
-          $ref: '#/components/schemas/EpochMillisTimestamp'
-        ignoredAt:
-          $ref: '#/components/schemas/EpochMillisTimestamp'
-        canonicalBuildingId:
+          description: 서브 건물 중심 위치
+        boundaryWkt:
           type: string
+          description: |
+            서브 건물 경계 (WKT Polygon 형식)
+            예: POLYGON((127.001 37.001, 127.002 37.001, 127.002 37.002, 127.001 37.002, 127.001 37.001))
+        notes:
+          type: string
+          description: 메모
+        confirmedAt:
+          $ref: '#/components/schemas/EpochMillisTimestamp'
+          description: 확정 시각
+        createdAt:
+          $ref: '#/components/schemas/EpochMillisTimestamp'
+          description: 생성 시각
+        updatedAt:
+          $ref: '#/components/schemas/EpochMillisTimestamp'
+          description: 수정 시각
       required:
         - id
-        - building1Id
-        - building2Id
-        - distanceInMeters
-        - normalizedAddress
-        - building1Location
-        - building2Location
+        - buildingDivisionId
+        - distinguishedName
+        - centerLocation
+        - boundaryWkt
+        - createdAt
+        - updatedAt
+
+    AdminCreateSubBuildingRequestDTO:
+      type: object
+      description: SubBuilding 생성 요청
+      properties:
+        distinguishedName:
+          type: string
+          description: 서브 건물을 구분하기 위한 이름
+        centerLng:
+          type: number
+          format: double
+          description: 서브 건물 중심 경도
+        centerLat:
+          type: number
+          format: double
+          description: 서브 건물 중심 위도
+        boundaryWkt:
+          type: string
+          description: |
+            서브 건물 경계 (WKT Polygon 형식)
+            예: POLYGON((127.001 37.001, 127.002 37.001, 127.002 37.002, 127.001 37.002, 127.001 37.001))
+        notes:
+          type: string
+          description: 메모
+      required:
+        - distinguishedName
+        - centerLng
+        - centerLat
+        - boundaryWkt
+
+    AdminAssignPlacesToSubBuildingsResponseDTO:
+      type: object
+      description: Place를 SubBuilding에 할당한 결과
+      properties:
+        totalPlaces:
+          type: integer
+          description: 대상 Building의 전체 Place 수
+        assignedCount:
+          type: integer
+          description: SubBuilding에 할당된 Place 수
+        unassignedCount:
+          type: integer
+          description: 어떤 SubBuilding에도 할당되지 않은 Place 수
+        message:
+          type: string
+          description: 결과 메시지
+      required:
+        - totalPlaces
+        - assignedCount
+        - unassignedCount
+        - message
 
     AdminListAllBannersResponseDTO:
       type: object
