@@ -2995,7 +2995,7 @@ components:
         nextCursorCreatedAt:
           type: string
           nullable: true
-          description: 다음 페이지 커서 createdAt (ISO 8601 형식)
+          description: 다음 페이지 커서 createdAt
         nextCursorId:
           type: string
           nullable: true
