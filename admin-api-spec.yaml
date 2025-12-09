@@ -2914,15 +2914,12 @@ components:
           $ref: '#/components/schemas/AdminBuildingDivisionStatusDTO'
         divisionReason:
           type: string
-          nullable: true
           description: 분할 사유
         confirmedAt:
           $ref: '#/components/schemas/EpochMillisTimestamp'
-          nullable: true
           description: 확정 시각
         ignoredAt:
           $ref: '#/components/schemas/EpochMillisTimestamp'
-          nullable: true
           description: 무시 시각
         createdAt:
           $ref: '#/components/schemas/EpochMillisTimestamp'
