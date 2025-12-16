@@ -1020,6 +1020,61 @@ paths:
               schema:
                 $ref: '#/components/schemas/AdminSubBuildingDTO'
 
+  /building-divisions/{divisionId}/sub-buildings/{subBuildingId}:
+    put:
+      summary: SubBuilding 정보를 수정한다.
+      operationId: updateSubBuilding
+      tags:
+        - building-division
+      parameters:
+        - in: path
+          name: divisionId
+          required: true
+          schema:
+            type: string
+          description: Building Division ID
+        - in: path
+          name: subBuildingId
+          required: true
+          schema:
+            type: string
+          description: SubBuilding ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdminUpdateSubBuildingRequestDTO'
+      responses:
+        '200':
+          description: SubBuilding 수정 성공
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminSubBuildingDTO'
+
+    delete:
+      summary: SubBuilding을 삭제한다.
+      operationId: deleteSubBuilding
+      tags:
+        - building-division
+      parameters:
+        - in: path
+          name: divisionId
+          required: true
+          schema:
+            type: string
+          description: Building Division ID
+        - in: path
+          name: subBuildingId
+          required: true
+          schema:
+            type: string
+          description: SubBuilding ID
+      responses:
+        '204':
+          $ref: '#/components/responses/NoContent'
+
   /building-divisions/{divisionId}/confirm:
     post:
       summary: Building Division을 확정한다.
@@ -2361,9 +2416,9 @@ components:
         - IGNORED
       description: |
         Building Division 상태
-        - PENDING: 대기 중 (관리자가 SubBuilding 생성 및 확정 필요)
-        - CONFIRMED: 확정됨 (SubBuilding 구성 완료 및 확정)
-        - IGNORED: 무시됨 (ID 충돌이 실제로는 문제가 아님을 확인)
+        - PENDING: 대기 중 (관리자 검토 필요)
+        - CONFIRMED: 확정됨 (분할 필요, SubBuilding 관리 가능)
+        - IGNORED: 무시됨 (분할 불필요)
 
     AdminBuildingDivisionDTO:
       type: object
@@ -2375,6 +2430,9 @@ components:
         buildingId:
           type: string
           description: 충돌이 발생한 Building ID
+        buildingLocation:
+          $ref: '#/components/schemas/LocationDTO'
+          description: 건물 위치
         roadAddress:
           type: string
           description: 도로명 주소
@@ -2383,6 +2441,9 @@ components:
         divisionReason:
           type: string
           description: 분할 사유
+        subBuildingsCount:
+          type: integer
+          description: 생성된 SubBuilding 개수
         confirmedAt:
           $ref: '#/components/schemas/EpochMillisTimestamp'
           description: 확정 시각
@@ -2398,42 +2459,11 @@ components:
       required:
         - id
         - buildingId
+        - buildingLocation
         - roadAddress
         - status
         - createdAt
         - updatedAt
-
-    AdminBuildingDivisionWithCountDTO:
-      type: object
-      description: SubBuilding 개수가 포함된 Building Division 정보
-      properties:
-        id:
-          type: string
-          description: Building Division ID
-        buildingId:
-          type: string
-          description: 충돌이 발생한 Building ID
-        roadAddress:
-          type: string
-          description: 도로명 주소
-        status:
-          $ref: '#/components/schemas/AdminBuildingDivisionStatusDTO'
-        subBuildingsCount:
-          type: integer
-          description: 생성된 SubBuilding 개수
-        createdAt:
-          $ref: '#/components/schemas/EpochMillisTimestamp'
-          description: 생성 시각
-        confirmedAt:
-          $ref: '#/components/schemas/EpochMillisTimestamp'
-          description: 확정 시각
-      required:
-        - id
-        - buildingId
-        - roadAddress
-        - status
-        - subBuildingsCount
-        - createdAt
 
     AdminBuildingDivisionDetailDTO:
       type: object
@@ -2457,7 +2487,7 @@ components:
         items:
           type: array
           items:
-            $ref: '#/components/schemas/AdminBuildingDivisionWithCountDTO'
+            $ref: '#/components/schemas/AdminBuildingDivisionDTO'
           description: Building Division 목록
         cursor:
           type: string
@@ -2525,6 +2555,35 @@ components:
     AdminCreateSubBuildingRequestDTO:
       type: object
       description: SubBuilding 생성 요청
+      properties:
+        subBuildingName:
+          type: string
+          description: 서브 건물 이름
+        centerLng:
+          type: number
+          format: double
+          description: 서브 건물 중심 경도
+        centerLat:
+          type: number
+          format: double
+          description: 서브 건물 중심 위도
+        boundaryWkt:
+          type: string
+          description: |
+            서브 건물 경계 (WKT Polygon 형식)
+            예: POLYGON((127.001 37.001, 127.002 37.001, 127.002 37.002, 127.001 37.002, 127.001 37.001))
+        notes:
+          type: string
+          description: 메모
+      required:
+        - subBuildingName
+        - centerLng
+        - centerLat
+        - boundaryWkt
+
+    AdminUpdateSubBuildingRequestDTO:
+      type: object
+      description: SubBuilding 수정 요청
       properties:
         subBuildingName:
           type: string
