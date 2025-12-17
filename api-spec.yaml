@@ -4110,6 +4110,9 @@ components:
           $ref: '#/components/schemas/EpochMillisTimestamp'
         historyType:
           $ref: '#/components/schemas/CrusherActivityHistorySummaryTypeDto'
+        crusherClubId:
+          type: string
+          definition: CrusherClub 객체 ID. historyType이 `CREW`일 때만 존재한다.
       required:
         - title
         - startAt
