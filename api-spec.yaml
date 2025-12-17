@@ -536,6 +536,25 @@ paths:
               schema:
                 $ref: '#/components/schemas/GetCrusherActivityPageDataResponseDto'
 
+  /getCrusherActivity:
+    post:
+      summary: 특정 크러셔 클럽의 활동 정보를 조회한다.
+      security:
+        - Identified: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GetCrusherActivityRequestDto'
+      responses:
+        '200':
+          description: 크러셔 클럽 활동 정보
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetCrusherActivityResponseDto'
+
   /recordCrusherClubActivity:
     post:
       summary: 크러셔 활동을 기록한다.
@@ -4034,9 +4053,9 @@ components:
       type: object
       properties:
         currentCrusherActivity:
-          $ref: '#/components/schemas/CurrentCrusherActivityDto'
+          $ref: '#/components/schemas/CrusherActivityDto'
 
-    CurrentCrusherActivityDto:
+    CrusherActivityDto:
       type: object
       properties:
         crusherClub:
@@ -4055,11 +4074,26 @@ components:
         - quests
         - activityLog
 
+    GetCrusherActivityRequestDto:
+      type: object
+      properties:
+        crusherClubId:
+          type: string
+          description: 크러셔 클럽 ID
+      required:
+        - crusherClubId
+
+    GetCrusherActivityResponseDto:
+      type: object
+      properties:
+        crusherActivity:
+          $ref: '#/components/schemas/CrusherActivityDto'
+
     GetCrusherActivityPageDataResponseDto:
       type: object
       properties:
         currentCrusherActivity:
-          $ref: '#/components/schemas/CurrentCrusherActivityDto'
+          $ref: '#/components/schemas/CrusherActivityDto'
         crusherActivityHistories:
           type: array
           items:
@@ -4110,7 +4144,7 @@ components:
       type: object
       properties:
         currentCrusherActivity:
-          $ref: '#/components/schemas/CurrentCrusherActivityDto'
+          $ref: '#/components/schemas/CrusherActivityDto'
 
     CheckInToClubQuestRequestDto:
       type: object
