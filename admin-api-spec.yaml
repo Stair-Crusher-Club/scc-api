@@ -699,6 +699,12 @@ paths:
 
         이미 반영된 검수 결과(handledAt != null)는 중복 처리하지 않습니다.
         각 검수 결과는 개별 트랜잭션으로 처리되어, 일부 실패해도 다른 결과는 계속 처리됩니다.
+
+        ## 두 가지 모드 지원:
+        1. **ID 기반 모드**: `inspectionResultIds` 배열을 제공하여 특정 검수 결과들을 반영
+        2. **필터 기반 모드**: `filter` 객체를 제공하여 조건에 맞는 모든 미처리 검수 결과를 반영
+
+        두 모드는 상호 배타적이며, 둘 중 하나만 제공해야 합니다.
       tags:
         - accessibility
       requestBody:
@@ -706,25 +712,17 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                inspectionResultIds:
-                  type: array
-                  items:
-                    type: string
-                  description: 반영할 검수 결과 ID 목록
-                  minItems: 1
-              required:
-                - inspectionResultIds
+              $ref: '#/components/schemas/ApplyAccessibilityInspectionResultsRequestDto'
       responses:
         '200':
-          description: 검수 결과 일괄 반영 완료
+          description: 검수 결과 반영 완료
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ApplyAccessibilityInspectionResultBatchResponseDto'
+                $ref: '#/components/schemas/ApplyAccessibilityInspectionResultSummaryResponseDto'
         '400':
-          description: 잘못된 요청 (빈 배열 등)
+          description:
+            잘못된 요청 (빈 배열, 두 모드 동시 제공, 아무것도 제공하지 않음 등)
 
   /accessibility-inspection-results/human/bulk-import:
     post:
@@ -2059,39 +2057,71 @@ components:
         - NO_ACTION_NEEDED
         - ERROR
 
-    ApplyAccessibilityInspectionResultBatchResponseDto:
+    ApplyAccessibilityInspectionResultsRequestDto:
       type: object
-      description: 접근성 검수 결과 일괄 반영 응답
+      description: 접근성 검수 결과 반영 요청 (ID 기반 또는 필터 기반 모드)
       properties:
-        results:
+        inspectionResultIds:
           type: array
           items:
-            $ref: '#/components/schemas/ApplyAccessibilityInspectionResultItemDto'
-          description: 각 검수 결과 처리 결과 목록
-      required:
-        - results
+            type: string
+          description: (ID 기반 모드) 반영할 검수 결과 ID 목록
+          minItems: 1
+        filter:
+          $ref: '#/components/schemas/ApplyFilterDto'
 
-    ApplyAccessibilityInspectionResultItemDto:
+    ApplyFilterDto:
       type: object
-      description: 개별 검수 결과 처리 결과
+      description: 필터 기반 검수 결과 반영 조건
       properties:
-        appliedInspectionResultId:
+        inspectorType:
           type: string
-          description: 반영된 검수 결과 ID
+          enum:
+            - AI
+            - USER
+            - BULK
+          description: 검수자 유형 (선택)
+        inspectorId:
+          type: string
+          description: 검수자 ID (선택)
         resultType:
-          $ref: '#/components/schemas/ResultTypeDTO'
-        appliedAction:
-          $ref: '#/components/schemas/AppliedActionDto'
-        success:
-          type: boolean
-          description: 처리 성공 여부
-        errorMessage:
           type: string
-          nullable: true
-          description: 실패한 경우 에러 메시지
+          enum:
+            - OK
+            - MODIFY
+            - DELETE
+            - UNKNOWN
+          description: 검수 결과 유형 (선택)
+
+    ApplyAccessibilityInspectionResultSummaryResponseDto:
+      type: object
+      description: 접근성 검수 결과 반영 응답 (ID 기반 및 필터 기반 모드 공통)
+      properties:
+        summary:
+          $ref: '#/components/schemas/ApplySummaryDto'
       required:
-        - appliedInspectionResultId
-        - success
+        - summary
+
+    ApplySummaryDto:
+      type: object
+      description: 검수 결과 반영 요약 정보
+      properties:
+        totalProcessed:
+          type: integer
+          format: int32
+          description: 총 처리된 검수 결과 수
+        successCount:
+          type: integer
+          format: int32
+          description: 성공한 검수 결과 수
+        failureCount:
+          type: integer
+          format: int32
+          description: 실패한 검수 결과 수
+      required:
+        - totalProcessed
+        - successCount
+        - failureCount
 
     AccessibilityTypeDTO:
       type: string
