@@ -2632,6 +2632,56 @@ components:
         - unassignedCount
         - message
 
+    AdminListBuildingDeduplicationCandidatesResponseDTO:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/AdminBuildingDeduplicationCandidateDTO'
+        cursor:
+          type: string
+          description: 없으면 다음 페이지가 없다는 의미.
+      required:
+        - items
+
+    AdminBuildingDeduplicationCandidateDTO:
+      type: object
+      properties:
+        id:
+          type: string
+        building1Id:
+          type: string
+        building2Id:
+          type: string
+        distanceInMeters:
+          type: number
+          format: double
+        building1Name:
+          type: string
+        building2Name:
+          type: string
+        normalizedAddress:
+          type: string
+        building1Location:
+          $ref: '#/components/schemas/LocationDTO'
+        building2Location:
+          $ref: '#/components/schemas/LocationDTO'
+        acceptedAt:
+          $ref: '#/components/schemas/EpochMillisTimestamp'
+        ignoredAt:
+          $ref: '#/components/schemas/EpochMillisTimestamp'
+        canonicalBuildingId:
+          type: string
+      required:
+        - id
+        - building1Id
+        - building2Id
+        - distanceInMeters
+        - normalizedAddress
+        - building1Location
+        - building2Location
+
     AdminListAllBannersResponseDTO:
       type: object
       properties:
