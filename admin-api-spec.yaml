@@ -554,16 +554,18 @@ paths:
             type: boolean
           required: false
         - in: query
-          name: createdAtFromLocalDate
-          description: yyyy-MM-dd 형식
+          name: createdAtFrom
+          description: 검색 시작 시각 (epoch milliseconds, inclusive)
           schema:
-            type: string
+            type: integer
+            format: int64
           required: false
         - in: query
-          name: createdAtToLocalDate
-          description: yyyy-MM-dd 형식
+          name: createdAtTo
+          description: 검색 종료 시각 (epoch milliseconds, exclusive)
           schema:
-            type: string
+            type: integer
+            format: int64
           required: false
         - in: query
           name: cursor
