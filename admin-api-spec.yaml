@@ -1386,6 +1386,122 @@ paths:
         '204':
           $ref: '#/components/responses/NoContent'
 
+  /place-category-caches:
+    get:
+      summary: 장소 카테고리 캐시 목록을 조회한다.
+      operationId: listPlaceCategoryCaches
+      tags:
+        - place-category-cache
+      parameters:
+        - in: query
+          name: cursor
+          schema:
+            type: string
+          required: false
+          description: 페이지네이션 커서
+        - in: query
+          name: limit
+          schema:
+            type: integer
+          required: false
+          description: 페이지당 항목 수 (기본값 20)
+        - in: query
+          name: placeCategory
+          schema:
+            $ref: '#/components/schemas/PlaceCategoryDto'
+          required: false
+          description: 카테고리별 필터링
+        - in: query
+          name: categoryStringContains
+          schema:
+            type: string
+          required: false
+          description: categoryString 검색 (포함 검색)
+      responses:
+        '200':
+          description: 목록 조회 성공
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminListPlaceCategoryCachesResponseDto'
+
+    post:
+      summary: 장소 카테고리 캐시를 수동으로 생성한다.
+      operationId: createPlaceCategoryCache
+      tags:
+        - place-category-cache
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdminCreatePlaceCategoryCacheRequestDto'
+      responses:
+        '200':
+          description: 생성 성공
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminPlaceCategoryCacheDto'
+        '409':
+          description: 이미 동일한 categoryString이 존재함
+
+  /place-category-caches/{id}:
+    parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+        description: PlaceCategoryCache ID
+
+    get:
+      summary: 장소 카테고리 캐시를 단건 조회한다.
+      operationId: getPlaceCategoryCache
+      tags:
+        - place-category-cache
+      responses:
+        '200':
+          description: 조회 성공
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminPlaceCategoryCacheDto'
+        '404':
+          description: 해당 ID의 캐시를 찾을 수 없음
+
+    put:
+      summary: 장소 카테고리 캐시를 수정한다.
+      operationId: updatePlaceCategoryCache
+      tags:
+        - place-category-cache
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdminUpdatePlaceCategoryCacheRequestDto'
+      responses:
+        '200':
+          description: 수정 성공
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminPlaceCategoryCacheDto'
+        '404':
+          description: 해당 ID의 캐시를 찾을 수 없음
+
+    delete:
+      summary: 장소 카테고리 캐시를 삭제한다. 삭제 후 다음 조회시 AI가 다시 카테고리를 판정한다.
+      operationId: deletePlaceCategoryCache
+      tags:
+        - place-category-cache
+      responses:
+        '204':
+          $ref: '#/components/responses/NoContent'
+        '404':
+          description: 해당 ID의 캐시를 찾을 수 없음
+
 components:
   # Reusable schemas (data models)
   securitySchemes:
@@ -3239,6 +3355,95 @@ components:
         - category
         - position
         - tooltipText
+
+    PlaceCategoryDto:
+      description: 장소 카테고리 enum
+      type: string
+      enum:
+        - MARKET
+        - CONVENIENCE_STORE
+        - KINDERGARTEN
+        - SCHOOL
+        - ACADEMY
+        - PARKING_LOT
+        - GAS_STATION
+        - SUBWAY_STATION
+        - BANK
+        - CULTURAL_FACILITIES
+        - AGENCY
+        - PUBLIC_OFFICE
+        - ATTRACTION
+        - ACCOMODATION
+        - RESTAURANT
+        - CAFE
+        - HOSPITAL
+        - PHARMACY
+
+    AdminPlaceCategoryCacheDto:
+      description: 장소 카테고리 캐시 정보
+      type: object
+      properties:
+        id:
+          type: string
+        categoryString:
+          type: string
+          description: 지도 API에서 반환된 원본 카테고리 문자열
+        placeCategory:
+          $ref: '#/components/schemas/PlaceCategoryDto'
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - categoryString
+        - placeCategory
+        - createdAt
+        - updatedAt
+
+    AdminListPlaceCategoryCachesResponseDto:
+      description: 장소 카테고리 캐시 목록 응답
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/AdminPlaceCategoryCacheDto'
+        cursor:
+          type: string
+          nullable: true
+          description: 다음 페이지 커서 (없으면 마지막 페이지)
+        totalCount:
+          type: integer
+          format: int64
+          description: 전체 항목 수
+      required:
+        - items
+        - totalCount
+
+    AdminCreatePlaceCategoryCacheRequestDto:
+      description: 장소 카테고리 캐시 생성 요청
+      type: object
+      properties:
+        categoryString:
+          type: string
+          description: 지도 API에서 반환된 원본 카테고리 문자열
+        placeCategory:
+          $ref: '#/components/schemas/PlaceCategoryDto'
+      required:
+        - categoryString
+        - placeCategory
+
+    AdminUpdatePlaceCategoryCacheRequestDto:
+      description: 장소 카테고리 캐시 수정 요청
+      type: object
+      properties:
+        placeCategory:
+          $ref: '#/components/schemas/PlaceCategoryDto'
+      required:
+        - placeCategory
 
   responses:
     NoContent:
