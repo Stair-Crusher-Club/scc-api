@@ -3391,11 +3391,11 @@ components:
         placeCategory:
           $ref: '#/components/schemas/PlaceCategoryDto'
         createdAt:
-          type: string
-          format: date-time
+          $ref: '#/components/schemas/EpochMillisTimestamp'
+          description: 생성 시각
         updatedAt:
-          type: string
-          format: date-time
+          $ref: '#/components/schemas/EpochMillisTimestamp'
+          description: 수정 시각
       required:
         - id
         - categoryString
