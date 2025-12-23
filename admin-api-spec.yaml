@@ -3415,13 +3415,8 @@ components:
           type: string
           nullable: true
           description: 다음 페이지 커서 (없으면 마지막 페이지)
-        totalCount:
-          type: integer
-          format: int64
-          description: 전체 항목 수
       required:
         - items
-        - totalCount
 
     AdminCreatePlaceCategoryCacheRequestDto:
       description: 장소 카테고리 캐시 생성 요청
