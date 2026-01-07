@@ -3681,6 +3681,9 @@ components:
           type: string
         email:
           type: string
+        displayId:
+          type: string
+          description: 사용자 고유 ID (앱에서 표시용)
         birthYear:
           type: integer
         mobilityTools:
