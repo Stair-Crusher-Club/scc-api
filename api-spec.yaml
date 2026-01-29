@@ -3298,6 +3298,9 @@ components:
           type: string
         doorDirectionType:
           $ref: '#/components/schemas/BuildingDoorDirectionTypeDto'
+        doorDirectionEtcComment:
+          type: string
+          description: 출입구 방향이 기타(ETC)인 경우 출입구 방향에 대한 설명. doorDirectionType이 ETC인 경우 필수.
         entranceStairInfo:
           $ref: '#/components/schemas/StairInfo'
         entranceStairHeightLevel:
