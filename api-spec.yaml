@@ -2846,6 +2846,11 @@ components:
           description: 접근성 정보를 등록할 수 있는지 여부.
         accessibilityInfo:
           $ref: '#/components/schemas/CompactAccessibilityInfoDto'
+        vendorPlaceIds:
+          type: array
+          description: 외부 지도 서비스의 장소 ID 목록 (카카오, 네이버 등)
+          items:
+            $ref: '#/components/schemas/VendorPlaceIdDto'
 
       required:
         - place
@@ -2853,6 +2858,25 @@ components:
         - hasBuildingAccessibility
         - hasPlaceAccessibility
         - isAccessibilityRegistrable
+
+    VendorPlaceIdDto:
+      type: object
+      description: 외부 지도 서비스의 장소 ID 정보
+      properties:
+        vendorType:
+          type: string
+          enum:
+            - KAKAO
+            - NAVER
+            - GOOGLE
+            - TMAP
+          description: 외부 지도 서비스 타입
+        vendorPlaceId:
+          type: string
+          description: 해당 서비스에서의 장소 ID
+      required:
+        - vendorType
+        - vendorPlaceId
 
     PlaceReviewListItemDto:
       type: object
