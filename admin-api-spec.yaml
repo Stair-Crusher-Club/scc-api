@@ -3158,6 +3158,7 @@ components:
         - CRUSHER_LABEL
         - BBUCLE_ROAD_MARKER
         - BBUCLE_ROAD_DESCRIPTION
+        - RECOMMENDED_CONTENT
 
     AdminCreateImageUploadUrlsResponseDTO:
       type: object
