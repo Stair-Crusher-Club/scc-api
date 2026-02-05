@@ -1532,6 +1532,18 @@ paths:
               schema:
                 $ref: '#/components/schemas/GetHomeBannersResponseDto'
 
+  /getHomeScreenData:
+    post:
+      summary: 홈 화면에 필요한 모든 데이터를 가져온다.
+      operationId: getHomeScreenData
+      responses:
+        '200':
+          description: 홈 화면 데이터를 내려준다.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetHomeScreenDataResponseDto'
+
   /getBbucleRoadPage:
     post:
       summary: 뿌클로드 페이지 정보를 조회한다.
@@ -4573,6 +4585,78 @@ components:
         - BUS_STOP
         - PARKING
         - CUSTOM
+
+    GetHomeScreenDataResponseDto:
+      type: object
+      description: 홈 화면에 필요한 모든 데이터
+      properties:
+        mainBanners:
+          type: array
+          description: 메인 홈 배너 (대형 배너)
+          items:
+            $ref: '#/components/schemas/HomeBannerDto'
+        stripBanners:
+          type: array
+          description: 띠 홈 배너 (기존 배너)
+          items:
+            $ref: '#/components/schemas/HomeBannerDto'
+        announcements:
+          type: array
+          description: 공지사항 (롤링 텍스트)
+          items:
+            $ref: '#/components/schemas/HomeAnnouncementDto'
+        recommendedContents:
+          type: array
+          description: 추천 컨텐츠
+          items:
+            $ref: '#/components/schemas/HomeRecommendedContentDto'
+      required:
+        - mainBanners
+        - stripBanners
+        - announcements
+        - recommendedContents
+
+    HomeAnnouncementDto:
+      type: object
+      description: 홈 화면 공지사항
+      properties:
+        id:
+          type: string
+        text:
+          type: string
+          description: 공지사항 텍스트
+        linkUrl:
+          type: string
+          description: 클릭 시 이동할 URL
+      required:
+        - id
+        - text
+        - linkUrl
+
+    HomeRecommendedContentDto:
+      type: object
+      description: 홈 화면 추천 컨텐츠
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+          description: 컨텐츠 제목
+        description:
+          type: string
+          description: 컨텐츠 설명
+        imageUrl:
+          type: string
+          description: 컨텐츠 이미지 URL
+        linkUrl:
+          type: string
+          description: 클릭 시 이동할 URL (딥링크 가능)
+      required:
+        - id
+        - title
+        - description
+        - imageUrl
+        - linkUrl
 
   responses:
     ApiFailure:
