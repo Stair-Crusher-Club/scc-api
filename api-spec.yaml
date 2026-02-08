@@ -96,6 +96,25 @@ paths:
               schema:
                 $ref: '#/components/schemas/CheckInToClubQuestResponseDto'
 
+  /createPlaceAccessibilityInfoRequest:
+    post:
+      summary: 장소의 접근성 정보를 요청한다.
+      security:
+        - Identified: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatePlaceAccessibilityInfoRequestRequestDto'
+      responses:
+        '200':
+          description: 접근성 정보 요청 성공
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreatePlaceAccessibilityInfoRequestResponseDto'
+
   /createPlaceFavorite:
     post:
       summary: 장소를 즐겨찾기에 추가한다.
@@ -162,6 +181,25 @@ paths:
           $ref: '#/components/responses/NoContent'
         '400':
           $ref: '#/components/responses/ApiFailure'
+
+  /deletePlaceAccessibilityInfoRequest:
+    post:
+      summary: 장소의 접근성 정보 요청을 취소한다.
+      security:
+        - Identified: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeletePlaceAccessibilityInfoRequestRequestDto'
+      responses:
+        '200':
+          description: 접근성 정보 요청 취소 성공
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeletePlaceAccessibilityInfoRequestResponseDto'
 
   /deletePlaceFavorite:
     post:
@@ -1673,12 +1711,21 @@ components:
           type: integer
           format: int64
           description: 이 장소를 즐겨찾기한 사람 수.
+        isAccessibilityInfoRequested:
+          type: boolean
+          description: 내가 접근성 정보를 요청했는지 여부.
+        totalAccessibilityInfoRequestCount:
+          type: integer
+          format: int64
+          description: 이 장소에 접근성 정보를 요청한 총 인원 수.
       required:
         - buildingAccessibilityComments
         - placeAccessibilityComments
         - hasOtherPlacesToRegisterInBuilding
         - isFavoritePlace
         - totalFavoriteCount
+        - isAccessibilityInfoRequested
+        - totalAccessibilityInfoRequestCount
 
     AccessibilityRankDto:
       type: object
@@ -2002,6 +2049,28 @@ components:
         - authTokens
         - userId
 
+    CreatePlaceAccessibilityInfoRequestRequestDto:
+      type: object
+      properties:
+        placeId:
+          type: string
+      required:
+        - placeId
+
+    CreatePlaceAccessibilityInfoRequestResponseDto:
+      type: object
+      properties:
+        isRequested:
+          type: boolean
+          description: 접근성 정보 요청 상태.
+        totalRequestCount:
+          type: integer
+          format: int64
+          description: 이 장소에 접근성 정보를 요청한 총 인원 수.
+      required:
+        - isRequested
+        - totalRequestCount
+
     CreatePlaceFavoriteRequestDto:
       type: object
       properties:
@@ -2021,6 +2090,28 @@ components:
       required:
         - totalPlaceFavoriteCount
         - placeFavorite
+
+    DeletePlaceAccessibilityInfoRequestRequestDto:
+      type: object
+      properties:
+        placeId:
+          type: string
+      required:
+        - placeId
+
+    DeletePlaceAccessibilityInfoRequestResponseDto:
+      type: object
+      properties:
+        isRequested:
+          type: boolean
+          description: 접근성 정보 요청 상태.
+        totalRequestCount:
+          type: integer
+          format: int64
+          description: 이 장소에 접근성 정보를 요청한 총 인원 수.
+      required:
+        - isRequested
+        - totalRequestCount
 
     DeletePlaceFavoriteRequestDto:
       type: object
@@ -2863,6 +2954,10 @@ components:
           description: 외부 지도 서비스의 장소 ID 목록 (카카오, 네이버 등)
           items:
             $ref: '#/components/schemas/VendorPlaceIdDto'
+        isAccessibilityInfoRequested:
+          type: boolean
+          description:
+            내가 접근성 정보를 요청했는지 여부. 비인증 유저는 항상 false.
 
       required:
         - place
@@ -3312,7 +3407,9 @@ components:
           $ref: '#/components/schemas/BuildingDoorDirectionTypeDto'
         doorDirectionEtcComment:
           type: string
-          description: 출입구 방향이 기타(ETC)인 경우 출입구 방향에 대한 설명. doorDirectionType이 ETC인 경우 필수.
+          description:
+            출입구 방향이 기타(ETC)인 경우 출입구 방향에 대한 설명.
+            doorDirectionType이 ETC인 경우 필수.
         entranceStairInfo:
           $ref: '#/components/schemas/StairInfo'
         entranceStairHeightLevel:
@@ -3458,7 +3555,8 @@ components:
       properties:
         phoneNumber:
           type: string
-          description: 인증할 전화번호 (예 - "010-1234-5678", "+82 10-1234-5678")
+          description:
+            인증할 전화번호 (예 - "010-1234-5678", "+82 10-1234-5678")
       required:
         - phoneNumber
 
@@ -3575,8 +3673,7 @@ components:
       allOf:
         - $ref: '#/components/schemas/PlaceListItem'
         - type: object
-          properties:
-            {}
+          properties: {}
             # 여기에 추가 필드들을 나중에 추가할 수 있음
             # searchRelevanceScore:
             #   type: number
@@ -3783,7 +3880,9 @@ components:
       properties:
         phoneNumber:
           type: string
-          description: 인증할 전화번호 (sendPhoneNumberVerifCodeSms에서 사용한 것과 동일해야 함)
+          description:
+            인증할 전화번호 (sendPhoneNumberVerifCodeSms에서 사용한 것과
+            동일해야 함)
         verifCode:
           type: string
           description: SMS로 수신한 6자리 인증번호
