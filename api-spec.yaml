@@ -117,7 +117,9 @@ paths:
 
   /createPlaceFavorite:
     post:
+      deprecated: true
       summary: 장소를 즐겨찾기에 추가한다.
+      description: "/savePlace를 사용하세요."
       security:
         - Identified: []
       requestBody:
@@ -203,7 +205,9 @@ paths:
 
   /deletePlaceFavorite:
     post:
+      deprecated: true
       summary: 장소를 즐겨찾기에서 삭제한다.
+      description: "/unsavePlace를 사용하세요."
       security:
         - Identified: []
       requestBody:
@@ -832,6 +836,7 @@ paths:
 
   /listPlaceFavorites:
     post:
+      deprecated: true
       summary: 즐겨찾기한 장소 목록을 조회한다.
       security:
         - Identified: []
@@ -1346,6 +1351,22 @@ paths:
         '204':
           $ref: '#/components/responses/NoContent'
 
+  /savePlace:
+    post:
+      summary: 장소를 내 저장 리스트에 추가한다.
+      security:
+        - Identified: []
+      operationId: savePlace
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SavePlaceRequestDto'
+      responses:
+        '204':
+          $ref: '#/components/responses/NoContent'
+
   /searchExternalAccessibilities:
     post:
       summary: 외부 접근성 정보가 등록된 장소를 검색한다.
@@ -1556,6 +1577,22 @@ paths:
                 - pushToken
       responses:
         '200':
+          $ref: '#/components/responses/NoContent'
+
+  /unsavePlace:
+    post:
+      summary: 장소를 내 저장 리스트에서 제거한다.
+      security:
+        - Identified: []
+      operationId: unsavePlace
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UnsavePlaceRequestDto'
+      responses:
+        '204':
           $ref: '#/components/responses/NoContent'
 
   /getHomeBanners:
@@ -4756,6 +4793,28 @@ components:
         - description
         - imageUrl
         - linkUrl
+
+    SavePlaceRequestDto:
+      type: object
+      properties:
+        placeId:
+          type: string
+        placeListId:
+          type: string
+          description: 저장할 PlaceList ID. 미지정 시 MY_PLACES에 추가.
+      required:
+        - placeId
+
+    UnsavePlaceRequestDto:
+      type: object
+      properties:
+        placeId:
+          type: string
+        placeListId:
+          type: string
+          description: 제거할 PlaceList ID. 미지정 시 MY_PLACES에서 제거.
+      required:
+        - placeId
 
   responses:
     ApiFailure:
