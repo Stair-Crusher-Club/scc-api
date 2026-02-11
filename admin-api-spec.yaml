@@ -1581,6 +1581,26 @@ paths:
         '404':
           description: 해당 ID의 리스트를 찾을 수 없음
 
+  /places/search:
+    post:
+      summary: 키워드로 장소를 검색한다.
+      operationId: searchPlacesByKeyword
+      tags:
+        - place-list
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdminSearchPlacesByKeywordRequestDto'
+      responses:
+        '200':
+          description: 검색 결과
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminSearchPlacesByKeywordResponseDto'
+
   /place-category-caches:
     get:
       summary: 장소 카테고리 캐시 목록을 조회한다.
@@ -3911,6 +3931,85 @@ components:
           $ref: '#/components/schemas/PlaceCategoryDto'
       required:
         - placeCategory
+
+    AdminSearchPlacesByKeywordRequestDto:
+      description: 키워드 장소 검색 요청
+      type: object
+      properties:
+        keyword:
+          type: string
+        circleRegion:
+          $ref: '#/components/schemas/AdminCircleSearchRegionDto'
+        rectangleRegion:
+          $ref: '#/components/schemas/AdminRectangleSearchRegionDto'
+      required:
+        - keyword
+
+    AdminSearchPlacesByKeywordResponseDto:
+      description: 키워드 장소 검색 응답
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/AdminSearchedPlaceDto'
+      required:
+        - items
+
+    AdminSearchedPlaceDto:
+      description: 검색된 장소 정보
+      type: object
+      properties:
+        placeId:
+          type: string
+        name:
+          type: string
+        address:
+          type: string
+          nullable: true
+        location:
+          $ref: '#/components/schemas/LocationDTO'
+        hasBuildingAccessibility:
+          type: boolean
+        hasPlaceAccessibility:
+          type: boolean
+        accessibilityScore:
+          type: number
+          format: double
+          nullable: true
+        isAccessibilityRegistrable:
+          type: boolean
+      required:
+        - placeId
+        - name
+        - location
+        - hasBuildingAccessibility
+        - hasPlaceAccessibility
+        - isAccessibilityRegistrable
+
+    AdminCircleSearchRegionDto:
+      description: 원형 검색 영역
+      type: object
+      properties:
+        centerLocation:
+          $ref: '#/components/schemas/LocationDTO'
+        radiusMeters:
+          type: integer
+      required:
+        - centerLocation
+        - radiusMeters
+
+    AdminRectangleSearchRegionDto:
+      description: 직사각형 검색 영역
+      type: object
+      properties:
+        leftTopLocation:
+          $ref: '#/components/schemas/LocationDTO'
+        rightBottomLocation:
+          $ref: '#/components/schemas/LocationDTO'
+      required:
+        - leftTopLocation
+        - rightBottomLocation
 
   responses:
     NoContent:
