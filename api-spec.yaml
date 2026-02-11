@@ -2373,6 +2373,10 @@ components:
           type: string
         currentLocation:
           $ref: '#/components/schemas/Location'
+        sort:
+          $ref: '#/components/schemas/SearchPlaceSortDto'
+        filters:
+          $ref: '#/components/schemas/SearchPlaceFilterDto'
       required:
         - placeListId
 
