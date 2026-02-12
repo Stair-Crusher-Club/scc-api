@@ -1694,6 +1694,76 @@ paths:
               schema:
                 $ref: '#/components/schemas/GetPlaceGroupResponseDto'
 
+  /getPlaceList:
+    post:
+      summary: PlaceList(저장 리스트)를 조회한다.
+      operationId: getPlaceList
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GetPlaceListRequestDto'
+      responses:
+        '200':
+          description: 조회 성공
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetPlaceListResponseDto'
+
+  /listSavedPlaceLists:
+    post:
+      summary: 내가 저장한 PlaceList 목록을 조회한다.
+      security:
+        - Identified: []
+      operationId: listSavedPlaceLists
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ListSavedPlaceListsRequestDto'
+      responses:
+        '200':
+          description: 조회 성공
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListSavedPlaceListsResponseDto'
+
+  /savePlaceList:
+    post:
+      summary: PlaceList를 내 저장 목록에 추가한다.
+      security:
+        - Identified: []
+      operationId: savePlaceList
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SavePlaceListRequestDto'
+      responses:
+        '204':
+          $ref: '#/components/responses/NoContent'
+
+  /unsavePlaceList:
+    post:
+      summary: PlaceList를 내 저장 목록에서 제거한다.
+      security:
+        - Identified: []
+      operationId: unsavePlaceList
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UnsavePlaceListRequestDto'
+      responses:
+        '204':
+          $ref: '#/components/responses/NoContent'
+
 components:
   parameters:
     SccCommonHeaders:
@@ -2252,6 +2322,122 @@ components:
       required:
         - placeGroup
         - places
+
+    PlaceListDto:
+      type: object
+      description: 저장 리스트 정보
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        type:
+          $ref: '#/components/schemas/PlaceListTypeDto'
+        description:
+          type: string
+          nullable: true
+        thumbnailUrl:
+          type: string
+          nullable: true
+        iconColor:
+          type: string
+          nullable: true
+          description: 아이콘 배경색 (hex, e.g. "#FFC01E"). null이면 기본색 사용.
+        placeCount:
+          type: integer
+          format: int32
+          description: 리스트에 포함된 장소 수
+        isSaved:
+          type: boolean
+          description: 내가 저장한 리스트인지 여부. 비인증 유저는 항상 false.
+        createdAt:
+          $ref: '#/components/schemas/EpochMillisTimestamp'
+        updatedAt:
+          $ref: '#/components/schemas/EpochMillisTimestamp'
+      required:
+        - id
+        - name
+        - type
+        - placeCount
+        - isSaved
+        - createdAt
+        - updatedAt
+
+    PlaceListTypeDto:
+      type: string
+      description: 저장 리스트 타입
+      enum:
+        - MY_PLACES
+        - NORMAL
+
+    GetPlaceListRequestDto:
+      type: object
+      properties:
+        placeListId:
+          type: string
+        currentLocation:
+          $ref: '#/components/schemas/Location'
+        sort:
+          $ref: '#/components/schemas/SearchPlaceSortDto'
+        filters:
+          $ref: '#/components/schemas/SearchPlaceFilterDto'
+      required:
+        - placeListId
+
+    GetPlaceListResponseDto:
+      type: object
+      properties:
+        placeList:
+          $ref: '#/components/schemas/PlaceListDto'
+        places:
+          type: array
+          items:
+            $ref: '#/components/schemas/PlaceListItem'
+      required:
+        - placeList
+        - places
+
+    ListSavedPlaceListsRequestDto:
+      type: object
+      properties:
+        cursor:
+          type: string
+          nullable: true
+          description: 페이지네이션 커서
+        limit:
+          type: integer
+          format: int32
+          description: 페이지당 항목 수. 기본값 20.
+
+    ListSavedPlaceListsResponseDto:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/PlaceListDto'
+        cursor:
+          type: string
+          nullable: true
+          description: 다음 페이지 커서 (없으면 마지막 페이지)
+      required:
+        - items
+
+    SavePlaceListRequestDto:
+      type: object
+      properties:
+        placeListId:
+          type: string
+      required:
+        - placeListId
+
+    UnsavePlaceListRequestDto:
+      type: object
+      properties:
+        placeListId:
+          type: string
+      required:
+        - placeListId
 
     PlaceFavorite:
       type: object
