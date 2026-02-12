@@ -3748,6 +3748,10 @@ components:
         thumbnailUrl:
           type: string
           nullable: true
+        iconColor:
+          type: string
+          nullable: true
+          description: 아이콘 배경색 (hex, e.g. "#FFC01E"). null이면 기본색 사용.
         placeCount:
           type: integer
           format: int32
@@ -3777,6 +3781,10 @@ components:
         thumbnailUrl:
           type: string
           nullable: true
+        iconColor:
+          type: string
+          nullable: true
+          description: 아이콘 배경색 (hex, e.g. "#FFC01E"). null이면 기본색 사용.
         places:
           type: array
           items:
@@ -3841,6 +3849,10 @@ components:
         thumbnailUrl:
           type: string
           nullable: true
+        iconColor:
+          type: string
+          nullable: true
+          description: 아이콘 배경색 (hex, e.g. "#FFC01E"). null이면 기본색 사용.
         placeIds:
           type: array
           items:
@@ -3862,6 +3874,10 @@ components:
         thumbnailUrl:
           type: string
           nullable: true
+        iconColor:
+          type: string
+          nullable: true
+          description: 아이콘 배경색 (hex, e.g. "#FFC01E"). null이면 기본색 사용.
         placeIds:
           type: array
           items:
