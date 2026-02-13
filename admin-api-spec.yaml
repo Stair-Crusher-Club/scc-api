@@ -1794,6 +1794,22 @@ paths:
         '204':
           $ref: '#/components/responses/NoContent'
 
+  /accessibility-images/{id}:
+    parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+    delete:
+      operationId: adminDeleteAccessibilityImage
+      summary: 접근성 이미지를 삭제한다.
+      tags:
+        - accessibility-report
+      responses:
+        '204':
+          $ref: '#/components/responses/NoContent'
+
 components:
   # Reusable schemas (data models)
   securitySchemes:
@@ -2798,11 +2814,14 @@ components:
     AdminImageDTO:
       type: object
       properties:
+        id:
+          type: string
         imageUrl:
           type: string
         thumbnailUrl:
           type: string
       required:
+        - id
         - imageUrl
 
     StartPlaceCrawlingRequestDTO:
