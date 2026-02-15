@@ -301,6 +301,28 @@ paths:
               schema:
                 $ref: '#/components/schemas/AccessibilityInfoDto'
 
+  /getAccessibilityV2:
+    post:
+      summary: 건물 & 점포의 접근성 정보를 조회한다. (v2 - 클로즈 베타)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                placeId:
+                  type: string
+              required:
+                - placeId
+      responses:
+        '200':
+          description: 건물 & 장소 접근성 정보 (placeUpvoteInfo 포함)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccessibilityInfoV2Dto'
+
   /listToiletReviews:
     post:
       summary: 화장실 리뷰를 조회한다.
@@ -1825,9 +1847,6 @@ components:
           type: integer
           format: int64
           description: 이 장소에 접근성 정보를 요청한 총 인원 수.
-        placeUpvoteInfo:
-          $ref: '#/components/schemas/PlaceUpvoteInfoDto'
-          description: 장소 단위 도움이 돼요 정보
       required:
         - buildingAccessibilityComments
         - placeAccessibilityComments
@@ -1836,6 +1855,16 @@ components:
         - totalFavoriteCount
         - isAccessibilityInfoRequested
         - totalAccessibilityInfoRequestCount
+
+    AccessibilityInfoV2Dto:
+      description: 건물 & 점포의 접근성 정보 (v2 - 클로즈 베타). placeUpvoteInfo 추가.
+      allOf:
+        - $ref: '#/components/schemas/AccessibilityInfoDto'
+        - type: object
+          properties:
+            placeUpvoteInfo:
+              $ref: '#/components/schemas/PlaceUpvoteInfoDto'
+              description: 장소 단위 도움이 돼요 정보
 
     AccessibilityRankDto:
       type: object
