@@ -1825,6 +1825,9 @@ components:
           type: integer
           format: int64
           description: 이 장소에 접근성 정보를 요청한 총 인원 수.
+        placeUpvoteInfo:
+          $ref: '#/components/schemas/PlaceUpvoteInfoDto'
+          description: 장소 단위 도움이 돼요 정보
       required:
         - buildingAccessibilityComments
         - placeAccessibilityComments
@@ -4120,11 +4123,26 @@ components:
     UpvoteTargetTypeDto:
       type: string
       enum:
+        - PLACE
         - PLACE_ACCESSIBILITY
         - BUILDING_ACCESSIBILITY
         - PLACE_REVIEW
         - TOILET_REVIEW
         - BBUCLE_ROAD
+
+    PlaceUpvoteInfoDto:
+      type: object
+      description: 장소 단위 도움이 돼요 정보
+      properties:
+        isUpvoted:
+          type: boolean
+          description: 현재 유저가 이 장소에 도움이 돼요를 눌렀는지 여부
+        totalUpvoteCount:
+          type: integer
+          description: 이 장소가 받은 총 도움이 돼요 수 (기존 PLACE_ACCESSIBILITY + BUILDING_ACCESSIBILITY 합산 포함)
+      required:
+        - isUpvoted
+        - totalUpvoteCount
 
     ImageDto:
       type: object
