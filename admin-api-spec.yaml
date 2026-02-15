@@ -4221,6 +4221,9 @@ components:
           $ref: '#/components/schemas/AdminUpdatePlaceAccessibilityRequestDTO'
         buildingAccessibilityUpdate:
           $ref: '#/components/schemas/AdminUpdateBuildingAccessibilityRequestDTO'
+        buildingAccessibilityId:
+          type: string
+          description: 장소 신고에서 건물 접근성을 함께 수정할 때 건물 접근성 ID
       required:
         - action
 
