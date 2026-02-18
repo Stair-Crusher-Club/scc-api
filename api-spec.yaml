@@ -3946,25 +3946,9 @@ components:
         items:
           type: array
           items:
-            $ref: '#/components/schemas/PlaceSuggestionDto'
+            $ref: '#/components/schemas/PlaceListItem'
       required:
         - items
-
-    PlaceSuggestionDto:
-      type: object
-      properties:
-        placeId:
-          type: string
-        placeName:
-          type: string
-        address:
-          type: string
-        category:
-          $ref: '#/components/schemas/PlaceCategoryDto'
-      required:
-        - placeId
-        - placeName
-        - address
 
     CircleSearchRegionDto:
       type: object
