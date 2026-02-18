@@ -1484,6 +1484,26 @@ paths:
               schema:
                 $ref: '#/components/schemas/SearchPlacesByNaturalLanguageResponseDto'
 
+  /suggestPlaces:
+    post:
+      summary: 장소 자동완성 제안을 반환한다.
+      description: |
+        사용자가 입력한 prefix를 기반으로 장소 자동완성 제안을 반환한다.
+        선택적으로 현재 위치와 거리 제한을 전달하면 근처 장소를 우선 제안한다.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SuggestPlacesRequestDto'
+      responses:
+        '200':
+          description: 자동완성 제안 결과
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuggestPlacesResponseDto'
+
   /signUp:
     post:
       summary: 회원가입을 한다.
@@ -3905,6 +3925,30 @@ components:
             #   type: string
             #   description: AI 분석 결과 요약
           # required: []
+
+    SuggestPlacesRequestDto:
+      type: object
+      properties:
+        query:
+          type: string
+          description: 자동완성 검색어 prefix
+        currentLocation:
+          $ref: '#/components/schemas/Location'
+        distanceMetersLimit:
+          type: integer
+          description: 현재 위치 기준 검색 반경 (미터)
+      required:
+        - query
+
+    SuggestPlacesResponseDto:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/PlaceListItem'
+      required:
+        - items
 
     CircleSearchRegionDto:
       type: object
