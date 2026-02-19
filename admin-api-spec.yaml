@@ -1951,6 +1951,28 @@ paths:
               schema:
                 $ref: '#/components/schemas/AdminPlaceAccessibilitySuggestionDto'
 
+  /place-accessibility-suggestions/{id}/revert:
+    parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+        description: PlaceAccessibilitySuggestion ID
+
+    post:
+      summary: 승인/반려된 접근성 정보 제안을 대기 상태로 되돌린다. 승인된 경우 생성된 PlaceAccessibility도 삭제된다.
+      operationId: revertPlaceAccessibilitySuggestion
+      tags:
+        - place-accessibility-suggestion
+      responses:
+        '200':
+          description: 되돌리기 성공
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminPlaceAccessibilitySuggestionDto'
+
   /place-accessibility-suggestions/bulk-confirm:
     post:
       summary: 접근성 정보 제안을 일괄 확인한다.
@@ -4466,6 +4488,10 @@ components:
         adminNote:
           type: string
           nullable: true
+        placeAccessibilityId:
+          type: string
+          nullable: true
+          description: 승인 시 생성된 PlaceAccessibility ID. 되돌리기 시 이 ID로 삭제.
         reviewedAtMillis:
           type: integer
           format: int64
