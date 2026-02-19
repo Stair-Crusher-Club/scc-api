@@ -27,6 +27,7 @@ tags:
   - name: bbucle-road
   - name: building-division
   - name: place-list
+  - name: place-accessibility-suggestion
 
 paths:
   /login:
@@ -1810,6 +1811,184 @@ paths:
         '204':
           $ref: '#/components/responses/NoContent'
 
+
+  /place-accessibility-suggestions/search:
+    get:
+      summary: 접근성 정보 제안 목록을 검색한다.
+      operationId: searchPlaceAccessibilitySuggestions
+      tags:
+        - place-accessibility-suggestion
+      parameters:
+        - in: query
+          name: status
+          schema:
+            $ref: '#/components/schemas/SuggestionStatusDto'
+          required: false
+          description: 상태별 필터링 (미지정시 전체)
+        - in: query
+          name: cursor
+          schema:
+            type: string
+          required: false
+          description: 커서 페이지네이션용 커서 값
+        - in: query
+          name: limit
+          schema:
+            type: integer
+          required: false
+          description: 페이지당 항목 수 (기본값 20)
+      responses:
+        '200':
+          description: 목록 조회 성공
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminSearchPlaceAccessibilitySuggestionsResultDto'
+
+  /place-accessibility-suggestions/{id}:
+    parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+        description: PlaceAccessibilitySuggestion ID
+
+    get:
+      summary: 접근성 정보 제안을 상세 조회한다.
+      operationId: getPlaceAccessibilitySuggestion
+      tags:
+        - place-accessibility-suggestion
+      responses:
+        '200':
+          description: 조회 성공
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminPlaceAccessibilitySuggestionDto'
+
+    put:
+      summary: 접근성 정보 제안을 수정한다.
+      operationId: updatePlaceAccessibilitySuggestion
+      tags:
+        - place-accessibility-suggestion
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdminUpdatePlaceAccessibilitySuggestionRequestDto'
+      responses:
+        '200':
+          description: 수정 성공
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminPlaceAccessibilitySuggestionDto'
+
+    delete:
+      summary: 접근성 정보 제안을 삭제한다.
+      operationId: deletePlaceAccessibilitySuggestion
+      tags:
+        - place-accessibility-suggestion
+      responses:
+        '204':
+          $ref: '#/components/responses/NoContent'
+
+  /place-accessibility-suggestions/{id}/confirm:
+    parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+        description: PlaceAccessibilitySuggestion ID
+
+    post:
+      summary: 접근성 정보 제안을 확인한다.
+      operationId: confirmPlaceAccessibilitySuggestion
+      tags:
+        - place-accessibility-suggestion
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdminConfirmPlaceAccessibilitySuggestionRequestDto'
+      responses:
+        '200':
+          description: 확인 성공
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminPlaceAccessibilitySuggestionDto'
+
+  /place-accessibility-suggestions/{id}/reject:
+    parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+        description: PlaceAccessibilitySuggestion ID
+
+    post:
+      summary: 접근성 정보 제안을 반려한다.
+      operationId: rejectPlaceAccessibilitySuggestion
+      tags:
+        - place-accessibility-suggestion
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdminRejectPlaceAccessibilitySuggestionRequestDto'
+      responses:
+        '200':
+          description: 반려 성공
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminPlaceAccessibilitySuggestionDto'
+
+  /place-accessibility-suggestions/{id}/revert:
+    parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+        description: PlaceAccessibilitySuggestion ID
+
+    post:
+      summary: 승인/반려된 접근성 정보 제안을 대기 상태로 되돌린다. 승인된 경우 생성된 PlaceAccessibility도 삭제된다.
+      operationId: revertPlaceAccessibilitySuggestion
+      tags:
+        - place-accessibility-suggestion
+      responses:
+        '200':
+          description: 되돌리기 성공
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminPlaceAccessibilitySuggestionDto'
+
+  /place-accessibility-suggestions/bulk-confirm:
+    post:
+      summary: 접근성 정보 제안을 일괄 확인한다.
+      operationId: bulkConfirmPlaceAccessibilitySuggestions
+      tags:
+        - place-accessibility-suggestion
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdminBulkConfirmPlaceAccessibilitySuggestionsRequestDto'
+      responses:
+        '204':
+          $ref: '#/components/responses/NoContent'
+
 components:
   # Reusable schemas (data models)
   securitySchemes:
@@ -3378,6 +3557,7 @@ components:
         - BBUCLE_ROAD_MARKER
         - BBUCLE_ROAD_DESCRIPTION
         - RECOMMENDED_CONTENT
+        - PLACE_ACCESSIBILITY_SUGGESTION
 
     AdminCreateImageUploadUrlsResponseDTO:
       type: object
@@ -4248,6 +4428,169 @@ components:
       enum:
         - RESOLVED
         - DISMISSED
+
+
+    SuggestionStatusDto:
+      type: string
+      enum:
+        - PENDING
+        - CONFIRMED
+        - REJECTED
+
+    AdminPlaceAccessibilitySuggestionDto:
+      type: object
+      properties:
+        id:
+          type: string
+        placeId:
+          type: string
+        placeName:
+          type: string
+        naverPlaceId:
+          type: string
+        status:
+          $ref: '#/components/schemas/SuggestionStatusDto'
+        photoUrls:
+          type: array
+          items:
+            type: string
+        entrancePhotoUrls:
+          type: array
+          items:
+            type: string
+        hasStairs:
+          type: boolean
+          nullable: true
+        stairCount:
+          type: integer
+          nullable: true
+        stairHeightLevel:
+          type: string
+          nullable: true
+        hasRamp:
+          type: boolean
+          nullable: true
+        doorTypes:
+          type: array
+          items:
+            type: string
+          nullable: true
+        hasThreshold:
+          type: boolean
+          nullable: true
+        aiConfidence:
+          type: string
+          nullable: true
+        aiReasoning:
+          type: string
+          nullable: true
+        addressFromCrawl:
+          type: string
+          nullable: true
+        categoryFromCrawl:
+          type: string
+          nullable: true
+        adminNote:
+          type: string
+          nullable: true
+        placeAccessibilityId:
+          type: string
+          nullable: true
+          description: 승인 시 생성된 PlaceAccessibility ID. 되돌리기 시 이 ID로 삭제.
+        reviewedAtMillis:
+          type: integer
+          format: int64
+          nullable: true
+        createdAtMillis:
+          type: integer
+          format: int64
+        updatedAtMillis:
+          type: integer
+          format: int64
+      required:
+        - id
+        - placeId
+        - placeName
+        - naverPlaceId
+        - status
+        - photoUrls
+        - entrancePhotoUrls
+        - createdAtMillis
+        - updatedAtMillis
+
+    AdminSearchPlaceAccessibilitySuggestionsResultDto:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/AdminPlaceAccessibilitySuggestionDto'
+        cursor:
+          type: string
+          description: 없으면 다음 페이지가 없다는 의미.
+      required:
+        - items
+
+    AdminUpdatePlaceAccessibilitySuggestionRequestDto:
+      type: object
+      properties:
+        hasStairs:
+          type: boolean
+          nullable: true
+        stairCount:
+          type: integer
+          nullable: true
+        stairHeightLevel:
+          type: string
+          nullable: true
+        hasRamp:
+          type: boolean
+          nullable: true
+        doorTypes:
+          type: array
+          items:
+            type: string
+          nullable: true
+        hasThreshold:
+          type: boolean
+          nullable: true
+        photoUrls:
+          type: array
+          items:
+            type: string
+          nullable: true
+        entrancePhotoUrls:
+          type: array
+          items:
+            type: string
+          nullable: true
+        adminNote:
+          type: string
+          nullable: true
+
+    AdminConfirmPlaceAccessibilitySuggestionRequestDto:
+      type: object
+      properties:
+        adminNote:
+          type: string
+          nullable: true
+
+    AdminRejectPlaceAccessibilitySuggestionRequestDto:
+      type: object
+      properties:
+        adminNote:
+          type: string
+          nullable: true
+
+    AdminBulkConfirmPlaceAccessibilitySuggestionsRequestDto:
+      type: object
+      properties:
+        suggestionIds:
+          type: array
+          items:
+            type: string
+      required:
+        - suggestionIds
 
   responses:
     NoContent:

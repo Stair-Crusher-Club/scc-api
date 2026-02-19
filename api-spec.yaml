@@ -4186,6 +4186,9 @@ components:
         thumbnailUrl:
           type: string
           description: '아직 썸네일이 생성되지 않았다면 null'
+        sourceAttribution:
+          type: string
+          description: '사진 출처 정보 (예: "사진 제공: 홍길동"). 없으면 null.'
       required:
         - imageUrl
 
