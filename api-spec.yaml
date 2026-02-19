@@ -1998,6 +1998,9 @@ components:
             $ref: '#/components/schemas/ImageDto'
         buildingId:
           type: string
+        doorDirectionType:
+          $ref: '#/components/schemas/BuildingDoorDirectionTypeDto'
+          description: 건물 입구 문의 방향. V2로 등록된 접근성만 값이 존재.
         registeredUserName:
           type: string
           description: 익명으로 등록되었으면 null.
@@ -3078,6 +3081,12 @@ components:
         totalUpvoteCount:
           type: integer
           description: 총 몇개의 도움이 돼요가 눌렸는지.
+        isStandaloneBuilding:
+          type: boolean
+          description: 단독 건물 여부 (해당 장소가 건물 전체를 차지하는지). V2로 등록된 접근성만 값이 존재.
+        doorDirectionType:
+          $ref: '#/components/schemas/PlaceDoorDirectionTypeDto'
+          description: 장소 입구 문이 건물 외부로 향하는지 내부로 향하는지. V2로 등록된 접근성만 값이 존재.
         createdAt:
           $ref: '#/components/schemas/EpochMillisTimestamp'
       required:
