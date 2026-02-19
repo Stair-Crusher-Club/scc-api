@@ -4464,11 +4464,16 @@ components:
         stairCount:
           type: integer
           nullable: true
+        stairHeightLevel:
+          type: string
+          nullable: true
         hasRamp:
           type: boolean
           nullable: true
-        doorType:
-          type: string
+        doorTypes:
+          type: array
+          items:
+            type: string
           nullable: true
         hasThreshold:
           type: boolean
@@ -4535,11 +4540,16 @@ components:
         stairCount:
           type: integer
           nullable: true
+        stairHeightLevel:
+          type: string
+          nullable: true
         hasRamp:
           type: boolean
           nullable: true
-        doorType:
-          type: string
+        doorTypes:
+          type: array
+          items:
+            type: string
           nullable: true
         hasThreshold:
           type: boolean
