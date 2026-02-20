@@ -3643,8 +3643,10 @@ components:
             type: string
         entranceComment:
           type: string
-        floorMovingMethodType:
-          $ref: '#/components/schemas/FloorMovingMethodTypeDto'
+        floorMovingMethodTypes:
+          type: array
+          items:
+            $ref: '#/components/schemas/FloorMovingMethodTypeDto'
         floorMovingMethodComment:
           type: string
         floorMovingElevatorAccessibility:
