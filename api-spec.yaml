@@ -3093,6 +3093,25 @@ components:
         doorDirectionType:
           $ref: '#/components/schemas/PlaceDoorDirectionTypeDto'
           description: 출입문 방향 (건물 밖/건물 안)
+        features:
+          description: 장소 입구 특이사항
+          type: array
+          items:
+            type: string
+        entranceComment:
+          type: string
+          description: 출입구 관련 코멘트
+        floorMovingMethodTypes:
+          type: array
+          items:
+            $ref: '#/components/schemas/FloorMovingMethodTypeDto'
+          description: 층간 이동 방법 목록
+        floorMovingElevatorAccessibility:
+          $ref: '#/components/schemas/ElevatorAccessibilityDto'
+          description: 층간 이동 엘리베이터 접근성 정보
+        floorMovingElevatorComment:
+          type: string
+          description: 층간 이동 엘리베이터 관련 코멘트
         registeredUserName:
           type: string
           description: 익명으로 등록되었으면 null.
