@@ -301,6 +301,28 @@ paths:
               schema:
                 $ref: '#/components/schemas/AccessibilityInfoDto'
 
+  /getAccessibilityV2:
+    post:
+      summary: 건물 & 점포의 접근성 정보를 조회한다. (v2 - 클로즈 베타)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                placeId:
+                  type: string
+              required:
+                - placeId
+      responses:
+        '200':
+          description: 건물 & 장소 접근성 정보 (placeUpvoteInfo 포함)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccessibilityInfoV2Dto'
+
   /listToiletReviews:
     post:
       summary: 화장실 리뷰를 조회한다.
@@ -1854,6 +1876,26 @@ components:
         - isAccessibilityInfoRequested
         - totalAccessibilityInfoRequestCount
 
+    AccessibilityInfoV2Dto:
+      description: 건물 & 점포의 접근성 정보 (v2 - 클로즈 베타). placeUpvoteInfo 추가.
+      allOf:
+        - $ref: '#/components/schemas/AccessibilityInfoDto'
+        - type: object
+          properties:
+            placeUpvoteInfo:
+              $ref: '#/components/schemas/PlaceUpvoteInfoDto'
+              description: 장소 단위 도움이 돼요 정보
+            placeAccessibilities:
+              type: array
+              items:
+                $ref: '#/components/schemas/PlaceAccessibility'
+              description: 이 장소의 모든 매장 접근성 등록 정보 (접근 레벨 오름차순)
+            buildingAccessibilities:
+              type: array
+              items:
+                $ref: '#/components/schemas/BuildingAccessibility'
+              description: 이 건물의 모든 건물 접근성 등록 정보 (접근 레벨 오름차순)
+
     AccessibilityRankDto:
       type: object
       properties:
@@ -1986,6 +2028,9 @@ components:
             $ref: '#/components/schemas/ImageDto'
         buildingId:
           type: string
+        doorDirectionType:
+          $ref: '#/components/schemas/BuildingDoorDirectionTypeDto'
+          description: 출입문 방향 (건물 밖/건물 안)
         registeredUserName:
           type: string
           description: 익명으로 등록되었으면 null.
@@ -2002,6 +2047,9 @@ components:
           description:
             이 접근성 정보가 '도움이 돼요'를 받은 총 횟수. 이 숫자에 따라 버튼
             텍스트에 '도움이 돼요'나 '정확한 정보에요'를 사용한다.
+        doorDirectionEtcComment:
+          type: string
+          description: 출입구 방향이 기타(ETC)인 경우 출입구 방향에 대한 설명.
         createdAt:
           $ref: '#/components/schemas/EpochMillisTimestamp'
       required:
@@ -3052,6 +3100,31 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/EntranceDoorType'
+        isStandaloneBuilding:
+          type: boolean
+          description: 독립 건물 여부 (매장이 건물 전체를 차지하는 경우)
+        doorDirectionType:
+          $ref: '#/components/schemas/PlaceDoorDirectionTypeDto'
+          description: 출입문 방향 (건물 밖/건물 안)
+        features:
+          description: 장소 입구 특이사항
+          type: array
+          items:
+            type: string
+        entranceComment:
+          type: string
+          description: 출입구 관련 코멘트
+        floorMovingMethodTypes:
+          type: array
+          items:
+            $ref: '#/components/schemas/FloorMovingMethodTypeDto'
+          description: 층간 이동 방법 목록
+        floorMovingElevatorAccessibility:
+          $ref: '#/components/schemas/ElevatorAccessibilityDto'
+          description: 층간 이동 엘리베이터 접근성 정보
+        floorMovingElevatorComment:
+          type: string
+          description: 층간 이동 엘리베이터 관련 코멘트
         registeredUserName:
           type: string
           description: 익명으로 등록되었으면 null.
@@ -3602,8 +3675,10 @@ components:
             type: string
         entranceComment:
           type: string
-        floorMovingMethodType:
-          $ref: '#/components/schemas/FloorMovingMethodTypeDto'
+        floorMovingMethodTypes:
+          type: array
+          items:
+            $ref: '#/components/schemas/FloorMovingMethodTypeDto'
         floorMovingMethodComment:
           type: string
         floorMovingElevatorAccessibility:
@@ -4164,11 +4239,26 @@ components:
     UpvoteTargetTypeDto:
       type: string
       enum:
+        - PLACE
         - PLACE_ACCESSIBILITY
         - BUILDING_ACCESSIBILITY
         - PLACE_REVIEW
         - TOILET_REVIEW
         - BBUCLE_ROAD
+
+    PlaceUpvoteInfoDto:
+      type: object
+      description: 장소 단위 도움이 돼요 정보
+      properties:
+        isUpvoted:
+          type: boolean
+          description: 현재 유저가 이 장소에 도움이 돼요를 눌렀는지 여부
+        totalUpvoteCount:
+          type: integer
+          description: 이 장소가 받은 총 도움이 돼요 수 (기존 PLACE_ACCESSIBILITY + BUILDING_ACCESSIBILITY 합산 포함)
+      required:
+        - isUpvoted
+        - totalUpvoteCount
 
     ImageDto:
       type: object
