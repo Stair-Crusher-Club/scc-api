@@ -1885,6 +1885,16 @@ components:
             placeUpvoteInfo:
               $ref: '#/components/schemas/PlaceUpvoteInfoDto'
               description: 장소 단위 도움이 돼요 정보
+            placeAccessibilities:
+              type: array
+              items:
+                $ref: '#/components/schemas/PlaceAccessibility'
+              description: 이 장소의 모든 매장 접근성 등록 정보 (접근 레벨 오름차순)
+            buildingAccessibilities:
+              type: array
+              items:
+                $ref: '#/components/schemas/BuildingAccessibility'
+              description: 이 건물의 모든 건물 접근성 등록 정보 (접근 레벨 오름차순)
 
     AccessibilityRankDto:
       type: object
@@ -2037,6 +2047,9 @@ components:
           description:
             이 접근성 정보가 '도움이 돼요'를 받은 총 횟수. 이 숫자에 따라 버튼
             텍스트에 '도움이 돼요'나 '정확한 정보에요'를 사용한다.
+        doorDirectionEtcComment:
+          type: string
+          description: 출입구 방향이 기타(ETC)인 경우 출입구 방향에 대한 설명.
         createdAt:
           $ref: '#/components/schemas/EpochMillisTimestamp'
       required:
