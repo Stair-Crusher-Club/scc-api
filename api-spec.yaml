@@ -2397,10 +2397,6 @@ components:
       properties:
         id:
           type: string
-        shortId:
-          type: string
-          nullable: true
-          description: 공유 URL 등에 사용할 수 있는 짧은 ID (8자리 영숫자). 기존 리스트는 null일 수 있음.
         name:
           type: string
         type:
