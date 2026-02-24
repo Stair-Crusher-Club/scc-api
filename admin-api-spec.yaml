@@ -1990,6 +1990,20 @@ paths:
         '204':
           $ref: '#/components/responses/NoContent'
 
+  /experiments:
+    get:
+      summary: 등록된 실험 정의 목록을 조회한다.
+      operationId: listExperiments
+      tags:
+        - experiment
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminListExperimentsResponseDto'
+
   /experiments/assignments:
     get:
       summary: 특정 유저의 실험 배정 목록을 조회한다.
@@ -4639,17 +4653,6 @@ components:
       required:
         - suggestionIds
 
-    ExperimentDto:
-      type: string
-      enum:
-        - UPVOTE_BUTTON_STYLE
-
-    ExperimentVariantDto:
-      type: string
-      enum:
-        - CONTROL
-        - TREATMENT
-
     AdminExperimentAssignmentDto:
       type: object
       properties:
@@ -4658,9 +4661,11 @@ components:
         userId:
           type: string
         experiment:
-          $ref: '#/components/schemas/ExperimentDto'
+          type: string
+          description: "실험 이름"
         variant:
-          $ref: '#/components/schemas/ExperimentVariantDto'
+          type: string
+          description: "배정된 variant 이름"
         stratum:
           type: string
         createdAt:
@@ -4688,9 +4693,51 @@ components:
       type: object
       properties:
         variant:
-          $ref: '#/components/schemas/ExperimentVariantDto'
+          type: string
+          description: "변경할 variant 이름"
       required:
         - variant
+
+    AdminListExperimentsResponseDto:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ExperimentDefinitionDto'
+      required:
+        - items
+
+    ExperimentDefinitionDto:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        variants:
+          type: array
+          items:
+            $ref: '#/components/schemas/VariantConfigDto'
+        winningVariant:
+          type: string
+          nullable: true
+      required:
+        - name
+        - description
+        - variants
+
+    VariantConfigDto:
+      type: object
+      properties:
+        name:
+          type: string
+        weight:
+          type: integer
+          description: "상대 비중 (e.g. 50:50, 34:33:33)"
+      required:
+        - name
+        - weight
 
   responses:
     NoContent:
