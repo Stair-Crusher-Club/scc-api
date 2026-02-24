@@ -2674,8 +2674,35 @@ components:
         isAlbumUploadAllowed:
           type: boolean
           description: 앨범에서 이미지 업로드가 허용되는지 여부
+        experiments:
+          type: array
+          items:
+            $ref: '#/components/schemas/ExperimentAssignmentDto'
+          description: 유저에게 배정된 실험 목록
       required:
         - user
+
+    ExperimentDto:
+      type: string
+      enum:
+        - UPVOTE_BUTTON_STYLE
+
+    ExperimentVariantDto:
+      type: string
+      enum:
+        - CONTROL
+        - TREATMENT
+
+    ExperimentAssignmentDto:
+      type: object
+      properties:
+        experiment:
+          $ref: '#/components/schemas/ExperimentDto'
+        variant:
+          $ref: '#/components/schemas/ExperimentVariantDto'
+      required:
+        - experiment
+        - variant
 
     GiveBuildingAccessibilityUpvoteRequestDto:
       type: object

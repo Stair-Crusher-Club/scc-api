@@ -28,6 +28,7 @@ tags:
   - name: building-division
   - name: place-list
   - name: place-accessibility-suggestion
+  - name: experiment
 
 paths:
   /login:
@@ -1988,6 +1989,52 @@ paths:
       responses:
         '204':
           $ref: '#/components/responses/NoContent'
+
+  /experiments/assignments:
+    get:
+      summary: 특정 유저의 실험 배정 목록을 조회한다.
+      operationId: searchExperimentAssignments
+      tags:
+        - experiment
+      parameters:
+        - name: userId
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminSearchExperimentAssignmentsResponseDto'
+
+  /experiments/assignments/{experimentAssignmentId}:
+    put:
+      summary: 실험 배정의 variant를 오버라이드한다.
+      operationId: updateExperimentAssignment
+      tags:
+        - experiment
+      parameters:
+        - name: experimentAssignmentId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdminUpdateExperimentAssignmentRequestDto'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminExperimentAssignmentDto'
 
 components:
   # Reusable schemas (data models)
@@ -4591,6 +4638,59 @@ components:
             type: string
       required:
         - suggestionIds
+
+    ExperimentDto:
+      type: string
+      enum:
+        - UPVOTE_BUTTON_STYLE
+
+    ExperimentVariantDto:
+      type: string
+      enum:
+        - CONTROL
+        - TREATMENT
+
+    AdminExperimentAssignmentDto:
+      type: object
+      properties:
+        id:
+          type: string
+        userId:
+          type: string
+        experiment:
+          $ref: '#/components/schemas/ExperimentDto'
+        variant:
+          $ref: '#/components/schemas/ExperimentVariantDto'
+        stratum:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - userId
+        - experiment
+        - variant
+        - stratum
+        - createdAt
+
+    AdminSearchExperimentAssignmentsResponseDto:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/AdminExperimentAssignmentDto'
+      required:
+        - items
+
+    AdminUpdateExperimentAssignmentRequestDto:
+      type: object
+      properties:
+        variant:
+          $ref: '#/components/schemas/ExperimentVariantDto'
+      required:
+        - variant
 
   responses:
     NoContent:
