@@ -2686,23 +2686,46 @@ components:
       type: object
       properties:
         experiment:
-          type: string
-          description: "실험 이름 (e.g. UPVOTE_BUTTON_STYLE)"
+          $ref: '#/components/schemas/ExperimentDefinitionDto'
         variant:
           type: string
           description: |
             배정된 variant 이름.
-            규칙: CONTROL (대조군), TREATMENT (단일 실험군),
-            TREATMENT_1/TREATMENT_2/... (복수 실험군)
-        availableVariants:
-          type: array
-          items:
-            type: string
-          description: "이 실험에서 가능한 모든 variant 목록"
+            규칙: CONTROL (대조군), TREATMENT_1/TREATMENT_2/... (실험군)
       required:
         - experiment
         - variant
-        - availableVariants
+
+    ExperimentDefinitionDto:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        variants:
+          type: array
+          items:
+            $ref: '#/components/schemas/VariantConfigDto'
+        winningVariant:
+          type: string
+          nullable: true
+      required:
+        - name
+        - description
+        - variants
+
+    VariantConfigDto:
+      type: object
+      properties:
+        name:
+          type: string
+        weight:
+          type: integer
+          description: "상대 비중 (e.g. 50:50, 34:33:33)"
+      required:
+        - name
+        - weight
 
     GiveBuildingAccessibilityUpvoteRequestDto:
       type: object
