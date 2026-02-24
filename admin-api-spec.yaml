@@ -4667,7 +4667,7 @@ components:
           type: string
           description: "배정된 variant 이름"
         stratum:
-          type: string
+          $ref: '#/components/schemas/ExperimentStratumDto'
         createdAt:
           type: string
           format: date-time
@@ -4738,6 +4738,23 @@ components:
       required:
         - name
         - weight
+
+    ExperimentStratumDto:
+      type: object
+      properties:
+        hasMobility:
+          type: boolean
+          description: "이동약자 여부"
+        hasWheelchair:
+          type: boolean
+          description: "휠체어 사용 여부"
+        isCrew:
+          type: boolean
+          description: "크루 여부"
+      required:
+        - hasMobility
+        - hasWheelchair
+        - isCrew
 
   responses:
     NoContent:
