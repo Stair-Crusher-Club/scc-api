@@ -2017,6 +2017,9 @@ components:
           $ref: '#/components/schemas/StairInfo'
         elevatorStairHeightLevel:
           $ref: '#/components/schemas/StairHeightLevel'
+        elevatorHasSlope:
+          type: boolean
+          description: 엘리베이터까지 가는 경사로 유무
         elevatorImageUrls:
           deprecated: true
           type: array
