@@ -4640,6 +4640,8 @@ components:
         - SHORT_REVIEW_4 # 숏리뷰 4
         - SHORT_REVIEW_5 # 숏리뷰 5
         - SHORT_REVIEW_6 # 숏리뷰 6
+        - SHORT_REVIEW_7 # 숏리뷰 7
+        - SHORT_REVIEW_8 # 숏리뷰 8
         - LONG_REVIEW_1 # 롱리뷰 1
         - LONG_REVIEW_2 # 롱리뷰 2
         - APP_USAGE_REVIEW # 앱 사용리뷰
