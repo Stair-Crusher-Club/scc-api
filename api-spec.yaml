@@ -4128,6 +4128,10 @@ components:
           description:
             접근성 정보가 등록된/등록되지 않은 장소만 반환한다. null이면
             필터링하지 않는다.
+        hasReview:
+          type: boolean
+          description:
+            리뷰가 있는/없는 장소만 반환한다. null이면 필터링하지 않는다.
 
     SiGunGu:
       description: 시군구를 표현하기 위한 모델.
