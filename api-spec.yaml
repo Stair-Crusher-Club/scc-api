@@ -4652,6 +4652,7 @@ components:
         - CONQUER_3 # 정복활동 3
         - CONQUER_4 # 정복활동 4
         - DAILY_LIFE_QUEST # 일상과 퀘스트
+        - SAVED_PLACE_LIST # 팀 저장리스트
 
     CrusherClubDto:
       type: object
@@ -4886,6 +4887,7 @@ components:
         - WARMING_UP_CONQUER # 워밍업 정복활동
         - CONQUER # 정복활동
         - DAILY_LIFE_QUEST # 일상과 퀘스트
+        - SAVED_PLACE_LIST # 팀 저장리스트
 
     UpvotedUserDto:
       type: object
