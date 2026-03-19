@@ -2426,6 +2426,10 @@ components:
           description:
             When enabled, past contributions within challenge period are applied
             on join
+        pushNotificationSchemes:
+          type: array
+          items:
+            $ref: '#/components/schemas/AdminChallengePushNotificationSchemeDTO'
       required:
         - id
         - name
@@ -2527,6 +2531,10 @@ components:
           description:
             When enabled, past contributions within challenge period are applied
             on join
+        pushNotificationSchemes:
+          type: array
+          items:
+            $ref: '#/components/schemas/AdminChallengePushNotificationSchemeDTO'
       required:
         - name
         - isPublic
@@ -2849,6 +2857,10 @@ components:
           description:
             When enabled, past contributions within challenge period are applied
             on join
+        pushNotificationSchemes:
+          type: array
+          items:
+            $ref: '#/components/schemas/AdminChallengePushNotificationSchemeDTO'
       required:
         - name
         - description
@@ -4755,6 +4767,88 @@ components:
         - hasMobility
         - hasWheelchair
         - isCrew
+
+    AdminChallengePushNotificationSchemeDTO:
+      type: object
+      required:
+        - type
+        - sendingSchedule
+      properties:
+        type:
+          $ref: '#/components/schemas/ChallengePushTypeEnum'
+        inactiveReminderConfig:
+          $ref: '#/components/schemas/AdminInactiveReminderConfigDTO'
+        milestoneConfigs:
+          type: array
+          items:
+            $ref: '#/components/schemas/AdminMilestoneConfigDTO'
+        sendingSchedule:
+          $ref: '#/components/schemas/AdminSendingScheduleDTO'
+    ChallengePushTypeEnum:
+      type: string
+      enum:
+        - INACTIVE_REMINDER
+        - MILESTONE
+    AdminInactiveReminderConfigDTO:
+      type: object
+      required:
+        - daysAfterJoin
+        - title
+        - body
+      properties:
+        daysAfterJoin:
+          type: integer
+          format: int32
+        title:
+          type: string
+        body:
+          type: string
+    AdminMilestoneConfigDTO:
+      type: object
+      required:
+        - conditionModulo
+        - conditionRemainder
+        - title
+        - body
+      properties:
+        conditionModulo:
+          type: integer
+          format: int32
+        conditionRemainder:
+          type: integer
+          format: int32
+        title:
+          type: string
+        body:
+          type: string
+    AdminSendingScheduleDTO:
+      type: object
+      required:
+        - groups
+      properties:
+        groups:
+          type: array
+          items:
+            $ref: '#/components/schemas/AdminSendingGroupDTO'
+    AdminSendingGroupDTO:
+      type: object
+      required:
+        - groupId
+        - sendHourKst
+        - basis
+      properties:
+        groupId:
+          type: string
+        sendHourKst:
+          type: integer
+          format: int32
+        basis:
+          $ref: '#/components/schemas/SendingBasisEnum'
+    SendingBasisEnum:
+      type: string
+      enum:
+        - SAME_DAY
+        - NEXT_DAY
 
   responses:
     NoContent:
