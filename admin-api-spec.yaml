@@ -4826,6 +4826,8 @@ components:
       required:
         - groups
       properties:
+        experimentName:
+          type: string
         groups:
           type: array
           items:
@@ -4835,20 +4837,12 @@ components:
       required:
         - groupId
         - sendHourKst
-        - basis
       properties:
         groupId:
           type: string
         sendHourKst:
           type: integer
           format: int32
-        basis:
-          $ref: '#/components/schemas/SendingBasisEnum'
-    SendingBasisEnum:
-      type: string
-      enum:
-        - SAME_DAY
-        - NEXT_DAY
 
   responses:
     NoContent:
