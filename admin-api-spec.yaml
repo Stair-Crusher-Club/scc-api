@@ -29,6 +29,7 @@ tags:
   - name: place-list
   - name: place-accessibility-suggestion
   - name: experiment
+  - name: place-special-accessibility
 
 paths:
   /login:
@@ -1482,6 +1483,90 @@ paths:
         '204':
           $ref: '#/components/responses/NoContent'
 
+  /place-special-accessibilities:
+    get:
+      summary: 장소 특수 접근성 목록을 조회한다.
+      operationId: listPlaceSpecialAccessibilities
+      tags:
+        - place-special-accessibility
+      responses:
+        '200':
+          description: 조회 성공
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AdminPlaceSpecialAccessibilityDto'
+
+    post:
+      summary: 장소 특수 접근성을 생성한다.
+      operationId: createPlaceSpecialAccessibility
+      tags:
+        - place-special-accessibility
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatePlaceSpecialAccessibilityRequestDto'
+      responses:
+        '201':
+          description: 생성 성공
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminPlaceSpecialAccessibilityDto'
+
+  /place-special-accessibilities/{id}:
+    parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+
+    get:
+      summary: 장소 특수 접근성을 조회한다.
+      operationId: getPlaceSpecialAccessibility
+      tags:
+        - place-special-accessibility
+      responses:
+        '200':
+          description: 조회 성공
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminPlaceSpecialAccessibilityDto'
+
+    put:
+      summary: 장소 특수 접근성을 수정한다.
+      operationId: updatePlaceSpecialAccessibility
+      tags:
+        - place-special-accessibility
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdatePlaceSpecialAccessibilityRequestDto'
+      responses:
+        '200':
+          description: 수정 성공
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminPlaceSpecialAccessibilityDto'
+
+    delete:
+      summary: 장소 특수 접근성을 삭제한다.
+      operationId: deletePlaceSpecialAccessibility
+      tags:
+        - place-special-accessibility
+      responses:
+        '204':
+          $ref: '#/components/responses/NoContent'
+
   /place-lists:
     get:
       summary: 저장 리스트 목록을 조회한다. NORMAL 타입만 조회한다.
@@ -1710,7 +1795,9 @@ paths:
           description: 해당 ID의 캐시를 찾을 수 없음
 
     delete:
-      summary: 장소 카테고리 캐시를 삭제한다. 삭제 후 다음 조회시 AI가 다시 카테고리를 판정한다.
+      summary:
+        장소 카테고리 캐시를 삭제한다. 삭제 후 다음 조회시 AI가 다시 카테고리를
+        판정한다.
       operationId: deletePlaceCategoryCache
       tags:
         - place-category-cache
@@ -1811,7 +1898,6 @@ paths:
       responses:
         '204':
           $ref: '#/components/responses/NoContent'
-
 
   /place-accessibility-suggestions/search:
     get:
@@ -1962,7 +2048,9 @@ paths:
         description: PlaceAccessibilitySuggestion ID
 
     post:
-      summary: 승인/반려된 접근성 정보 제안을 대기 상태로 되돌린다. 승인된 경우 생성된 PlaceAccessibility도 삭제된다.
+      summary:
+        승인/반려된 접근성 정보 제안을 대기 상태로 되돌린다. 승인된 경우 생성된
+        PlaceAccessibility도 삭제된다.
       operationId: revertPlaceAccessibilitySuggestion
       tags:
         - place-accessibility-suggestion
@@ -4088,7 +4176,8 @@ components:
         iconColor:
           type: string
           nullable: true
-          description: 아이콘 배경색 (hex, e.g. "#FFC01E"). null이면 기본색 사용.
+          description:
+            아이콘 배경색 (hex, e.g. "#FFC01E"). null이면 기본색 사용.
         placeCount:
           type: integer
           format: int32
@@ -4121,7 +4210,8 @@ components:
         iconColor:
           type: string
           nullable: true
-          description: 아이콘 배경색 (hex, e.g. "#FFC01E"). null이면 기본색 사용.
+          description:
+            아이콘 배경색 (hex, e.g. "#FFC01E"). null이면 기본색 사용.
         places:
           type: array
           items:
@@ -4189,7 +4279,8 @@ components:
         iconColor:
           type: string
           nullable: true
-          description: 아이콘 배경색 (hex, e.g. "#FFC01E"). null이면 기본색 사용.
+          description:
+            아이콘 배경색 (hex, e.g. "#FFC01E"). null이면 기본색 사용.
         placeIds:
           type: array
           items:
@@ -4214,7 +4305,8 @@ components:
         iconColor:
           type: string
           nullable: true
-          description: 아이콘 배경색 (hex, e.g. "#FFC01E"). null이면 기본색 사용.
+          description:
+            아이콘 배경색 (hex, e.g. "#FFC01E"). null이면 기본색 사용.
         placeIds:
           type: array
           items:
@@ -4490,7 +4582,6 @@ components:
         - RESOLVED
         - DISMISSED
 
-
     SuggestionStatusDto:
       type: string
       enum:
@@ -4557,7 +4648,8 @@ components:
         placeAccessibilityId:
           type: string
           nullable: true
-          description: 승인 시 생성된 PlaceAccessibility ID. 되돌리기 시 이 ID로 삭제.
+          description:
+            승인 시 생성된 PlaceAccessibility ID. 되돌리기 시 이 ID로 삭제.
         reviewedAtMillis:
           type: integer
           format: int64
@@ -4662,10 +4754,10 @@ components:
           type: string
         experiment:
           type: string
-          description: "실험 이름"
+          description: '실험 이름'
         variant:
           type: string
-          description: "배정된 variant 이름"
+          description: '배정된 variant 이름'
         stratum:
           $ref: '#/components/schemas/ExperimentStratumDto'
         createdAt:
@@ -4694,7 +4786,7 @@ components:
       properties:
         variant:
           type: string
-          description: "변경할 variant 이름"
+          description: '변경할 variant 이름'
       required:
         - variant
 
@@ -4734,7 +4826,7 @@ components:
           type: string
         weight:
           type: integer
-          description: "상대 비중 (e.g. 50:50, 34:33:33)"
+          description: '상대 비중 (e.g. 50:50, 34:33:33)'
       required:
         - name
         - weight
@@ -4744,17 +4836,92 @@ components:
       properties:
         hasMobility:
           type: boolean
-          description: "이동약자 여부"
+          description: '이동약자 여부'
         hasWheelchair:
           type: boolean
-          description: "휠체어 사용 여부"
+          description: '휠체어 사용 여부'
         isCrew:
           type: boolean
-          description: "크루 여부"
+          description: '크루 여부'
       required:
         - hasMobility
         - hasWheelchair
         - isCrew
+
+    AdminPlaceSpecialAccessibilityDto:
+      type: object
+      description: 장소 특수 접근성 정보 (어드민용)
+      properties:
+        id:
+          type: string
+        placeId:
+          type: string
+        placeName:
+          type: string
+        accessibilityType:
+          type: string
+          enum:
+            - BBUCLE_ROAD
+        bbucleRoadType:
+          type: string
+          enum:
+            - BASEBALL_STADIUM
+            - CONCERT_HALL
+        bbucleRoadUrl:
+          type: string
+        thumbnailImageUrl:
+          type: string
+        createdAt:
+          $ref: '#/components/schemas/EpochMillisTimestamp'
+        updatedAt:
+          $ref: '#/components/schemas/EpochMillisTimestamp'
+      required:
+        - id
+        - placeId
+        - placeName
+        - accessibilityType
+        - createdAt
+        - updatedAt
+
+    CreatePlaceSpecialAccessibilityRequestDto:
+      type: object
+      description: 장소 특수 접근성 생성 요청
+      properties:
+        placeId:
+          type: string
+        accessibilityType:
+          type: string
+          enum:
+            - BBUCLE_ROAD
+        bbucleRoadType:
+          type: string
+          enum:
+            - BASEBALL_STADIUM
+            - CONCERT_HALL
+        bbucleRoadUrl:
+          type: string
+        thumbnailImageUrl:
+          type: string
+      required:
+        - placeId
+        - accessibilityType
+        - bbucleRoadType
+        - bbucleRoadUrl
+        - thumbnailImageUrl
+
+    UpdatePlaceSpecialAccessibilityRequestDto:
+      type: object
+      description: 장소 특수 접근성 수정 요청
+      properties:
+        bbucleRoadType:
+          type: string
+          enum:
+            - BASEBALL_STADIUM
+            - CONCERT_HALL
+        bbucleRoadUrl:
+          type: string
+        thumbnailImageUrl:
+          type: string
 
   responses:
     NoContent:

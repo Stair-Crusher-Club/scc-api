@@ -119,7 +119,7 @@ paths:
     post:
       deprecated: true
       summary: 장소를 즐겨찾기에 추가한다.
-      description: "/savePlace를 사용하세요."
+      description: '/savePlace를 사용하세요.'
       security:
         - Identified: []
       requestBody:
@@ -207,7 +207,7 @@ paths:
     post:
       deprecated: true
       summary: 장소를 즐겨찾기에서 삭제한다.
-      description: "/unsavePlace를 사용하세요."
+      description: '/unsavePlace를 사용하세요.'
       security:
         - Identified: []
       requestBody:
@@ -1877,7 +1877,8 @@ components:
         - totalAccessibilityInfoRequestCount
 
     AccessibilityInfoV2Dto:
-      description: 건물 & 점포의 접근성 정보 (v2 - 클로즈 베타). placeUpvoteInfo 추가.
+      description:
+        건물 & 점포의 접근성 정보 (v2 - 클로즈 베타). placeUpvoteInfo 추가.
       allOf:
         - $ref: '#/components/schemas/AccessibilityInfoDto'
         - type: object
@@ -1889,12 +1890,14 @@ components:
               type: array
               items:
                 $ref: '#/components/schemas/PlaceAccessibility'
-              description: 이 장소의 모든 매장 접근성 등록 정보 (접근 레벨 오름차순)
+              description:
+                이 장소의 모든 매장 접근성 등록 정보 (접근 레벨 오름차순)
             buildingAccessibilities:
               type: array
               items:
                 $ref: '#/components/schemas/BuildingAccessibility'
-              description: 이 건물의 모든 건물 접근성 등록 정보 (접근 레벨 오름차순)
+              description:
+                이 건물의 모든 건물 접근성 등록 정보 (접근 레벨 오름차순)
 
     AccessibilityRankDto:
       type: object
@@ -2413,7 +2416,8 @@ components:
         iconColor:
           type: string
           nullable: true
-          description: 아이콘 배경색 (hex, e.g. "#FFC01E"). null이면 기본색 사용.
+          description:
+            아이콘 배경색 (hex, e.g. "#FFC01E"). null이면 기본색 사용.
         placeCount:
           type: integer
           format: int32
@@ -2725,7 +2729,7 @@ components:
           type: string
         weight:
           type: integer
-          description: "상대 비중 (e.g. 50:50, 34:33:33)"
+          description: '상대 비중 (e.g. 50:50, 34:33:33)'
       required:
         - name
         - weight
@@ -3330,6 +3334,8 @@ components:
           type: boolean
           description:
             내가 접근성 정보를 요청했는지 여부. 비인증 유저는 항상 false.
+        specialAccessibility:
+          $ref: '#/components/schemas/PlaceSpecialAccessibilityDto'
 
       required:
         - place
@@ -4047,7 +4053,8 @@ components:
       allOf:
         - $ref: '#/components/schemas/PlaceListItem'
         - type: object
-          properties: {}
+          properties:
+            {}
             # 여기에 추가 필드들을 나중에 추가할 수 있음
             # searchRelevanceScore:
             #   type: number
@@ -4315,7 +4322,9 @@ components:
           description: 현재 유저가 이 장소에 도움이 돼요를 눌렀는지 여부
         totalUpvoteCount:
           type: integer
-          description: 이 장소가 받은 총 도움이 돼요 수 (기존 PLACE_ACCESSIBILITY + BUILDING_ACCESSIBILITY 합산 포함)
+          description:
+            이 장소가 받은 총 도움이 돼요 수 (기존 PLACE_ACCESSIBILITY +
+            BUILDING_ACCESSIBILITY 합산 포함)
       required:
         - isUpvoted
         - totalUpvoteCount
@@ -5202,6 +5211,41 @@ components:
           description: 제거할 PlaceList ID. 미지정 시 MY_PLACES에서 제거.
       required:
         - placeId
+
+    PlaceSpecialAccessibilityDto:
+      type: object
+      description:
+        장소의 특수 접근성 정보. 뿌클로드 등 특수한 방식으로 접근성 정보를
+        제공하는 장소에 대한 메타데이터.
+      properties:
+        accessibilityType:
+          type: string
+          enum:
+            - BBUCLE_ROAD
+        bbucleRoadData:
+          $ref: '#/components/schemas/BbucleRoadAccessibilityDto'
+      required:
+        - accessibilityType
+
+    BbucleRoadAccessibilityDto:
+      type: object
+      description: 뿌클로드 접근성 데이터.
+      properties:
+        bbucleRoadType:
+          type: string
+          enum:
+            - BASEBALL_STADIUM
+            - CONCERT_HALL
+        bbucleRoadUrl:
+          type: string
+          description: 뿌클로드 웹뷰 URL
+        thumbnailImageUrl:
+          type: string
+          description: 카드뷰/리스트뷰 썸네일 이미지 URL
+      required:
+        - bbucleRoadType
+        - bbucleRoadUrl
+        - thumbnailImageUrl
 
   responses:
     ApiFailure:
