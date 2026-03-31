@@ -4848,6 +4848,30 @@ components:
         - hasWheelchair
         - isCrew
 
+    BbucleRoadTypeDto:
+      type: string
+      description: 뿌클로드 유형
+      enum:
+        - BASEBALL_STADIUM
+        - CONCERT_HALL
+
+    AdminBbucleRoadDataDto:
+      type: object
+      description: 뿌클로드 접근성 데이터 (어드민용)
+      properties:
+        bbucleRoadType:
+          $ref: '#/components/schemas/BbucleRoadTypeDto'
+        bbucleRoadUrl:
+          type: string
+          description: 뿌클로드 웹뷰 URL
+        thumbnailImageUrl:
+          type: string
+          description: 카드뷰/리스트뷰 썸네일 이미지 URL
+      required:
+        - bbucleRoadType
+        - bbucleRoadUrl
+        - thumbnailImageUrl
+
     AdminPlaceSpecialAccessibilityDto:
       type: object
       description: 장소 특수 접근성 정보 (어드민용)
@@ -4862,15 +4886,8 @@ components:
           type: string
           enum:
             - BBUCLE_ROAD
-        bbucleRoadType:
-          type: string
-          enum:
-            - BASEBALL_STADIUM
-            - CONCERT_HALL
-        bbucleRoadUrl:
-          type: string
-        thumbnailImageUrl:
-          type: string
+        bbucleRoadData:
+          $ref: '#/components/schemas/AdminBbucleRoadDataDto'
         createdAt:
           $ref: '#/components/schemas/EpochMillisTimestamp'
         updatedAt:
@@ -4893,35 +4910,19 @@ components:
           type: string
           enum:
             - BBUCLE_ROAD
-        bbucleRoadType:
-          type: string
-          enum:
-            - BASEBALL_STADIUM
-            - CONCERT_HALL
-        bbucleRoadUrl:
-          type: string
-        thumbnailImageUrl:
-          type: string
+        bbucleRoadData:
+          $ref: '#/components/schemas/AdminBbucleRoadDataDto'
       required:
         - placeId
         - accessibilityType
-        - bbucleRoadType
-        - bbucleRoadUrl
-        - thumbnailImageUrl
+        - bbucleRoadData
 
     UpdatePlaceSpecialAccessibilityRequestDto:
       type: object
       description: 장소 특수 접근성 수정 요청
       properties:
-        bbucleRoadType:
-          type: string
-          enum:
-            - BASEBALL_STADIUM
-            - CONCERT_HALL
-        bbucleRoadUrl:
-          type: string
-        thumbnailImageUrl:
-          type: string
+        bbucleRoadData:
+          $ref: '#/components/schemas/AdminBbucleRoadDataDto'
 
   responses:
     NoContent:
