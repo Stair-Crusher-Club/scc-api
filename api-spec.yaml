@@ -1950,6 +1950,7 @@ components:
             - INVALID_BIRTH_YEAR # 14
             - B2B_INFO_REQUIRED # 15
             - PHONE_NUMBER_VERIFICATION_FAILED # 20
+            - CHALLENGE_FULL # 16
 
           enum:
             - -999999
@@ -1963,6 +1964,7 @@ components:
             - 13
             - 14
             - 15
+            - 16
             - 20 # Phone verification
 
     AuthTokensDto:
