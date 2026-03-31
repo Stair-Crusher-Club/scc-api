@@ -4848,19 +4848,19 @@ components:
         - hasWheelchair
         - isCrew
 
-    BbucleRoadTypeDto:
+    PlaceSpecialAccessibilityBbucleRoadTypeDto:
       type: string
       description: 뿌클로드 유형
       enum:
         - BASEBALL_STADIUM
         - CONCERT_HALL
 
-    AdminBbucleRoadDataDto:
+    AdminPlaceSpecialAccessibilityBbucleRoadDataDto:
       type: object
       description: 뿌클로드 접근성 데이터 (어드민용)
       properties:
         bbucleRoadType:
-          $ref: '#/components/schemas/BbucleRoadTypeDto'
+          $ref: '#/components/schemas/PlaceSpecialAccessibilityBbucleRoadTypeDto'
         bbucleRoadUrl:
           type: string
           description: 뿌클로드 웹뷰 URL
@@ -4887,7 +4887,7 @@ components:
           enum:
             - BBUCLE_ROAD
         bbucleRoadData:
-          $ref: '#/components/schemas/AdminBbucleRoadDataDto'
+          $ref: '#/components/schemas/AdminPlaceSpecialAccessibilityBbucleRoadDataDto'
         createdAt:
           $ref: '#/components/schemas/EpochMillisTimestamp'
         updatedAt:
@@ -4911,7 +4911,7 @@ components:
           enum:
             - BBUCLE_ROAD
         bbucleRoadData:
-          $ref: '#/components/schemas/AdminBbucleRoadDataDto'
+          $ref: '#/components/schemas/AdminPlaceSpecialAccessibilityBbucleRoadDataDto'
       required:
         - placeId
         - accessibilityType
@@ -4922,7 +4922,7 @@ components:
       description: 장소 특수 접근성 수정 요청
       properties:
         bbucleRoadData:
-          $ref: '#/components/schemas/AdminBbucleRoadDataDto'
+          $ref: '#/components/schemas/AdminPlaceSpecialAccessibilityBbucleRoadDataDto'
 
   responses:
     NoContent:
