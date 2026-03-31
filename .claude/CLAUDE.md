@@ -60,6 +60,14 @@ The `X-SCC-REQUEST-ID` header:
 
 ## Schema Reusability
 
+### 관련 필드는 DTO로 묶기
+flat하게 나열하지 말고, 관련 필드를 별도 DTO로 그룹핑한다.
+- 나쁜 예: `bbucleRoadType`, `bbucleRoadUrl`, `thumbnailImageUrl`을 각각 flat 필드로
+- 좋은 예: `bbucleRoadData: AdminBbucleRoadDataDto`로 묶기
+
+### Enum 중복 제거
+동일한 enum이 3곳 이상 반복되면 별도 스키마(`BbucleRoadTypeDto` 등)로 분리하고 `$ref`로 참조한다.
+
 ### Common Schemas
 
 Reuse common schemas across different endpoints to maintain consistency:
