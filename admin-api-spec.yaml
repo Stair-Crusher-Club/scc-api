@@ -2514,6 +2514,9 @@ components:
           description:
             When enabled, past contributions within challenge period are applied
             on join
+        maxParticipants:
+          type: integer
+          format: int32
       required:
         - id
         - name
@@ -2615,6 +2618,9 @@ components:
           description:
             When enabled, past contributions within challenge period are applied
             on join
+        maxParticipants:
+          type: integer
+          format: int32
       required:
         - name
         - isPublic
@@ -2937,6 +2943,9 @@ components:
           description:
             When enabled, past contributions within challenge period are applied
             on join
+        maxParticipants:
+          type: integer
+          format: int32
       required:
         - name
         - description
