@@ -3716,6 +3716,7 @@ components:
         - BBUCLE_ROAD_DESCRIPTION
         - RECOMMENDED_CONTENT
         - PLACE_ACCESSIBILITY_SUGGESTION
+        - ACCESSIBILITY
 
     AdminCreateImageUploadUrlsResponseDTO:
       type: object
