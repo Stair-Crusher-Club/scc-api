@@ -5182,6 +5182,9 @@ components:
         imageUrl:
           type: string
           description: 팝업 이미지 URL (제목 텍스트도 이미지에 포함)
+        clickUrl:
+          type: string
+          description: 클릭 시 이동할 URL (딥링크). 없으면 클릭 시 dismiss만.
         displayOrder:
           type: integer
           format: int32

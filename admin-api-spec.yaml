@@ -3627,6 +3627,9 @@ components:
           type: string
         imageUrl:
           type: string
+        clickUrl:
+          type: string
+          description: 클릭 시 이동할 URL (딥링크)
         displayOrder:
           type: integer
           format: int32
@@ -3644,6 +3647,9 @@ components:
       properties:
         imageUrl:
           type: string
+        clickUrl:
+          type: string
+          description: 클릭 시 이동할 URL (딥링크)
         displayOrder:
           type: integer
           format: int32
