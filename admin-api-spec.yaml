@@ -1203,6 +1203,52 @@ paths:
         '204':
           $ref: '#/components/responses/NoContent'
 
+  /home-popups:
+    get:
+      operationId: adminListHomePopups
+      summary: 홈 팝업 목록을 조회한다.
+      tags:
+        - home-popup
+      responses:
+        '200':
+          description: 팝업 목록 조회 성공
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminListHomePopupsResponseDTO'
+
+    post:
+      operationId: adminCreateHomePopup
+      summary: 홈 팝업을 생성한다.
+      tags:
+        - home-popup
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdminCreateHomePopupRequestDTO'
+      responses:
+        '204':
+          $ref: '#/components/responses/NoContent'
+
+  /home-popups/{id}:
+    parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+
+    delete:
+      operationId: adminDeleteHomePopup
+      summary: 홈 팝업을 삭제한다.
+      tags:
+        - home-popup
+      responses:
+        '204':
+          $ref: '#/components/responses/NoContent'
+
   /home-announcements:
     get:
       operationId: adminListHomeAnnouncements
@@ -3564,6 +3610,51 @@ components:
         - MAIN
         - STRIP
 
+    AdminListHomePopupsResponseDTO:
+      type: object
+      properties:
+        popups:
+          type: array
+          items:
+            $ref: '#/components/schemas/AdminHomePopupDTO'
+      required:
+        - popups
+
+    AdminHomePopupDTO:
+      type: object
+      properties:
+        id:
+          type: string
+        imageUrl:
+          type: string
+        displayOrder:
+          type: integer
+          format: int32
+        startAt:
+          $ref: '#/components/schemas/EpochMillisTimestamp'
+        endAt:
+          $ref: '#/components/schemas/EpochMillisTimestamp'
+      required:
+        - id
+        - imageUrl
+        - displayOrder
+
+    AdminCreateHomePopupRequestDTO:
+      type: object
+      properties:
+        imageUrl:
+          type: string
+        displayOrder:
+          type: integer
+          format: int32
+        startAt:
+          $ref: '#/components/schemas/EpochMillisTimestamp'
+        endAt:
+          $ref: '#/components/schemas/EpochMillisTimestamp'
+      required:
+        - imageUrl
+        - displayOrder
+
     AdminListHomeAnnouncementsResponseDTO:
       type: object
       properties:
@@ -3717,6 +3808,7 @@ components:
         - RECOMMENDED_CONTENT
         - PLACE_ACCESSIBILITY_SUGGESTION
         - ACCESSIBILITY
+        - HOME_POPUP
 
     AdminCreateImageUploadUrlsResponseDTO:
       type: object

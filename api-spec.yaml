@@ -5144,11 +5144,17 @@ components:
           description: 추천 컨텐츠
           items:
             $ref: '#/components/schemas/HomeRecommendedContentDto'
+        homePopups:
+          type: array
+          description: 홈 화면 팝업 (활성 상태, displayOrder 오름차순)
+          items:
+            $ref: '#/components/schemas/HomePopupDto'
       required:
         - mainBanners
         - stripBanners
         - announcements
         - recommendedContents
+        - homePopups
 
     HomeAnnouncementDto:
       type: object
@@ -5166,6 +5172,24 @@ components:
         - id
         - text
         - linkUrl
+
+    HomePopupDto:
+      type: object
+      description: 홈 화면 팝업
+      properties:
+        id:
+          type: string
+        imageUrl:
+          type: string
+          description: 팝업 이미지 URL (제목 텍스트도 이미지에 포함)
+        displayOrder:
+          type: integer
+          format: int32
+          description: 노출 순서 (작을수록 높은 우선순위)
+      required:
+        - id
+        - imageUrl
+        - displayOrder
 
     HomeRecommendedContentDto:
       type: object
