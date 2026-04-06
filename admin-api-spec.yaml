@@ -4645,12 +4645,100 @@ components:
           $ref: '#/components/schemas/AdminPlaceAccessibilityDTO'
         buildingAccessibility:
           $ref: '#/components/schemas/AdminBuildingAccessibilityDTO'
+        inaccurateCategories:
+          type: array
+          items:
+            $ref: '#/components/schemas/InaccurateInfoCategoryDTO'
+          description: 구조화 신고 - 틀린 정보 항목
+        closedSubType:
+          $ref: '#/components/schemas/ClosedSubTypeDTO'
+        correction:
+          $ref: '#/components/schemas/AccessibilityReportCorrectionDTO'
       required:
         - id
         - targetId
         - targetType
         - reason
         - createdAt
+
+    InaccurateInfoCategoryDTO:
+      type: string
+      description: 틀린 정보 신고 시 구체적으로 어떤 항목이 틀렸는지
+      enum:
+        - ENTRANCE
+        - FLOOR
+        - DOOR_TYPE
+        - ELEVATOR
+        - ACCESS_LEVEL
+        - PHOTO
+        - OTHER
+
+    ClosedSubTypeDTO:
+      type: string
+      description: 폐업/이전 신고 시 세부 유형
+      enum:
+        - PERMANENTLY_CLOSED
+        - REPLACED_BY_OTHER
+        - OTHER
+
+    AccessibilityReportCorrectionDTO:
+      type: object
+      description: 구조화된 신고 교정 데이터
+      properties:
+        placeAccessibilityCorrection:
+          $ref: '#/components/schemas/AdminPlaceAccessibilityCorrectionDTO'
+        buildingAccessibilityCorrection:
+          $ref: '#/components/schemas/AdminBuildingAccessibilityCorrectionDTO'
+        noteText:
+          type: string
+          description: 유저 부연 설명
+        photoUrls:
+          type: array
+          items:
+            type: string
+          description: 유저 첨부 사진
+
+    AdminPlaceAccessibilityCorrectionDTO:
+      type: object
+      description: 유저가 제안한 장소 접근성 교정값
+      properties:
+        stairInfo:
+          $ref: '#/components/schemas/AdminStairInfoDTO'
+        stairHeightLevel:
+          $ref: '#/components/schemas/AdminStairHeightLevel'
+        hasSlope:
+          type: boolean
+        floors:
+          type: array
+          items:
+            type: integer
+        entranceDoorTypes:
+          type: array
+          items:
+            $ref: '#/components/schemas/AdminEntranceDoorType'
+
+    AdminBuildingAccessibilityCorrectionDTO:
+      type: object
+      description: 유저가 제안한 건물 접근성 교정값
+      properties:
+        entranceStairInfo:
+          $ref: '#/components/schemas/AdminStairInfoDTO'
+        entranceStairHeightLevel:
+          $ref: '#/components/schemas/AdminStairHeightLevel'
+        hasSlope:
+          type: boolean
+        hasElevator:
+          type: boolean
+        entranceDoorTypes:
+          type: array
+          items:
+            $ref: '#/components/schemas/AdminEntranceDoorType'
+        elevatorStairInfo:
+          $ref: '#/components/schemas/AdminStairInfoDTO'
+        elevatorStairHeightLevel:
+          $ref: '#/components/schemas/AdminStairHeightLevel'
+        elevatorHasSlope:
+          type: boolean
 
     AdminResolveAccessibilityReportRequestDTO:
       type: object
