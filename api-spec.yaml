@@ -2710,6 +2710,9 @@ components:
         isAlbumUploadAllowed:
           type: boolean
           description: 앨범에서 이미지 업로드가 허용되는지 여부
+        isCrew:
+          type: boolean
+          description: 크루 여부 (한 번이라도 크루였으면 true)
         experiments:
           type: array
           items:
