@@ -4479,6 +4479,16 @@ components:
             $ref: '#/components/schemas/FloorMovingMethodTypeDto'
         elevatorAccessibility:
           $ref: '#/components/schemas/ElevatorAccessibilityDto'
+        entranceImageUrls:
+          type: array
+          items:
+            type: string
+          description: 교정된 입구 사진 URL 목록
+        elevatorImageUrls:
+          type: array
+          items:
+            type: string
+          description: 교정된 엘리베이터 사진 URL 목록
 
     BuildingAccessibilityCorrectionDto:
       type: object
