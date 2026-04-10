@@ -209,6 +209,27 @@ paths:
               schema:
                 $ref: '#/components/schemas/GetClubQuestsByGroupIdResult'
 
+  /clubQuests/byGroup/{groupId}/name:
+    put:
+      summary: 퀘스트 그룹의 이름(퀘스트 이름 prefix)을 변경한다.
+      operationId: renameClubQuestGroup
+      parameters:
+        - in: path
+          name: groupId
+          schema:
+            type: string
+          required: true
+          description: 퀘스트 그룹 식별자
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RenameClubQuestGroupRequestDto'
+      responses:
+        '204':
+          description: 이름 변경 성공
+
   /clubQuests/{clubQuestId}:
     get:
       summary: 퀘스트를 조회한다.
@@ -2399,6 +2420,15 @@ components:
             $ref: '#/components/schemas/ClubQuestDTO'
       required:
         - items
+
+    RenameClubQuestGroupRequestDto:
+      description: 퀘스트 그룹 이름 변경 요청
+      properties:
+        questNamePrefix:
+          type: string
+          description: 새 퀘스트 이름 prefix
+      required:
+        - questNamePrefix
 
     MoveClubQuestTargetPlaceRequest:
       description: 장소 이동 요청
