@@ -4482,6 +4482,8 @@ components:
             $ref: '#/components/schemas/FloorMovingMethodTypeDto'
         elevatorAccessibility:
           $ref: '#/components/schemas/ElevatorAccessibilityDto'
+        doorDirectionType:
+          $ref: '#/components/schemas/PlaceDoorDirectionTypeDto'
         entranceImageUrls:
           type: array
           items:
