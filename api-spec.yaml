@@ -1361,11 +1361,19 @@ paths:
                 id:
                   type: string
                   description: 신고하고자 하는 정보의 id
+                placeAccessibilityId:
+                  type: string
+                  description: 신고 대상 장소 접근성 정보 ID
+                buildingAccessibilityId:
+                  type: string
+                  description: 신고 대상 건물 접근성 정보 ID
                 reason:
                   $ref: '#/components/schemas/AccessibilityReportReason'
                 detail:
                   type: string
-                  description: 신고 상세 내용
+                  description: 신고 상세 내용 (legacy)
+                correction:
+                  $ref: '#/components/schemas/AccessibilityReportCorrectionDto'
               required:
                 - placeId
                 - reason
@@ -2683,6 +2691,9 @@ components:
         isAlbumUploadAllowed:
           type: boolean
           description: 앨범에서 이미지 업로드가 허용되는지 여부
+        hasBeenCrew:
+          type: boolean
+          description: 한 번이라도 크루였으면 true
         experiments:
           type: array
           items:
@@ -4407,6 +4418,116 @@ components:
         - INACCURATE_INFO
         - CLOSED
         - BAD_USER
+
+    InaccurateInfoCategoryDto:
+      type: string
+      description: 틀린 정보 신고 시 구체적으로 어떤 항목이 틀렸는지
+      enum:
+        - ENTRANCE # 입구 정보 (계단 + 경사로)
+        - FLOOR # 층 정보
+        - DOOR_TYPE # 문 유형
+        - ELEVATOR # 엘리베이터 정보
+        - ACCESS_LEVEL # 접근레벨
+        - PHOTO # 사진 오류
+        - OTHER # 기타
+
+    ClosedSubTypeDto:
+      type: string
+      description: 폐업/이전 신고 시 세부 유형
+      enum:
+        - PERMANENTLY_CLOSED # 폐업했어요
+        - REPLACED_BY_OTHER # 다른 가게로 바뀌었어요
+        - OTHER # 기타 (이전/재오픈 등)
+
+    PlaceAccessibilityCorrectionDto:
+      type: object
+      description: 장소 접근성 교정값. 유저가 수정 제안하는 값만 포함.
+      properties:
+        stairInfo:
+          $ref: '#/components/schemas/StairInfo'
+        stairHeightLevel:
+          $ref: '#/components/schemas/StairHeightLevel'
+        hasSlope:
+          type: boolean
+        floors:
+          type: array
+          items:
+            type: integer
+        entranceDoorTypes:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntranceDoorType'
+        floorMovingMethodTypes:
+          type: array
+          items:
+            $ref: '#/components/schemas/FloorMovingMethodTypeDto'
+        elevatorAccessibility:
+          $ref: '#/components/schemas/ElevatorAccessibilityDto'
+        doorDirectionType:
+          $ref: '#/components/schemas/PlaceDoorDirectionTypeDto'
+        entranceImageUrls:
+          type: array
+          items:
+            type: string
+          description: 교정된 입구 사진 URL 목록
+        elevatorImageUrls:
+          type: array
+          items:
+            type: string
+          description: 교정된 엘리베이터 사진 URL 목록
+
+    BuildingAccessibilityCorrectionDto:
+      type: object
+      description: 건물 접근성 교정값. 유저가 수정 제안하는 값만 포함.
+      properties:
+        entranceStairInfo:
+          $ref: '#/components/schemas/StairInfo'
+        entranceStairHeightLevel:
+          $ref: '#/components/schemas/StairHeightLevel'
+        hasSlope:
+          type: boolean
+        hasElevator:
+          type: boolean
+        entranceDoorTypes:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntranceDoorType'
+        elevatorAccessibility:
+          $ref: '#/components/schemas/ElevatorAccessibilityDto'
+        entranceImageUrls:
+          type: array
+          items:
+            type: string
+          description: 교정된 건물 입구 사진 URL 목록
+        elevatorImageUrls:
+          type: array
+          items:
+            type: string
+          description: 교정된 엘리베이터 사진 URL 목록
+
+    AccessibilityReportCorrectionDto:
+      type: object
+      description: 구조화된 신고 교정 데이터
+      properties:
+        inaccurateCategories:
+          type: array
+          items:
+            $ref: '#/components/schemas/InaccurateInfoCategoryDto'
+          description: 틀린 정보 항목 (복수 선택 가능)
+        closedSubType:
+          $ref: '#/components/schemas/ClosedSubTypeDto'
+        placeAccessibilityCorrection:
+          $ref: '#/components/schemas/PlaceAccessibilityCorrectionDto'
+        buildingAccessibilityCorrection:
+          $ref: '#/components/schemas/BuildingAccessibilityCorrectionDto'
+        noteText:
+          type: string
+          description: 부연 설명
+        photoUrls:
+          type: array
+          items:
+            type: string
+          description: 첨부 사진 URL 목록
 
     RecommendedMobilityTypeDto:
       type: string
