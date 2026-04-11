@@ -1375,31 +1375,6 @@ paths:
         '204':
           $ref: '#/components/responses/NoContent'
 
-  /reportAccessibility/prefill:
-    post:
-      summary: 신고 교정 폼에 미리 채울 현재 접근성 데이터를 반환한다.
-      security:
-        - Identified: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                placeId:
-                  type: string
-                  description: 대상 장소 ID
-              required:
-                - placeId
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ReportPrefillResponseDto'
-
   /savePlace:
     post:
       summary: 장소를 내 저장 리스트에 추가한다.
@@ -4541,28 +4516,6 @@ components:
           items:
             type: string
           description: 첨부 사진 URL 목록
-
-    ReportPrefillResponseDto:
-      type: object
-      description: 신고 교정 폼 prefill 데이터
-      properties:
-        placeAccessibility:
-          $ref: '#/components/schemas/PlaceAccessibilityCorrectionDto'
-        buildingAccessibility:
-          $ref: '#/components/schemas/BuildingAccessibilityCorrectionDto'
-        isStandaloneBuilding:
-          type: boolean
-          description: 단독건물 여부 (true이면 건물 접근성 폼 불필요)
-        entranceImageUrls:
-          type: array
-          items:
-            type: string
-          description: 현재 입구 사진 URL 목록
-        elevatorImageUrls:
-          type: array
-          items:
-            type: string
-          description: 현재 엘리베이터 사진 URL 목록
 
     RecommendedMobilityTypeDto:
       type: string
