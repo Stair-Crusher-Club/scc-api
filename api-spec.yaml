@@ -4505,21 +4505,172 @@ components:
             type: string
           description: 교정된 엘리베이터 사진 URL 목록
 
+    EntranceCorrectionDto:
+      type: object
+      description: 입구 정보 교정 (계단, 경사로, 문 방향, 출입문, 사진)
+      properties:
+        # PA 필드
+        stairInfo:
+          $ref: '#/components/schemas/StairInfo'
+        stairHeightLevel:
+          description: stairInfo가 ONE일 때만
+          allOf:
+            - $ref: '#/components/schemas/StairHeightLevel'
+        hasSlope:
+          type: boolean
+        entranceDoorTypes:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntranceDoorType'
+        doorDirectionType:
+          $ref: '#/components/schemas/PlaceDoorDirectionTypeDto'
+        isStandaloneBuilding:
+          type: boolean
+          description: 단독건물 여부 (클라이언트에서 직접 전달)
+        entranceImageUrls:
+          type: array
+          items:
+            type: string
+          description: PA 입구 사진 URL 목록
+        # BA 필드
+        baEntranceStairInfo:
+          $ref: '#/components/schemas/StairInfo'
+        baEntranceStairHeightLevel:
+          $ref: '#/components/schemas/StairHeightLevel'
+        baHasSlope:
+          type: boolean
+        baEntranceDoorTypes:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntranceDoorType'
+        baEntranceImageUrls:
+          type: array
+          items:
+            type: string
+          description: BA 입구 사진 URL 목록
+
+    FloorCorrectionDto:
+      type: object
+      description: 층 정보 교정
+      properties:
+        floors:
+          type: array
+          items:
+            type: integer
+        isStandaloneBuilding:
+          type: boolean
+          description: 단독건물 여부
+        floorMovingMethodTypes:
+          type: array
+          items:
+            $ref: '#/components/schemas/FloorMovingMethodTypeDto'
+          description: 여러층일 때 층간이동 방법
+
+    ElevatorCorrectionDto:
+      type: object
+      description: 엘리베이터 정보 교정
+      properties:
+        # PA 필드
+        elevatorAccessibility:
+          description: null이면 엘리베이터 없음
+          allOf:
+            - $ref: '#/components/schemas/ElevatorAccessibilityDto'
+        elevatorImageUrls:
+          type: array
+          items:
+            type: string
+          description: PA 엘리베이터 사진
+        # BA 필드
+        hasElevator:
+          type: boolean
+        baElevatorAccessibility:
+          description: hasElevator=true일 때
+          allOf:
+            - $ref: '#/components/schemas/ElevatorAccessibilityDto'
+        baElevatorImageUrls:
+          type: array
+          items:
+            type: string
+          description: BA 엘리베이터 사진
+
+    DoorTypeCorrectionDto:
+      type: object
+      description: 출입문 종류 교정
+      properties:
+        entranceDoorTypes:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntranceDoorType'
+
+    AccessLevelCorrectionDto:
+      type: object
+      description: 접근 레벨 교정
+      properties:
+        stairInfo:
+          $ref: '#/components/schemas/StairInfo'
+        stairHeightLevel:
+          $ref: '#/components/schemas/StairHeightLevel'
+
+    PhotoCorrectionDto:
+      type: object
+      description: 사진 교정
+      properties:
+        entranceImageUrls:
+          type: array
+          items:
+            type: string
+        elevatorImageUrls:
+          type: array
+          items:
+            type: string
+        baEntranceImageUrls:
+          type: array
+          items:
+            type: string
+        baElevatorImageUrls:
+          type: array
+          items:
+            type: string
+
     AccessibilityReportCorrectionDto:
       type: object
       description: 구조화된 신고 교정 데이터
       properties:
+        # NEW: 카테고리 타입 (단일 값)
+        type:
+          description: 신고 카테고리 (단일 값). 아래 카테고리별 DTO 중 해당하는 것만 non-null.
+          allOf:
+            - $ref: '#/components/schemas/InaccurateInfoCategoryDto'
+        # NEW: 카테고리별 전용 DTO
+        entrance:
+          $ref: '#/components/schemas/EntranceCorrectionDto'
+        floor:
+          $ref: '#/components/schemas/FloorCorrectionDto'
+        elevator:
+          $ref: '#/components/schemas/ElevatorCorrectionDto'
+        doorType:
+          $ref: '#/components/schemas/DoorTypeCorrectionDto'
+        accessLevel:
+          $ref: '#/components/schemas/AccessLevelCorrectionDto'
+        photo:
+          $ref: '#/components/schemas/PhotoCorrectionDto'
+        # EXISTING (deprecated)
         inaccurateCategories:
           type: array
           items:
             $ref: '#/components/schemas/InaccurateInfoCategoryDto'
           description: 틀린 정보 항목 (복수 선택 가능)
+          deprecated: true
         closedSubType:
           $ref: '#/components/schemas/ClosedSubTypeDto'
         placeAccessibilityCorrection:
-          $ref: '#/components/schemas/PlaceAccessibilityCorrectionDto'
+          deprecated: true
+          allOf:
+            - $ref: '#/components/schemas/PlaceAccessibilityCorrectionDto'
         buildingAccessibilityCorrection:
-          $ref: '#/components/schemas/BuildingAccessibilityCorrectionDto'
+          deprecated: true
+          allOf:
+            - $ref: '#/components/schemas/BuildingAccessibilityCorrectionDto'
         noteText:
           type: string
           description: 부연 설명
@@ -4528,6 +4679,7 @@ components:
           items:
             type: string
           description: 첨부 사진 URL 목록
+          deprecated: true
 
     RecommendedMobilityTypeDto:
       type: string
