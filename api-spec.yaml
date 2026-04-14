@@ -4443,7 +4443,7 @@ components:
     PlaceEntranceCorrectionDto:
       type: object
       description:
-        장소(매장) 입구 정보 교정 (계단, 경사로, 문 방향, 출입문, 사진)
+        장소(매장) 입구 정보 교정 (계단, 경사로, 문 방향, 사진). 출입문 유형은 DOOR_TYPE 카테고리에서 별도 교정.
       properties:
         stairInfo:
           $ref: '#/components/schemas/StairInfo'
@@ -4453,10 +4453,6 @@ components:
             - $ref: '#/components/schemas/StairHeightLevel'
         hasSlope:
           type: boolean
-        entranceDoorTypes:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntranceDoorType'
         doorDirectionType:
           $ref: '#/components/schemas/PlaceDoorDirectionTypeDto'
         isStandaloneBuilding:
@@ -4470,7 +4466,7 @@ components:
 
     BuildingEntranceCorrectionDto:
       type: object
-      description: 건물 입구 정보 교정 (계단, 경사로, 출입문, 사진)
+      description: 건물 입구 정보 교정 (계단, 경사로, 사진). 출입문 유형은 DOOR_TYPE 카테고리에서 별도 교정.
       properties:
         entranceStairInfo:
           $ref: '#/components/schemas/StairInfo'
@@ -4478,10 +4474,6 @@ components:
           $ref: '#/components/schemas/StairHeightLevel'
         hasSlope:
           type: boolean
-        entranceDoorTypes:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntranceDoorType'
         entranceImageUrls:
           type: array
           items:
@@ -4504,8 +4496,8 @@ components:
           items:
             $ref: '#/components/schemas/FloorMovingMethodTypeDto'
           description: 여러층일 때 층간이동 방법
-        buildingElevatorAccessibility:
-          description: floorMovingMethodTypes에 건물 내부 엘리베이터가 포함될 때 엘리베이터 입구 정보
+        elevatorAccessibility:
+          description: 층간이동 방법에 엘리베이터가 포함될 때 엘리베이터 접근성 정보
           allOf:
             - $ref: '#/components/schemas/ElevatorAccessibilityDto'
 
