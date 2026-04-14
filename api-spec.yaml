@@ -1378,8 +1378,12 @@ paths:
                 - placeId
                 - reason
       responses:
-        '204':
-          $ref: '#/components/responses/NoContent'
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReportAccessibilityResponseDto'
 
   /savePlace:
     post:
@@ -5465,6 +5469,15 @@ components:
         - bbucleRoadType
         - bbucleRoadUrl
         - thumbnailImageUrl
+
+    ReportAccessibilityResponseDto:
+      type: object
+      properties:
+        isAutoResolved:
+          type: boolean
+          description: 신고가 즉시 자동 반영되었는지 여부
+      required:
+        - isAutoResolved
 
   responses:
     ApiFailure:
