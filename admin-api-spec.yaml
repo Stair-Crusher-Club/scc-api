@@ -4695,7 +4695,7 @@ components:
       type: string
       description: 틀린 정보 신고 시 구체적으로 어떤 항목이 틀렸는지
       enum:
-        - ENTRANCE
+        - PLACE_ENTRANCE
         - FLOOR
         - DOOR_TYPE
         - ELEVATOR
