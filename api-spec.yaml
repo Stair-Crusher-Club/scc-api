@@ -4470,7 +4470,7 @@ components:
 
     BuildingEntranceCorrectionDto:
       type: object
-      description: 건물 입구 정보 교정 (계단, 경사로, 사진). 출입문 유형은 DOOR_TYPE 카테고리에서 별도 교정.
+      description: 건물 입구 정보 교정 (계단, 경사로, 문 종류, 사진).
       properties:
         entranceStairInfo:
           $ref: '#/components/schemas/StairInfo'
@@ -4478,6 +4478,10 @@ components:
           $ref: '#/components/schemas/StairHeightLevel'
         hasSlope:
           type: boolean
+        entranceDoorTypes:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntranceDoorType'
         entranceImageUrls:
           type: array
           items:
