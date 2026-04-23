@@ -2401,6 +2401,19 @@ components:
         isNotAccessible:
           type: boolean
           description: 장소에 접근 가능한지 여부.
+        floor:
+          type: string
+          description: >-
+            점포가 위치한 층 표시용 문자열 원문. PlaceBusinessInfo.additionalInfo.floor 를 그대로 전달.
+            크롤링 미수집 또는 외부 소스에도 층 정보가 없으면 null.
+          example: "지하1층"
+        floorNum:
+          type: integer
+          description: >-
+            층 정규화 정수. 지상은 양수, 지하는 음수 (예: "B1층" → -1, "3층" → 3).
+            옥상/루프탑 등 정수로 환원 불가한 값 또는 크롤링 미수집 시 null.
+            UI에서는 오름차순 정렬 키로 사용하고, null 은 유효 층 그룹 다음에 배치한다.
+          example: -1
       required:
         - name
         - location
