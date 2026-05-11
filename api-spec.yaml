@@ -5579,6 +5579,7 @@ components:
       required:
         - missionType
         - isCompleted
+        - completedAt
 
     TutorialMissionTypeDto:
       type: string
