@@ -1838,6 +1838,9 @@ paths:
       summary: 윌리의 외출 NUX 튜토리얼의 히든 미션 완료를 처리한다.
       description: |
         히든 미션(tally form 제출) 완료 후 호출하여 진행 상태를 업데이트한다.
+        서버는 tally API를 통해 해당 사용자의 form 제출 기록을 검증하며,
+        제출 기록이 없으면 400을 반환한다. 사용자 자가 confirm 방식이 아닌
+        서버 검증 방식으로 동작한다.
       security:
         - Identified: []
       operationId: completeUserTutorialHiddenMission
@@ -1848,6 +1851,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/UserTutorialProgressDto'
+        '400':
+          $ref: '#/components/responses/ApiFailure'
 
   /registerUserInterestedRegionsAndThemes:
     post:
@@ -5554,8 +5559,11 @@ components:
             $ref: '#/components/schemas/UserTutorialMissionDto'
         hiddenMissionTallyFormUrl:
           type: string
-          description:
-            히든 미션용 tally form URL (서버 application.yaml에서 주입)
+          description: |
+            히든 미션용 tally form URL. 서버는 사용자 식별을 위해 hidden field를
+            query param으로 주입한 URL을 반환한다 (예: `userId=...`). 앱은 받은
+            URL을 그대로 webview 또는 외부 브라우저로 연다. 익명 사용자에게는
+            식별 query param이 포함되지 않은 base URL이 반환될 수 있다.
       required:
         - missions
         - hiddenMissionTallyFormUrl
@@ -5566,33 +5574,29 @@ components:
       properties:
         missionType:
           $ref: '#/components/schemas/TutorialMissionTypeDto'
-        isCompleted:
-          type: boolean
-          description: 미션 완료 여부
         completedAt:
           description:
-            미션 완료 시각. 미완료 미션은 null. isCompleted가 true이면 항상
-            non-null.
+            미션 완료 시각. 미완료 미션은 null. 클라이언트는 completedAt != null
+            여부로 미션 완료 상태를 판단한다.
           nullable: true
           allOf:
             - $ref: '#/components/schemas/EpochMillisTimestamp'
       required:
         - missionType
-        - isCompleted
         - completedAt
 
     TutorialMissionTypeDto:
       type: string
       description: |
         윌리의 외출 NUX 튜토리얼 미션 종류.
-        COLLECT_HIDDEN_ITEM이 히든 미션이며, 나머지 4개가 메인 미션이다.
+        HIDDEN_APP_SURVEY가 히든 미션(앱 사용 후기 설문)이며, 나머지 4개가 메인 미션이다.
         UserTutorialProgressDto.missions 배열은 이 enum 선언 순서대로 5개를 모두 포함한다.
       enum:
         - REGISTER_INTERESTED_REGIONS_AND_THEMES
         - SAVE_PLACE_LIST
         - UPVOTE_ACCESSIBILITY
         - WRITE_PLACE_REVIEW
-        - COLLECT_HIDDEN_ITEM
+        - HIDDEN_APP_SURVEY
 
     RegisterUserInterestedRegionsAndThemesRequestDto:
       type: object
@@ -5605,12 +5609,27 @@ components:
             type: string
         interestedThemes:
           type: array
-          description: 관심 테마 목록. PlaceCategoryDto enum을 재사용한다.
+          description: 관심 테마 목록.
           items:
-            $ref: '#/components/schemas/PlaceCategoryDto'
+            $ref: '#/components/schemas/UserInterestedThemeDto'
       required:
         - interestedRegionIds
         - interestedThemes
+
+    UserInterestedThemeDto:
+      type: string
+      description: |
+        사용자의 관심 테마. 윌리의 외출 NUX 튜토리얼 첫 번째 메인 미션에서 선택한다.
+        Figma 1427-8980 화면 기준 8개 항목.
+      enum:
+        - WHEELCHAIR_REVIEW
+        - MEDIA_HOTSPOT
+        - FOOD_CAFE_TOUR
+        - EMOTIONAL_VIEW
+        - SPORTS
+        - CULTURE
+        - TRAVEL
+        - NATURE
 
   responses:
     ApiFailure:
