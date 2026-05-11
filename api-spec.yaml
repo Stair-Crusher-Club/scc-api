@@ -5570,7 +5570,9 @@ components:
           type: boolean
           description: 미션 완료 여부
         completedAt:
-          description: 미션 완료 시각. 미완료 미션은 null.
+          description:
+            미션 완료 시각. 미완료 미션은 null. isCompleted가 true이면 항상
+            non-null.
           nullable: true
           allOf:
             - $ref: '#/components/schemas/EpochMillisTimestamp'
@@ -5580,7 +5582,10 @@ components:
 
     TutorialMissionTypeDto:
       type: string
-      description: 윌리의 외출 NUX 튜토리얼 미션 종류.
+      description: |
+        윌리의 외출 NUX 튜토리얼 미션 종류.
+        COLLECT_HIDDEN_ITEM이 히든 미션이며, 나머지 4개가 메인 미션이다.
+        UserTutorialProgressDto.missions 배열은 이 enum 선언 순서대로 5개를 모두 포함한다.
       enum:
         - REGISTER_INTERESTED_REGIONS_AND_THEMES
         - SAVE_PLACE_LIST
