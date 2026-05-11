@@ -5569,9 +5569,11 @@ components:
         isCompleted:
           type: boolean
           description: 미션 완료 여부
-        # 미션 완료 시각. 미완료 미션은 null.
         completedAt:
-          $ref: '#/components/schemas/EpochMillisTimestamp'
+          description: 미션 완료 시각. 미완료 미션은 null.
+          nullable: true
+          allOf:
+            - $ref: '#/components/schemas/EpochMillisTimestamp'
       required:
         - missionType
         - isCompleted
