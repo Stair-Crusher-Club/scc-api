@@ -1818,6 +1818,23 @@ paths:
         '204':
           $ref: '#/components/responses/NoContent'
 
+  /listPublicPlaceLists:
+    post:
+      summary: 공개된 PlaceList 목록을 조회한다.
+      description: |
+        Google Drive 파일 공유 모델과 유사한 접근 제어를 따른다.
+        - `PUBLIC` 리스트는 모든 사용자(익명 포함)에게 노출된다.
+        - `LINK_ONLY` 리스트는 NUX 튜토리얼의 모든 메인 미션을 완료한 식별 사용자에게만 노출된다.
+        - `PRIVATE` 리스트는 노출되지 않는다.
+      operationId: listPublicPlaceLists
+      responses:
+        '200':
+          description: 공개 저장 리스트 목록
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListPublicPlaceListsResponseDto'
+
   /getUserTutorialProgress:
     post:
       summary: 윌리의 외출 NUX 튜토리얼 미션 진행 상태를 조회한다.
@@ -2494,6 +2511,8 @@ components:
         isSaved:
           type: boolean
           description: 내가 저장한 리스트인지 여부. 비인증 유저는 항상 false.
+        accessControl:
+          $ref: '#/components/schemas/PlaceListAccessControlDto'
         createdAt:
           $ref: '#/components/schemas/EpochMillisTimestamp'
         updatedAt:
@@ -2504,6 +2523,7 @@ components:
         - type
         - placeCount
         - isSaved
+        - accessControl
         - createdAt
         - updatedAt
 
@@ -2513,6 +2533,57 @@ components:
       enum:
         - MY_PLACES
         - NORMAL
+
+    PlaceListAccessControlDto:
+      type: string
+      description: |
+        저장 리스트 접근 제어. Google Drive 파일 공유 모델을 모방한다.
+        - PRIVATE: 본인만 접근 가능 (예: 개인 저장 장소)
+        - PUBLIC: 모든 사용자에게 공개
+        - LINK_ONLY: 튜토리얼 메인 미션을 모두 완료한 사용자에게만 노출
+      enum:
+        - PRIVATE
+        - PUBLIC
+        - LINK_ONLY
+
+    PublicPlaceListDto:
+      type: object
+      description: 공개 저장 리스트 목록 항목
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        placeCount:
+          type: integer
+          format: int32
+          description: 리스트에 포함된 장소 수
+        iconColor:
+          type: string
+          nullable: true
+          description:
+            아이콘 배경색 (hex, e.g. "#FFC01E"). null이면 기본색 사용.
+        thumbnailUrl:
+          type: string
+          nullable: true
+        accessControl:
+          $ref: '#/components/schemas/PlaceListAccessControlDto'
+      required:
+        - id
+        - name
+        - placeCount
+        - accessControl
+
+    ListPublicPlaceListsResponseDto:
+      type: object
+      description: 공개 저장 리스트 목록 응답
+      properties:
+        placeLists:
+          type: array
+          items:
+            $ref: '#/components/schemas/PublicPlaceListDto'
+      required:
+        - placeLists
 
     GetPlaceListRequestDto:
       type: object
