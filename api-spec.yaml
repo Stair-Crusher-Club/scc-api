@@ -5057,9 +5057,13 @@ components:
             type: string
           nullable: true
           description: 객관식 옵션 목록 (null이면 주관식)
+        isRequired:
+          type: boolean
+          description: 필수 입력 여부 (true면 빈 값으로 제출 시 검증 실패)
       required:
         - key
         - displayName
+        - isRequired
 
     ChallengeB2bFormAvailableFieldNameTypeDto:
       type: string
