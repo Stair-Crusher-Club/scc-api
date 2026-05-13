@@ -4392,11 +4392,29 @@ components:
         isNewsLetterSubscriptionAgreed:
           type: boolean
           description: 뉴스레터 구독 동의 여부
+        interestedRegionIds:
+          type: array
+          description: |
+            사용자가 등록한 관심 지역 ID 목록.
+            윌리의 외출 NUX 튜토리얼의 RegisterUserInterestedRegionsAndThemes 미션에서 설정한다.
+            한 번도 설정한 적 없으면 빈 배열.
+          items:
+            type: string
+        interestedThemes:
+          type: array
+          description: |
+            사용자가 등록한 관심 테마 목록.
+            윌리의 외출 NUX 튜토리얼의 RegisterUserInterestedRegionsAndThemes 미션에서 설정한다.
+            한 번도 설정한 적 없으면 빈 배열.
+          items:
+            $ref: '#/components/schemas/UserInterestedThemeDto'
       required:
         - id
         - nickname
         - mobilityTools
         - isNewsLetterSubscriptionAgreed
+        - interestedRegionIds
+        - interestedThemes
 
     UserMobilityToolDto:
       type: string
