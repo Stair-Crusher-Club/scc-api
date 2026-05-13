@@ -1890,6 +1890,22 @@ paths:
         '204':
           $ref: '#/components/responses/NoContent'
 
+  /listInterestedRegions:
+    post:
+      summary: 관심 지역 등록 시 사용할 시도/시군구 그룹 목록을 가져온다.
+      description: |
+        윌리의 외출 NUX 튜토리얼 첫 번째 메인 미션의 관심 지역 선택 화면(Figma 1648-41115)에서 사용한다.
+        시도 단위로 그룹핑된 시군구 그룹 목록을 반환한다.
+        앱이 정적으로 들고 있지 않고 서버에서 받아오게 하여, 지역 목록을 서버에서 자유롭게 확장할 수 있도록 한다.
+      operationId: listInterestedRegions
+      responses:
+        '200':
+          description: 시도/시군구 그룹 목록.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListInterestedRegionsResponseDto'
+
 components:
   parameters:
     SccCommonHeaders:
@@ -5709,6 +5725,56 @@ components:
         - CULTURE
         - TRAVEL
         - NATURE
+
+    ListInterestedRegionsResponseDto:
+      type: object
+      description: 관심 지역 등록 시 사용할 시도/시군구 그룹 목록.
+      properties:
+        sidos:
+          type: array
+          description: 시도 목록. 좌측 컬럼에 표시되는 순서대로 정렬되어 있다.
+          items:
+            $ref: '#/components/schemas/InterestedRegionSidoDto'
+      required:
+        - sidos
+
+    InterestedRegionSidoDto:
+      type: object
+      description: 시도 단위 항목. 좌측 컬럼에서 선택한다.
+      properties:
+        id:
+          type: string
+          description: 시도 식별 키. e.g. 'seoul'.
+        label:
+          type: string
+          description: 시도 라벨. e.g. '서울'.
+        groups:
+          type: array
+          description: |
+            해당 시도에 속한 시군구 그룹 목록. 우측 컬럼에 표시된다.
+            비어있으면 클라이언트에서 "준비 중" 등의 안내를 표시한다.
+          items:
+            $ref: '#/components/schemas/InterestedRegionGroupDto'
+      required:
+        - id
+        - label
+        - groups
+
+    InterestedRegionGroupDto:
+      type: object
+      description: |
+        시군구 그룹. 사용자는 이 단위로 다중 선택한다.
+        id는 RegisterUserInterestedRegionsAndThemesRequestDto.interestedRegionIds 에 그대로 전송한다.
+      properties:
+        id:
+          type: string
+          description: 그룹 식별 키. e.g. 'seoul_gangnam_seocho'.
+        label:
+          type: string
+          description: 그룹 라벨. e.g. '강남/서초'.
+      required:
+        - id
+        - label
 
   responses:
     ApiFailure:
