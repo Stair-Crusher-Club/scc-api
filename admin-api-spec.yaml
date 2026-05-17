@@ -4014,7 +4014,8 @@ components:
         isRequired:
           type: boolean
           nullable: true
-          description: 필수 입력 여부 (null이면 true로 처리; 기존 필드 backward-compat)
+          description:
+            필수 입력 여부 (null이면 true로 처리; 기존 필드 backward-compat)
 
     AdminChallengeB2bFormSchemaAvailableFieldNameEnumDTO:
       type: string

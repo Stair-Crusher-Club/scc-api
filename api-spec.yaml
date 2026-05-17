@@ -1871,6 +1871,25 @@ paths:
         '400':
           $ref: '#/components/responses/ApiFailure'
 
+  /completeUserTutorialUpvoteAccessibilityMission:
+    post:
+      summary:
+        윌리의 외출 NUX 튜토리얼 미션 3(접근성 정보 도움돼요)의 완료를 처리한다.
+      description: |
+        튜토리얼 전용 가짜 PDP 화면에서 "도움돼요" 버튼을 눌렀을 때 앱이 호출한다.
+        실제 장소가 아니므로 /giveUpvote 경로 대신 이 엔드포인트로 미션 3(UPVOTE_ACCESSIBILITY)
+        완료를 명시적으로 기록한다. idempotent: 이미 완료된 미션이면 no-op.
+      security:
+        - Identified: []
+      operationId: completeUserTutorialUpvoteAccessibilityMission
+      responses:
+        '200':
+          description: 업데이트된 튜토리얼 미션 진행 상태
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserTutorialProgressDto'
+
   /registerUserInterestedRegionsAndThemes:
     post:
       summary: 사용자의 관심지역과 관심테마를 등록한다.
