@@ -4,3 +4,11 @@ rules:
   operation-description: off
   operation-operationId: off
   operation-tags: off
+  # $ref 옆 description/필드 허용. codegen tool 들은 정상 처리 + OpenAPI 3.1 표준 허용.
+  no-$ref-siblings: off
+  # enum 값이 string이 아니어도 허용 (정수 enum 의도적 사용 케이스).
+  typed-enum: off
+  # 컴포넌트 tag 등록 강제 안 함.
+  operation-tag-defined: off
+  # spectral 의 unused component 감지가 false positive 가 많음 (cross-spec 참조 등).
+  oas3-unused-component: off

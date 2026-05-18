@@ -2404,15 +2404,17 @@ components:
         floor:
           type: string
           description: >-
-            점포가 위치한 층 표시용 문자열 원문. PlaceBusinessInfo.additionalInfo.floor 를 그대로 전달.
-            크롤링 미수집 또는 외부 소스에도 층 정보가 없으면 null.
-          example: "지하1층"
+            점포가 위치한 층 표시용 문자열 원문.
+            PlaceBusinessInfo.additionalInfo.floor 를 그대로 전달. 크롤링 미수집
+            또는 외부 소스에도 층 정보가 없으면 null.
+          example: '지하1층'
         floorNum:
           type: integer
           description: >-
-            층 정규화 정수. 지상은 양수, 지하는 음수 (예: "B1층" → -1, "3층" → 3).
-            옥상/루프탑 등 정수로 환원 불가한 값 또는 크롤링 미수집 시 null.
-            UI에서는 오름차순 정렬 키로 사용하고, null 은 유효 층 그룹 다음에 배치한다.
+            층 정규화 정수. 지상은 양수, 지하는 음수 (예: "B1층" → -1, "3층" →
+            3). 옥상/루프탑 등 정수로 환원 불가한 값 또는 크롤링 미수집 시 null.
+            UI에서는 오름차순 정렬 키로 사용하고, null 은 유효 층 그룹 다음에
+            배치한다.
           example: -1
       required:
         - name
@@ -4012,7 +4014,8 @@ components:
         isRequired:
           type: boolean
           nullable: true
-          description: 필수 입력 여부 (null이면 true로 처리; 기존 필드 backward-compat)
+          description:
+            필수 입력 여부 (null이면 true로 처리; 기존 필드 backward-compat)
 
     AdminChallengeB2bFormSchemaAvailableFieldNameEnumDTO:
       type: string
@@ -4100,7 +4103,6 @@ components:
         level:
           type: integer
           description: 지도 확대 레벨 (1-14)
-      required: []
 
     MapMarkerDTO:
       type: object
@@ -4337,6 +4339,8 @@ components:
           type: integer
           format: int32
           description: 리스트에 포함된 장소 수
+        accessControl:
+          $ref: '#/components/schemas/AdminPlaceListAccessControlDto'
         createdAt:
           $ref: '#/components/schemas/EpochMillisTimestamp'
         updatedAt:
@@ -4345,8 +4349,21 @@ components:
         - id
         - name
         - placeCount
+        - accessControl
         - createdAt
         - updatedAt
+
+    AdminPlaceListAccessControlDto:
+      description: |
+        저장 리스트 접근 제어. Google Drive 파일 공유 모델을 모방한다.
+        - PRIVATE: 본인만 접근 가능 (어드민에서 임의로 PRIVATE 리스트를 생성하지는 않으나, 호환을 위해 enum에 포함)
+        - PUBLIC: 모든 사용자에게 공개
+        - LINK_ONLY: 튜토리얼 메인 미션을 모두 완료한 사용자에게만 노출
+      type: string
+      enum:
+        - PRIVATE
+        - PUBLIC
+        - LINK_ONLY
 
     AdminPlaceListDetailDto:
       description: 저장 리스트 상세 정보 (장소 목록 포함)
@@ -4367,6 +4384,8 @@ components:
           nullable: true
           description:
             아이콘 배경색 (hex, e.g. "#FFC01E"). null이면 기본색 사용.
+        accessControl:
+          $ref: '#/components/schemas/AdminPlaceListAccessControlDto'
         places:
           type: array
           items:
@@ -4378,6 +4397,7 @@ components:
       required:
         - id
         - name
+        - accessControl
         - places
         - createdAt
         - updatedAt
@@ -4436,6 +4456,8 @@ components:
           nullable: true
           description:
             아이콘 배경색 (hex, e.g. "#FFC01E"). null이면 기본색 사용.
+        accessControl:
+          $ref: '#/components/schemas/AdminPlaceListAccessControlDto'
         placeIds:
           type: array
           items:
@@ -4462,6 +4484,8 @@ components:
           nullable: true
           description:
             아이콘 배경색 (hex, e.g. "#FFC01E"). null이면 기본색 사용.
+        accessControl:
+          $ref: '#/components/schemas/AdminPlaceListAccessControlDto'
         placeIds:
           type: array
           items:
