@@ -1859,8 +1859,8 @@ paths:
         미션별 추가 컨텍스트(예: SAVE_PLACE_LIST 의 placeListId)는 동일 body 에 함께 전달한다.
 
         서버 검증 (미션 타입별):
-        - REGISTER_INTERESTED_REGIONS_AND_THEMES: 사용자가 관심 지역/주제를 1개 이상 등록한 상태인지 확인. 미충족 시 400.
-        - SAVE_PLACE_LIST: context.placeListId 를 사용자가 실제로 저장한 상태인지 확인. 미충족 시 400.
+        - REGISTER_INTERESTED_REGIONS_AND_THEMES: 추가 검증 없음 (클라이언트가 등록 직후 호출).
+        - SAVE_PLACE_LIST: 추가 검증 없음 (클라이언트가 저장 직후 placeListId 와 함께 호출).
         - UPVOTE_ACCESSIBILITY: 추가 검증 없음 (가짜 PDP 에서 사용자 명시 액션 후 호출되므로).
         - HIDDEN_APP_SURVEY: tally API 로 form 제출 기록 검증. 제출 기록 없으면 400.
 
