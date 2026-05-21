@@ -4677,7 +4677,6 @@ components:
           type: boolean
       required:
         - id
-        - targetType
         - reason
         - createdAt
 
@@ -4727,8 +4726,6 @@ components:
           $ref: '#/components/schemas/AccessibilityReportCorrectionDTO'
       required:
         - id
-        - targetId
-        - targetType
         - reason
         - createdAt
 
