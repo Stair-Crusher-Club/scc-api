@@ -1929,7 +1929,7 @@ paths:
       summary: 웹페이지 등 컨텐츠를 저장한다.
       description: |
         URL을 기준으로 SccContent를 upsert하고, 유저의 UserSavedContent를 생성한다.
-        OG 메타데이터(title, thumbnailUrl, description)는 앱이 웹뷰에서 추출해 전달한다.
+        OG 메타데이터(title, description) + 페이지 본문 이미지(imageUrls)는 앱이 웹뷰에서 추출해 전달한다.
         같은 URL로 이미 저장한 적이 있고 soft delete 상태였다면 다시 살린다.
       operationId: saveContent
       security:
@@ -5938,7 +5938,7 @@ components:
     SccContentDto:
       type: object
       description: |
-        URL을 기준으로 유일성을 가지는 컨텐츠. title/thumbnail/description은 OG 메타에서 가져온다.
+        URL을 기준으로 유일성을 가지는 컨텐츠. title/description/imageUrls는 OG 메타 + 본문 이미지에서 가져온다.
       properties:
         id:
           type: string
@@ -5949,16 +5949,21 @@ components:
         title:
           type: string
           description: 컨텐츠 제목. OG title이 없으면 null일 수 있다.
-        thumbnailUrl:
-          type: string
-          description: 컨텐츠 썸네일 URL. OG image가 없으면 null일 수 있다.
         description:
           type: string
           description: 컨텐츠 설명. OG description이 없으면 null일 수 있다.
+        imageUrls:
+          type: array
+          items:
+            type: string
+          description: |
+            컨텐츠 페이지에서 추출한 이미지 URL들. 본문 img + og:image 를 순서대로 수집한다.
+            빈 배열일 수 있다. 목록 노출에서는 앞쪽 N장 + 더보기 표기를 사용한다.
       required:
         - id
         - contentType
         - url
+        - imageUrls
 
     UserSavedContentDto:
       type: object
@@ -5989,17 +5994,22 @@ components:
           type: string
           description:
             앱이 웹뷰의 og:title 또는 document.title에서 추출. 없으면 null.
-        thumbnailUrl:
-          type: string
-          description: 앱이 웹뷰의 og:image에서 추출. 없으면 null.
         description:
           type: string
           description:
             앱이 웹뷰의 og:description 또는 meta[name=description]에서 추출.
             없으면 null.
+        imageUrls:
+          type: array
+          items:
+            type: string
+          description: |
+            앱이 웹뷰에서 추출한 이미지 URL들. og:image 와 본문 <img> src 를 합쳐
+            중복 제거 + 등장 순서로 정렬해 보낸다. 비어 있으면 빈 배열을 보낸다.
       required:
         - url
         - contentType
+        - imageUrls
 
     SaveContentResponseDto:
       type: object
