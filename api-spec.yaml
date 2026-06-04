@@ -6036,7 +6036,8 @@ components:
           description: 알면 이걸 우선 사용. 모르면 url 로 fallback.
         url:
           type: string
-          description: sccContentId 없을 때 사용. 서버에서 정규화 후 SccContent 를 찾는다.
+          description:
+            sccContentId 없을 때 사용. 서버에서 정규화 후 SccContent 를 찾는다.
 
     ListSavedContentsRequestDto:
       type: object
@@ -6076,8 +6077,8 @@ components:
         url:
           type: string
           description:
-            조회할 컨텐츠의 URL. 서버에서 정규화 후 SccContent를 찾는다.
-            또한 이 URL 에서 좋아요 target (e.g. BBUCLE_ROAD path id) 도 추론한다.
+            조회할 컨텐츠의 URL. 서버에서 정규화 후 SccContent를 찾는다. 또한 이
+            URL 에서 좋아요 target (e.g. BBUCLE_ROAD path id) 도 추론한다.
       required:
         - url
 
