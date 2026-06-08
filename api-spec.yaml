@@ -2030,6 +2030,49 @@ paths:
               schema:
                 $ref: '#/components/schemas/GetSccContentDetailsResponseDto'
 
+  /searchToiletAccessibilities:
+    post:
+      tags:
+        - toilet-accessibility
+      summary: 통합 화장실 접근성 정보를 위치 기반으로 검색한다.
+      description: |
+        isSearchable=true 인 ToiletAccessibility를 위치 기반 nearest-N으로 반환한다.
+        공공데이터(ExternalAccessibility)와 유저 등록(ToiletReview) 두 소스를 통합하여 제공한다.
+      operationId: searchToiletAccessibilities
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SearchToiletAccessibilitiesRequestDto'
+      responses:
+        '200':
+          description: 통합 화장실 검색 결과 (isSearchable=true만, nearest-N)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SearchToiletAccessibilitiesResponseDto'
+
+  /getToiletAccessibility:
+    post:
+      tags:
+        - toilet-accessibility
+      summary: 통합 화장실 접근성 상세 정보를 조회한다.
+      operationId: getToiletAccessibility
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GetToiletAccessibilityRequestDto'
+      responses:
+        '200':
+          description: 통합 화장실 상세 정보
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ToiletAccessibilityDetailDto'
+
 components:
   parameters:
     SccCommonHeaders:
@@ -4199,6 +4242,10 @@ components:
           type: array
           items:
             type: string
+        locationComment:
+          type: string
+          nullable: true
+          description: "화장실 위치 설명 (기타 참고사항과 별도)"
         comment:
           type: string
           description: 화장실에 대해 자세히 알려주세요
@@ -4976,6 +5023,10 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/EntranceDoorType'
+        locationComment:
+          type: string
+          nullable: true
+          description: "화장실 위치 설명 (기타 참고사항과 별도)"
         comment:
           type: string
         images:
@@ -6188,6 +6239,112 @@ components:
       required:
         - totalCount
         - isUpvoted
+
+    ToiletAccessibilitySourceTypeDto:
+      type: string
+      description: "화장실 접근성 데이터 소스 타입"
+      enum:
+        - USER_TOILET_REVIEW
+        - EXTERNAL_ACCESSIBILITY
+
+    SearchToiletAccessibilitiesRequestDto:
+      type: object
+      required:
+        - currentLocation
+      properties:
+        currentLocation:
+          $ref: '#/components/schemas/Location'
+        limit:
+          type: integer
+          default: 50
+          description: "nearest-N 개수 (기본 50)"
+        distanceMetersLimit:
+          type: integer
+          nullable: true
+          description: "최대 반경 (미터). 없으면 limit만 적용"
+
+    SearchToiletAccessibilitiesResponseDto:
+      type: object
+      required:
+        - items
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ToiletAccessibilitySummaryDto'
+
+    ToiletAccessibilitySummaryDto:
+      type: object
+      required:
+        - id
+        - sourceType
+        - name
+        - location
+      properties:
+        id:
+          type: string
+          description: "ToiletAccessibility ID (prefix: TA)"
+        sourceType:
+          $ref: '#/components/schemas/ToiletAccessibilitySourceTypeDto'
+        name:
+          type: string
+        address:
+          type: string
+          nullable: true
+        location:
+          $ref: '#/components/schemas/Location'
+        thumbnailUrl:
+          type: string
+          nullable: true
+
+    GetToiletAccessibilityRequestDto:
+      type: object
+      required:
+        - toiletAccessibilityId
+      properties:
+        toiletAccessibilityId:
+          type: string
+
+    ToiletAccessibilityDetailDto:
+      type: object
+      required:
+        - id
+        - sourceType
+        - name
+        - location
+        - images
+      properties:
+        id:
+          type: string
+        sourceType:
+          $ref: '#/components/schemas/ToiletAccessibilitySourceTypeDto'
+        name:
+          type: string
+        address:
+          type: string
+          nullable: true
+        location:
+          $ref: '#/components/schemas/Location'
+        images:
+          type: array
+          items:
+            $ref: '#/components/schemas/ImageDto'
+        locationComment:
+          type: string
+          nullable: true
+          description: "화장실 위치 설명 (USER 소스)"
+        comment:
+          type: string
+          nullable: true
+          description: "기타 참고사항 (USER 소스)"
+        toiletDetails:
+          $ref: '#/components/schemas/ToiletAccessibilityDetails'
+          nullable: true
+          description: "EXTERNAL 소스 상세 필드"
+        referenceTargetId:
+          type: string
+          nullable: true
+          description: "USER 소스의 placeId/buildingId (앱에서 PDP 이동 보조)"
 
   responses:
     ApiFailure:

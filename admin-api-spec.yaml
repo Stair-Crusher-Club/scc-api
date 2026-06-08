@@ -2205,6 +2205,54 @@ paths:
               schema:
                 $ref: '#/components/schemas/AdminExperimentAssignmentDto'
 
+  /toilet-accessibilities/search:
+    post:
+      tags:
+        - admin-toilet-accessibility
+      summary: 통합 화장실 접근성 목록을 조회한다. (큐레이션 큐 조회용)
+      description: |
+        sourceType, isSearchable 필터로 ToiletAccessibility 목록을 페이지네이션 조회한다.
+        USER + isSearchable=false 목록을 내려 운영자가 사진/comment/위치유형을 보고 검색 대상 여부를 판단한다.
+      operationId: adminSearchToiletAccessibilities
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdminSearchToiletAccessibilitiesRequestDto'
+      responses:
+        '200':
+          description: 통합 화장실 목록
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminSearchToiletAccessibilitiesResponseDto'
+
+  /toilet-accessibilities/{id}/set-searchable:
+    post:
+      tags:
+        - admin-toilet-accessibility
+      summary: 화장실 접근성 검색 대상 여부를 설정한다.
+      description: |
+        isSearchable=true 로 설정하면 즉시 검색에 노출되고, false 로 설정하면 즉시 제외된다.
+      operationId: setToiletAccessibilitySearchable
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SetToiletAccessibilitySearchableRequestDto'
+      responses:
+        '200':
+          description: 성공
+          $ref: '#/components/responses/NoContent'
+
 components:
   # Reusable schemas (data models)
   securitySchemes:
@@ -5187,6 +5235,107 @@ components:
       properties:
         bbucleRoadData:
           $ref: '#/components/schemas/AdminPlaceSpecialAccessibilityBbucleRoadDataDto'
+
+    ToiletAccessibilitySourceTypeDto:
+      type: string
+      description: "화장실 접근성 데이터 소스 타입"
+      enum:
+        - USER_TOILET_REVIEW
+        - EXTERNAL_ACCESSIBILITY
+
+    AdminToiletReviewDetailDto:
+      type: object
+      description: "USER_TOILET_REVIEW 소스의 원본 ToiletReview 상세 정보"
+      properties:
+        toiletLocationType:
+          type: string
+          description: "화장실 위치 유형 (PLACE / BUILDING / NONE / ETC)"
+        locationComment:
+          type: string
+          nullable: true
+          description: "화장실 위치 설명"
+        comment:
+          type: string
+          nullable: true
+          description: "기타 참고사항"
+        images:
+          type: array
+          items:
+            $ref: '#/components/schemas/AdminImageDTO'
+
+    AdminToiletAccessibilityDto:
+      type: object
+      required:
+        - id
+        - sourceType
+        - name
+        - isSearchable
+        - hasImage
+        - createdAt
+      properties:
+        id:
+          type: string
+        sourceType:
+          $ref: '#/components/schemas/ToiletAccessibilitySourceTypeDto'
+        name:
+          type: string
+        address:
+          type: string
+          nullable: true
+        isSearchable:
+          type: boolean
+          description: "검색 노출 여부"
+        hasImage:
+          type: boolean
+          description: "이미지 보유 여부"
+        thumbnailUrl:
+          type: string
+          nullable: true
+        createdAt:
+          $ref: '#/components/schemas/EpochMillisTimestamp'
+        toiletReviewDetail:
+          $ref: '#/components/schemas/AdminToiletReviewDetailDto'
+          nullable: true
+          description: "USER_TOILET_REVIEW 소스일 때만 포함"
+
+    AdminSearchToiletAccessibilitiesRequestDto:
+      type: object
+      properties:
+        sourceType:
+          $ref: '#/components/schemas/ToiletAccessibilitySourceTypeDto'
+          nullable: true
+        isSearchable:
+          type: boolean
+          nullable: true
+          description: "검색 노출 여부 필터. null이면 전체 조회"
+        nextPageToken:
+          type: string
+          nullable: true
+        limit:
+          type: integer
+          default: 20
+
+    AdminSearchToiletAccessibilitiesResponseDto:
+      type: object
+      required:
+        - items
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/AdminToiletAccessibilityDto'
+        nextPageToken:
+          type: string
+          nullable: true
+
+    SetToiletAccessibilitySearchableRequestDto:
+      type: object
+      required:
+        - isSearchable
+      properties:
+        isSearchable:
+          type: boolean
+          description: "검색 노출 여부. true로 설정하면 즉시 검색에 노출, false로 설정하면 즉시 제외"
 
   responses:
     NoContent:
