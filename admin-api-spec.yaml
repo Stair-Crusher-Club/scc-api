@@ -2205,37 +2205,37 @@ paths:
               schema:
                 $ref: '#/components/schemas/AdminExperimentAssignmentDto'
 
-  /toilet-accessibilities/search:
+  /toilets/search:
     post:
       tags:
-        - admin-toilet-accessibility
-      summary: 통합 화장실 접근성 목록을 조회한다. (큐레이션 큐 조회용)
+        - admin-toilet
+      summary: 화장실 목록을 조회한다. (큐레이션 큐 조회용)
       description: |
-        sourceType, isSearchable 필터로 ToiletAccessibility 목록을 페이지네이션 조회한다.
-        USER + isSearchable=false 목록을 내려 운영자가 사진/comment/위치유형을 보고 검색 대상 여부를 판단한다.
-      operationId: adminSearchToiletAccessibilities
+        isSearchable 필터로 Toilet 목록을 페이지네이션 조회한다.
+        isSearchable=false 목록을 내려 운영자가 병합된 유저 리뷰의 사진/comment/위치유형을 보고 검색 대상 여부를 판단한다.
+      operationId: adminSearchToilets
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/AdminSearchToiletAccessibilitiesRequestDto'
+              $ref: '#/components/schemas/AdminSearchToiletsRequestDto'
       responses:
         '200':
-          description: 통합 화장실 목록
+          description: 화장실 목록
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AdminSearchToiletAccessibilitiesResponseDto'
+                $ref: '#/components/schemas/AdminSearchToiletsResponseDto'
 
-  /toilet-accessibilities/{id}/set-searchable:
+  /toilets/{id}/set-searchable:
     post:
       tags:
-        - admin-toilet-accessibility
-      summary: 화장실 접근성 검색 대상 여부를 설정한다.
+        - admin-toilet
+      summary: 화장실 검색 대상 여부를 설정한다.
       description: |
         isSearchable=true 로 설정하면 즉시 검색에 노출되고, false 로 설정하면 즉시 제외된다.
-      operationId: setToiletAccessibilitySearchable
+      operationId: setToiletSearchable
       parameters:
         - name: id
           in: path
@@ -2247,7 +2247,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/SetToiletAccessibilitySearchableRequestDto'
+              $ref: '#/components/schemas/SetToiletSearchableRequestDto'
       responses:
         '200':
           description: 성공
@@ -5236,16 +5236,9 @@ components:
         bbucleRoadData:
           $ref: '#/components/schemas/AdminPlaceSpecialAccessibilityBbucleRoadDataDto'
 
-    ToiletAccessibilitySourceTypeDto:
-      type: string
-      description: '화장실 접근성 데이터 소스 타입'
-      enum:
-        - USER_TOILET_REVIEW
-        - EXTERNAL_ACCESSIBILITY
-
     AdminToiletReviewDetailDto:
       type: object
-      description: 'USER_TOILET_REVIEW 소스의 원본 ToiletReview 상세 정보'
+      description: 'Toilet에 병합된 유저 리뷰(ToiletReview)의 상세 정보'
       properties:
         toiletLocationType:
           type: string
@@ -5263,20 +5256,18 @@ components:
           items:
             $ref: '#/components/schemas/AdminImageDTO'
 
-    AdminToiletAccessibilityDto:
+    AdminToiletDto:
       type: object
       required:
         - id
-        - sourceType
         - name
         - isSearchable
-        - hasImage
+        - hasExternalSource
         - createdAt
+        - toiletReviewDetails
       properties:
         id:
           type: string
-        sourceType:
-          $ref: '#/components/schemas/ToiletAccessibilitySourceTypeDto'
         name:
           type: string
         address:
@@ -5285,25 +5276,21 @@ components:
         isSearchable:
           type: boolean
           description: '검색 노출 여부'
-        hasImage:
+        hasExternalSource:
           type: boolean
-          description: '이미지 보유 여부'
-        thumbnailUrl:
-          type: string
-          nullable: true
+          description: '공공데이터(ExternalAccessibility) 소스 병합 여부'
         createdAt:
           $ref: '#/components/schemas/EpochMillisTimestamp'
-        toiletReviewDetail:
-          $ref: '#/components/schemas/AdminToiletReviewDetailDto'
-          nullable: true
-          description: 'USER_TOILET_REVIEW 소스일 때만 포함'
+        toiletReviewDetails:
+          type: array
+          description:
+            '이 Toilet에 병합된 유저 리뷰들 (큐레이션 판단용). 없으면 빈 배열'
+          items:
+            $ref: '#/components/schemas/AdminToiletReviewDetailDto'
 
-    AdminSearchToiletAccessibilitiesRequestDto:
+    AdminSearchToiletsRequestDto:
       type: object
       properties:
-        sourceType:
-          $ref: '#/components/schemas/ToiletAccessibilitySourceTypeDto'
-          nullable: true
         isSearchable:
           type: boolean
           nullable: true
@@ -5315,7 +5302,7 @@ components:
           type: integer
           default: 20
 
-    AdminSearchToiletAccessibilitiesResponseDto:
+    AdminSearchToiletsResponseDto:
       type: object
       required:
         - items
@@ -5323,12 +5310,12 @@ components:
         items:
           type: array
           items:
-            $ref: '#/components/schemas/AdminToiletAccessibilityDto'
+            $ref: '#/components/schemas/AdminToiletDto'
         nextPageToken:
           type: string
           nullable: true
 
-    SetToiletAccessibilitySearchableRequestDto:
+    SetToiletSearchableRequestDto:
       type: object
       required:
         - isSearchable

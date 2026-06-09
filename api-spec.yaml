@@ -2030,48 +2030,50 @@ paths:
               schema:
                 $ref: '#/components/schemas/GetSccContentDetailsResponseDto'
 
-  /searchToiletAccessibilities:
+  /searchToilets:
     post:
       tags:
-        - toilet-accessibility
-      summary: 통합 화장실 접근성 정보를 위치 기반으로 검색한다.
+        - toilet
+      summary: 화장실을 위치 기반으로 검색한다.
       description: |
-        isSearchable=true 인 ToiletAccessibility를 위치 기반 nearest-N으로 반환한다.
-        공공데이터(ExternalAccessibility)와 유저 등록(ToiletReview) 두 소스를 통합하여 제공한다.
-      operationId: searchToiletAccessibilities
+        isSearchable=true 인 Toilet을 위치 기반 nearest-N으로 반환한다.
+        하나의 Toilet은 공공데이터(ExternalAccessibility)와 유저 등록(ToiletReview) 소스가 병합된 통합 화장실이다.
+      operationId: searchToilets
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/SearchToiletAccessibilitiesRequestDto'
+              $ref: '#/components/schemas/SearchToiletsRequestDto'
       responses:
         '200':
-          description: 통합 화장실 검색 결과 (isSearchable=true만, nearest-N)
+          description: 화장실 검색 결과 (isSearchable=true만, nearest-N)
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/SearchToiletAccessibilitiesResponseDto'
+                $ref: '#/components/schemas/SearchToiletsResponseDto'
 
-  /getToiletAccessibility:
+  /getToilet:
     post:
       tags:
-        - toilet-accessibility
-      summary: 통합 화장실 접근성 상세 정보를 조회한다.
-      operationId: getToiletAccessibility
+        - toilet
+      summary: 화장실 상세 정보를 조회한다.
+      description: |
+        Toilet과 그에 병합된 모든 소스(ToiletReview/ExternalAccessibility)를 조합해 상세 정보를 내려준다.
+      operationId: getToilet
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/GetToiletAccessibilityRequestDto'
+              $ref: '#/components/schemas/GetToiletRequestDto'
       responses:
         '200':
-          description: 통합 화장실 상세 정보
+          description: 화장실 상세 정보
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ToiletAccessibilityDetailDto'
+                $ref: '#/components/schemas/ToiletDetailDto'
 
 components:
   parameters:
@@ -6240,14 +6242,7 @@ components:
         - totalCount
         - isUpvoted
 
-    ToiletAccessibilitySourceTypeDto:
-      type: string
-      description: '화장실 접근성 데이터 소스 타입'
-      enum:
-        - USER_TOILET_REVIEW
-        - EXTERNAL_ACCESSIBILITY
-
-    SearchToiletAccessibilitiesRequestDto:
+    SearchToiletsRequestDto:
       type: object
       required:
         - currentLocation
@@ -6263,7 +6258,7 @@ components:
           nullable: true
           description: '최대 반경 (미터). 없으면 limit만 적용'
 
-    SearchToiletAccessibilitiesResponseDto:
+    SearchToiletsResponseDto:
       type: object
       required:
         - items
@@ -6271,21 +6266,18 @@ components:
         items:
           type: array
           items:
-            $ref: '#/components/schemas/ToiletAccessibilitySummaryDto'
+            $ref: '#/components/schemas/ToiletSummaryDto'
 
-    ToiletAccessibilitySummaryDto:
+    ToiletSummaryDto:
       type: object
       required:
         - id
-        - sourceType
         - name
         - location
       properties:
         id:
           type: string
-          description: 'ToiletAccessibility ID (prefix: TA)'
-        sourceType:
-          $ref: '#/components/schemas/ToiletAccessibilitySourceTypeDto'
+          description: 'Toilet ID (prefix: TLT)'
         name:
           type: string
         address:
@@ -6293,31 +6285,28 @@ components:
           nullable: true
         location:
           $ref: '#/components/schemas/Location'
-        thumbnailUrl:
-          type: string
-          nullable: true
 
-    GetToiletAccessibilityRequestDto:
+    GetToiletRequestDto:
       type: object
       required:
-        - toiletAccessibilityId
+        - toiletId
       properties:
-        toiletAccessibilityId:
+        toiletId:
           type: string
 
-    ToiletAccessibilityDetailDto:
+    ToiletDetailDto:
       type: object
+      description: |
+        Toilet + 병합된 소스들의 조합. 각 섹션은 데이터가 있을 때만 채워지며,
+        클라이언트는 sourceType 분기 없이 존재하는 필드만 조건부로 렌더링한다.
       required:
         - id
-        - sourceType
         - name
         - location
         - images
       properties:
         id:
           type: string
-        sourceType:
-          $ref: '#/components/schemas/ToiletAccessibilitySourceTypeDto'
         name:
           type: string
         address:
@@ -6327,24 +6316,26 @@ components:
           $ref: '#/components/schemas/Location'
         images:
           type: array
+          description: '병합된 모든 소스의 이미지 합본'
           items:
             $ref: '#/components/schemas/ImageDto'
         locationComment:
           type: string
           nullable: true
-          description: '화장실 위치 설명 (USER 소스)'
+          description: '화장실 위치 설명 (유저 리뷰 소스가 있으면)'
         comment:
           type: string
           nullable: true
-          description: '기타 참고사항 (USER 소스)'
+          description: '기타 참고사항 (유저 리뷰 소스가 있으면)'
         toiletDetails:
           $ref: '#/components/schemas/ToiletAccessibilityDetails'
           nullable: true
-          description: 'EXTERNAL 소스 상세 필드'
+          description: '공공데이터 소스 상세 필드 (있으면)'
         referenceTargetId:
           type: string
           nullable: true
-          description: 'USER 소스의 placeId/buildingId (앱에서 PDP 이동 보조)'
+          description:
+            '유저 리뷰 소스의 placeId/buildingId (앱에서 PDP 이동 보조)'
 
   responses:
     ApiFailure:
