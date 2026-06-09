@@ -3595,6 +3595,12 @@ components:
           description: 장소의 종류
         toilet_details:
           $ref: '#/components/schemas/ToiletAccessibilityDetails'
+        toiletId:
+          type: string
+          nullable: true
+          description:
+            '병합된 통합 화장실(Toilet) ID. 동기화된 TOILET 카테고리 데이터에만
+            존재. 상세 이동(getToilet) 시 사용.'
       required:
         - id
         - name
