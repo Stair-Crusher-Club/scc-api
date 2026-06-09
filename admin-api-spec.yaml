@@ -5238,26 +5238,26 @@ components:
 
     ToiletAccessibilitySourceTypeDto:
       type: string
-      description: "화장실 접근성 데이터 소스 타입"
+      description: '화장실 접근성 데이터 소스 타입'
       enum:
         - USER_TOILET_REVIEW
         - EXTERNAL_ACCESSIBILITY
 
     AdminToiletReviewDetailDto:
       type: object
-      description: "USER_TOILET_REVIEW 소스의 원본 ToiletReview 상세 정보"
+      description: 'USER_TOILET_REVIEW 소스의 원본 ToiletReview 상세 정보'
       properties:
         toiletLocationType:
           type: string
-          description: "화장실 위치 유형 (PLACE / BUILDING / NONE / ETC)"
+          description: '화장실 위치 유형 (PLACE / BUILDING / NONE / ETC)'
         locationComment:
           type: string
           nullable: true
-          description: "화장실 위치 설명"
+          description: '화장실 위치 설명'
         comment:
           type: string
           nullable: true
-          description: "기타 참고사항"
+          description: '기타 참고사항'
         images:
           type: array
           items:
@@ -5284,10 +5284,10 @@ components:
           nullable: true
         isSearchable:
           type: boolean
-          description: "검색 노출 여부"
+          description: '검색 노출 여부'
         hasImage:
           type: boolean
-          description: "이미지 보유 여부"
+          description: '이미지 보유 여부'
         thumbnailUrl:
           type: string
           nullable: true
@@ -5296,7 +5296,7 @@ components:
         toiletReviewDetail:
           $ref: '#/components/schemas/AdminToiletReviewDetailDto'
           nullable: true
-          description: "USER_TOILET_REVIEW 소스일 때만 포함"
+          description: 'USER_TOILET_REVIEW 소스일 때만 포함'
 
     AdminSearchToiletAccessibilitiesRequestDto:
       type: object
@@ -5307,7 +5307,7 @@ components:
         isSearchable:
           type: boolean
           nullable: true
-          description: "검색 노출 여부 필터. null이면 전체 조회"
+          description: '검색 노출 여부 필터. null이면 전체 조회'
         nextPageToken:
           type: string
           nullable: true
@@ -5335,7 +5335,9 @@ components:
       properties:
         isSearchable:
           type: boolean
-          description: "검색 노출 여부. true로 설정하면 즉시 검색에 노출, false로 설정하면 즉시 제외"
+          description:
+            '검색 노출 여부. true로 설정하면 즉시 검색에 노출, false로 설정하면
+            즉시 제외'
 
   responses:
     NoContent:

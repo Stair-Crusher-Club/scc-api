@@ -4245,7 +4245,7 @@ components:
         locationComment:
           type: string
           nullable: true
-          description: "화장실 위치 설명 (기타 참고사항과 별도)"
+          description: '화장실 위치 설명 (기타 참고사항과 별도)'
         comment:
           type: string
           description: 화장실에 대해 자세히 알려주세요
@@ -5026,7 +5026,7 @@ components:
         locationComment:
           type: string
           nullable: true
-          description: "화장실 위치 설명 (기타 참고사항과 별도)"
+          description: '화장실 위치 설명 (기타 참고사항과 별도)'
         comment:
           type: string
         images:
@@ -6242,7 +6242,7 @@ components:
 
     ToiletAccessibilitySourceTypeDto:
       type: string
-      description: "화장실 접근성 데이터 소스 타입"
+      description: '화장실 접근성 데이터 소스 타입'
       enum:
         - USER_TOILET_REVIEW
         - EXTERNAL_ACCESSIBILITY
@@ -6257,11 +6257,11 @@ components:
         limit:
           type: integer
           default: 50
-          description: "nearest-N 개수 (기본 50)"
+          description: 'nearest-N 개수 (기본 50)'
         distanceMetersLimit:
           type: integer
           nullable: true
-          description: "최대 반경 (미터). 없으면 limit만 적용"
+          description: '최대 반경 (미터). 없으면 limit만 적용'
 
     SearchToiletAccessibilitiesResponseDto:
       type: object
@@ -6283,7 +6283,7 @@ components:
       properties:
         id:
           type: string
-          description: "ToiletAccessibility ID (prefix: TA)"
+          description: 'ToiletAccessibility ID (prefix: TA)'
         sourceType:
           $ref: '#/components/schemas/ToiletAccessibilitySourceTypeDto'
         name:
@@ -6332,19 +6332,19 @@ components:
         locationComment:
           type: string
           nullable: true
-          description: "화장실 위치 설명 (USER 소스)"
+          description: '화장실 위치 설명 (USER 소스)'
         comment:
           type: string
           nullable: true
-          description: "기타 참고사항 (USER 소스)"
+          description: '기타 참고사항 (USER 소스)'
         toiletDetails:
           $ref: '#/components/schemas/ToiletAccessibilityDetails'
           nullable: true
-          description: "EXTERNAL 소스 상세 필드"
+          description: 'EXTERNAL 소스 상세 필드'
         referenceTargetId:
           type: string
           nullable: true
-          description: "USER 소스의 placeId/buildingId (앱에서 PDP 이동 보조)"
+          description: 'USER 소스의 placeId/buildingId (앱에서 PDP 이동 보조)'
 
   responses:
     ApiFailure:
