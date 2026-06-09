@@ -1479,6 +1479,23 @@ paths:
               schema:
                 $ref: '#/components/schemas/SearchPlacesResponseDto'
 
+  /resolveSharedPlaceLink:
+    post:
+      summary: 외부 지도앱에서 공유된 텍스트를 해석해 내부 장소로 매핑한다.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ResolveSharedPlaceLinkRequestDto'
+      responses:
+        '200':
+          description: 해석 결과
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResolveSharedPlaceLinkResponseDto'
+
   /searchUnconqueredPlacesNearby:
     post:
       summary: 정복 안 된 장소를 검색한다.
@@ -4324,6 +4341,53 @@ components:
             #   type: string
             #   description: AI 분석 결과 요약
           # required: []
+
+    ResolveSharedPlaceLinkRequestDto:
+      type: object
+      properties:
+        sharedText:
+          type: string
+          description:
+            외부 앱이 공유 시트로 넘긴 원문 텍스트 전체(URL 포함). 서버가
+            파싱한다.
+      required:
+        - sharedText
+
+    ResolveSharedPlaceLinkResultStatusDto:
+      type: string
+      enum:
+        - MATCHED
+        - AMBIGUOUS
+        - NOT_FOUND
+
+    SharedPlaceLinkVendorDto:
+      type: string
+      enum:
+        - KAKAO
+        - NAVER
+        - GOOGLE
+        - TMAP
+        - UNKNOWN
+
+    ResolveSharedPlaceLinkResponseDto:
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/ResolveSharedPlaceLinkResultStatusDto'
+        place:
+          $ref: '#/components/schemas/PlaceListItem'
+        candidates:
+          type: array
+          items:
+            $ref: '#/components/schemas/PlaceListItem'
+        fallbackQuery:
+          type: string
+          description: status=NOT_FOUND 일 때 Search 화면 prefill 용 검색어
+        detectedVendor:
+          $ref: '#/components/schemas/SharedPlaceLinkVendorDto'
+      required:
+        - status
+        - detectedVendor
 
     SuggestPlacesRequestDto:
       type: object
