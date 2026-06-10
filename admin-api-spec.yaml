@@ -5236,25 +5236,76 @@ components:
         bbucleRoadData:
           $ref: '#/components/schemas/AdminPlaceSpecialAccessibilityBbucleRoadDataDto'
 
-    AdminToiletReviewDetailDto:
+    AdminToiletAccessibilityDto:
       type: object
-      description: 'Toilet에 병합된 유저 리뷰(ToiletReview)의 상세 정보'
+      description: |
+        Toilet에 병합된 단일 소스(유저 리뷰 ToiletReview 또는 공공데이터 ExternalAccessibility)의
+        접근성 정보. 소스 종류에 따라 채워지는 필드가 다르며, 어드민은 존재하는 필드로 큐레이션을 판단한다.
+      required:
+        - id
+        - images
       properties:
-        toiletLocationType:
+        id:
           type: string
-          description: '화장실 위치 유형 (PLACE / BUILDING / NONE / ETC)'
-        locationComment:
-          type: string
-          nullable: true
-          description: '화장실 위치 설명'
-        comment:
-          type: string
-          nullable: true
-          description: '기타 참고사항'
+          description: '소스 엔티티 id (ToiletReview 또는 ExternalAccessibility)'
         images:
           type: array
           items:
             $ref: '#/components/schemas/AdminImageDTO'
+        toiletLocationType:
+          type: string
+          nullable: true
+          description: '화장실 위치 유형 PLACE/BUILDING/NONE/ETC (유저 리뷰 소스)'
+        locationComment:
+          type: string
+          nullable: true
+          description: '화장실 위치 설명 (유저 리뷰 소스)'
+        comment:
+          type: string
+          nullable: true
+          description: '기타 참고사항 (유저 리뷰 소스)'
+        toiletDetails:
+          $ref: '#/components/schemas/AdminToiletAccessibilityDetailsDto'
+          nullable: true
+          description: '공공데이터 소스 상세 필드'
+
+    AdminToiletAccessibilityDetailsDto:
+      type: object
+      description: '공공데이터(ExternalAccessibility) 화장실 상세 필드'
+      properties:
+        gender:
+          type: string
+          nullable: true
+        accessDesc:
+          type: string
+          nullable: true
+        availableDesc:
+          type: string
+          nullable: true
+        entranceDesc:
+          type: string
+          nullable: true
+        stallWidth:
+          type: string
+          nullable: true
+        stallDepth:
+          type: string
+          nullable: true
+        doorDesc:
+          type: string
+          nullable: true
+        doorSideRoom:
+          type: string
+          nullable: true
+        washStandBelowRoom:
+          type: string
+          nullable: true
+        washStandHandle:
+          type: string
+          nullable: true
+        extraDesc:
+          type: string
+          nullable: true
 
     AdminToiletDto:
       type: object
@@ -5264,7 +5315,7 @@ components:
         - isSearchable
         - hasExternalSource
         - createdAt
-        - toiletReviewDetails
+        - toiletAccessibilities
       properties:
         id:
           type: string
@@ -5281,12 +5332,12 @@ components:
           description: '공공데이터(ExternalAccessibility) 소스 병합 여부'
         createdAt:
           $ref: '#/components/schemas/EpochMillisTimestamp'
-        toiletReviewDetails:
+        toiletAccessibilities:
           type: array
           description:
-            '이 Toilet에 병합된 유저 리뷰들 (큐레이션 판단용). 없으면 빈 배열'
+            '이 Toilet에 병합된 모든 소스(유저 리뷰 + 공공데이터). 큐레이션 판단용. 없으면 빈 배열'
           items:
-            $ref: '#/components/schemas/AdminToiletReviewDetailDto'
+            $ref: '#/components/schemas/AdminToiletAccessibilityDto'
 
     AdminSearchToiletsRequestDto:
       type: object

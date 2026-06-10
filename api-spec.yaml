@@ -6303,13 +6303,13 @@ components:
     ToiletDetailDto:
       type: object
       description: |
-        Toilet + 병합된 소스들의 조합. 각 섹션은 데이터가 있을 때만 채워지며,
-        클라이언트는 sourceType 분기 없이 존재하는 필드만 조건부로 렌더링한다.
+        통합 Toilet + 병합된 소스별 접근성 정보 리스트. PDP(Place + PlaceAccessibility[]) 패턴.
+        Toilet 레벨 식별/표시 정보 + 소스별 ToiletAccessibilityDto 배열로 구성된다.
       required:
         - id
         - name
         - location
-        - images
+        - accessibilities
       properties:
         id:
           type: string
@@ -6320,23 +6320,46 @@ components:
           nullable: true
         location:
           $ref: '#/components/schemas/Location'
+        accessibilities:
+          type: array
+          description: '이 Toilet에 병합된 모든 소스(유저 리뷰 + 공공데이터)의 접근성 정보'
+          items:
+            $ref: '#/components/schemas/ToiletAccessibilityDto'
+
+    ToiletAccessibilityDto:
+      type: object
+      description: |
+        Toilet에 병합된 단일 소스(유저 리뷰 ToiletReview 또는 공공데이터 ExternalAccessibility)의 접근성 정보.
+        소스 종류에 따라 채워지는 필드가 다르며, 클라이언트는 sourceType 분기 없이
+        존재하는 필드만 조건부로 렌더링한다.
+      required:
+        - id
+        - images
+      properties:
+        id:
+          type: string
+          description: '소스 엔티티 id (ToiletReview 또는 ExternalAccessibility)'
         images:
           type: array
-          description: '병합된 모든 소스의 이미지 합본'
+          description: '이 소스의 이미지들 (공공데이터는 0~1장, 유저 리뷰는 0~N장)'
           items:
             $ref: '#/components/schemas/ImageDto'
         locationComment:
           type: string
           nullable: true
-          description: '화장실 위치 설명 (유저 리뷰 소스가 있으면)'
+          description: '화장실 위치 설명 (유저 리뷰 소스)'
         comment:
           type: string
           nullable: true
-          description: '기타 참고사항 (유저 리뷰 소스가 있으면)'
+          description: '기타 참고사항 (유저 리뷰 소스)'
+        toiletLocationType:
+          type: string
+          nullable: true
+          description: '화장실 위치 유형 PLACE/BUILDING/NONE/ETC (유저 리뷰 소스)'
         toiletDetails:
           $ref: '#/components/schemas/ToiletAccessibilityDetails'
           nullable: true
-          description: '공공데이터 소스 상세 필드 (있으면)'
+          description: '공공데이터 소스 상세 필드'
         referenceTargetId:
           type: string
           nullable: true
