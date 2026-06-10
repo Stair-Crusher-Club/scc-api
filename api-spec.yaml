@@ -6322,7 +6322,8 @@ components:
           $ref: '#/components/schemas/Location'
         accessibilities:
           type: array
-          description: '이 Toilet에 병합된 모든 소스(유저 리뷰 + 공공데이터)의 접근성 정보'
+          description:
+            '이 Toilet에 병합된 모든 소스(유저 리뷰 + 공공데이터)의 접근성 정보'
           items:
             $ref: '#/components/schemas/ToiletAccessibilityDto'
 
@@ -6338,10 +6339,12 @@ components:
       properties:
         id:
           type: string
-          description: '소스 엔티티 id (ToiletReview 또는 ExternalAccessibility)'
+          description:
+            '소스 엔티티 id (ToiletReview 또는 ExternalAccessibility)'
         images:
           type: array
-          description: '이 소스의 이미지들 (공공데이터는 0~1장, 유저 리뷰는 0~N장)'
+          description:
+            '이 소스의 이미지들 (공공데이터는 0~1장, 유저 리뷰는 0~N장)'
           items:
             $ref: '#/components/schemas/ImageDto'
         locationComment:
@@ -6355,7 +6358,8 @@ components:
         toiletLocationType:
           type: string
           nullable: true
-          description: '화장실 위치 유형 PLACE/BUILDING/NONE/ETC (유저 리뷰 소스)'
+          description:
+            '화장실 위치 유형 PLACE/BUILDING/NONE/ETC (유저 리뷰 소스)'
         toiletDetails:
           $ref: '#/components/schemas/ToiletAccessibilityDetails'
           nullable: true

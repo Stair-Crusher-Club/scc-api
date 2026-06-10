@@ -5247,7 +5247,8 @@ components:
       properties:
         id:
           type: string
-          description: '소스 엔티티 id (ToiletReview 또는 ExternalAccessibility)'
+          description:
+            '소스 엔티티 id (ToiletReview 또는 ExternalAccessibility)'
         images:
           type: array
           items:
@@ -5255,7 +5256,8 @@ components:
         toiletLocationType:
           type: string
           nullable: true
-          description: '화장실 위치 유형 PLACE/BUILDING/NONE/ETC (유저 리뷰 소스)'
+          description:
+            '화장실 위치 유형 PLACE/BUILDING/NONE/ETC (유저 리뷰 소스)'
         locationComment:
           type: string
           nullable: true
@@ -5335,7 +5337,8 @@ components:
         toiletAccessibilities:
           type: array
           description:
-            '이 Toilet에 병합된 모든 소스(유저 리뷰 + 공공데이터). 큐레이션 판단용. 없으면 빈 배열'
+            '이 Toilet에 병합된 모든 소스(유저 리뷰 + 공공데이터). 큐레이션
+            판단용. 없으면 빈 배열'
           items:
             $ref: '#/components/schemas/AdminToiletAccessibilityDto'
 
