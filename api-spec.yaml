@@ -6378,6 +6378,18 @@ components:
           nullable: true
           description:
             '유저 리뷰 소스의 placeId/buildingId (앱에서 PDP 이동 보조)'
+        registeredUserName:
+          type: string
+          nullable: true
+          description:
+            '유저 리뷰 작성자 닉네임. 익명이거나 공공데이터 소스면 null. (유저
+            리뷰 소스)'
+        createdAt:
+          $ref: '#/components/schemas/EpochMillisTimestamp'
+          nullable: true
+          description:
+            '소스 등록 시점. 유저 리뷰 소스에만 존재하고 공공데이터 소스면 null.
+            (유저 리뷰 소스)'
 
   responses:
     ApiFailure:
