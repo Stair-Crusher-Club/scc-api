@@ -1852,6 +1852,27 @@ paths:
               schema:
                 $ref: '#/components/schemas/ListPublicPlaceListsResponseDto'
 
+  /listPlaceSearchRecommendations:
+    post:
+      summary: 현재 지도 영역에 해당하는 장소 검색 추천 목록을 조회한다.
+      description: |
+        현재 지도 중심점(currentLocation)이 추천 항목의 폴리곤 내부에 있으면 해당 추천을 반환한다.
+        매칭되는 추천이 없으면 빈 배열을 반환한다. 비인증 사용자도 조회 가능하다.
+      operationId: listPlaceSearchRecommendations
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ListPlaceSearchRecommendationsRequestDto'
+      responses:
+        '200':
+          description: 추천 목록
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListPlaceSearchRecommendationsResponseDto'
+
   /getUserTutorialProgress:
     post:
       summary: 윌리의 외출 NUX 튜토리얼 미션 진행 상태를 조회한다.
@@ -2676,6 +2697,13 @@ components:
           type: string
         name:
           type: string
+        shortName:
+          type: string
+          nullable: true
+          maxLength: 8
+          description:
+            검색 결과 카드 등 공간이 좁은 곳에 표시하는 짧은 이름 (최대 8자).
+            null이면 태그 미노출.
         type:
           $ref: '#/components/schemas/PlaceListTypeDto'
         description:
@@ -3665,6 +3693,13 @@ components:
             내가 접근성 정보를 요청했는지 여부. 비인증 유저는 항상 false.
         specialAccessibility:
           $ref: '#/components/schemas/PlaceSpecialAccessibilityDto'
+        placeTags:
+          type: array
+          description: >-
+            장소에 연결된 태그 목록 (예: 저장리스트 태그). shortName이 설정된
+            PUBLIC 저장리스트에 포함된 경우에만 노출.
+          items:
+            $ref: '#/components/schemas/PlaceTagDto'
 
       required:
         - place
@@ -6390,6 +6425,82 @@ components:
           description:
             '소스 등록 시점. 유저 리뷰 소스에만 존재하고 공공데이터 소스면 null.
             (유저 리뷰 소스)'
+
+    PlaceTagTypeDto:
+      type: string
+      description: 장소 태그 타입
+      enum:
+        - SAVED_LIST
+
+    PlaceTagDto:
+      type: object
+      description: 장소에 연결된 태그
+      properties:
+        type:
+          $ref: '#/components/schemas/PlaceTagTypeDto'
+        name:
+          type: string
+          description: 태그 표시 이름
+        placeListId:
+          type: string
+          nullable: true
+          description: SAVED_LIST 타입일 때 연결된 저장리스트 ID
+      required:
+        - type
+        - name
+
+    PlaceSearchRecommendationTypeDto:
+      type: string
+      description: 장소 검색 추천 타입
+      enum:
+        - REGION_BASED
+
+    PlaceSearchRecommendationDto:
+      type: object
+      description: 장소 검색 추천 항목 (지도 empty view 칩)
+      properties:
+        id:
+          type: string
+        type:
+          $ref: '#/components/schemas/PlaceSearchRecommendationTypeDto'
+        name:
+          type: string
+          maxLength: 12
+          description: 칩에 표시하는 짧은 이름 (최대 12자)
+        placeListId:
+          type: string
+          nullable: true
+          description: REGION_BASED 타입일 때 탭 시 이동할 저장리스트 ID
+      required:
+        - id
+        - type
+        - name
+
+    ListPlaceSearchRecommendationsRequestDto:
+      type: object
+      description: 장소 검색 추천 목록 조회 요청
+      properties:
+        currentLocation:
+          $ref: '#/components/schemas/Location'
+        rectangleRegion:
+          $ref: '#/components/schemas/RectangleSearchRegionDto'
+          nullable: true
+          description:
+            현재 지도 뷰포트 영역 (선택). null이면 currentLocation만으로 판단.
+      required:
+        - currentLocation
+
+    ListPlaceSearchRecommendationsResponseDto:
+      type: object
+      description: 장소 검색 추천 목록 응답
+      properties:
+        items:
+          type: array
+          description: 추천 항목 목록. 매칭 없으면 빈 배열.
+          items:
+            $ref: '#/components/schemas/PlaceSearchRecommendationDto'
+      required:
+        - items
 
   responses:
     ApiFailure:

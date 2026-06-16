@@ -1736,6 +1736,93 @@ paths:
         '404':
           description: 해당 ID의 리스트를 찾을 수 없음
 
+  /place-search-recommendations:
+    get:
+      summary: 장소 검색 추천 목록을 조회한다.
+      operationId: listPlaceSearchRecommendations
+      tags:
+        - place-search-recommendation
+      parameters:
+        - in: query
+          name: cursor
+          schema:
+            type: string
+          required: false
+          description: 페이지네이션 커서
+        - in: query
+          name: limit
+          schema:
+            type: integer
+          required: false
+          description: 페이지당 항목 수 (기본값 20)
+      responses:
+        '200':
+          description: 목록 조회 성공
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminListPlaceSearchRecommendationsResponseDto'
+
+    post:
+      summary: 장소 검색 추천을 생성한다.
+      operationId: createPlaceSearchRecommendation
+      tags:
+        - place-search-recommendation
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdminCreatePlaceSearchRecommendationRequestDto'
+      responses:
+        '200':
+          description: 생성 성공
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminPlaceSearchRecommendationDto'
+
+  /place-search-recommendations/{id}:
+    parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+        description: PlaceSearchRecommendation ID
+
+    put:
+      summary: 장소 검색 추천을 수정한다.
+      operationId: updatePlaceSearchRecommendation
+      tags:
+        - place-search-recommendation
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdminUpdatePlaceSearchRecommendationRequestDto'
+      responses:
+        '200':
+          description: 수정 성공
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminPlaceSearchRecommendationDto'
+        '404':
+          description: 해당 ID의 추천을 찾을 수 없음
+
+    delete:
+      summary: 장소 검색 추천을 삭제한다.
+      operationId: deletePlaceSearchRecommendation
+      tags:
+        - place-search-recommendation
+      responses:
+        '204':
+          $ref: '#/components/responses/NoContent'
+        '404':
+          description: 해당 ID의 추천을 찾을 수 없음
+
   /places/search:
     post:
       summary: 키워드로 장소를 검색한다.
@@ -4372,6 +4459,12 @@ components:
           type: string
         name:
           type: string
+        shortName:
+          type: string
+          nullable: true
+          maxLength: 8
+          description:
+            검색 결과 카드 등 공간이 좁은 곳에 표시하는 짧은 이름 (최대 8자).
         description:
           type: string
           nullable: true
@@ -4421,6 +4514,12 @@ components:
           type: string
         name:
           type: string
+        shortName:
+          type: string
+          nullable: true
+          maxLength: 8
+          description:
+            검색 결과 카드 등 공간이 좁은 곳에 표시하는 짧은 이름 (최대 8자).
         description:
           type: string
           nullable: true
@@ -4493,6 +4592,12 @@ components:
       properties:
         name:
           type: string
+        shortName:
+          type: string
+          nullable: true
+          maxLength: 8
+          description:
+            검색 결과 카드 등 공간이 좁은 곳에 표시하는 짧은 이름 (최대 8자).
         description:
           type: string
           nullable: true
@@ -4521,6 +4626,12 @@ components:
       properties:
         name:
           type: string
+        shortName:
+          type: string
+          nullable: true
+          maxLength: 8
+          description:
+            검색 결과 카드 등 공간이 좁은 곳에 표시하는 짧은 이름 (최대 8자).
         description:
           type: string
           nullable: true
@@ -5379,6 +5490,115 @@ components:
           description:
             '검색 노출 여부. true로 설정하면 즉시 검색에 노출, false로 설정하면
             즉시 제외'
+
+    AdminPlaceSearchRecommendationTypeDto:
+      type: string
+      description: 장소 검색 추천 타입
+      enum:
+        - REGION_BASED
+
+    AdminCreatePlaceSearchRecommendationRequestDto:
+      description: 장소 검색 추천 생성 요청
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/AdminPlaceSearchRecommendationTypeDto'
+        name:
+          type: string
+          maxLength: 12
+          description: 칩에 표시하는 짧은 이름 (최대 12자)
+        placeListId:
+          type: string
+          description: 연결할 저장리스트 ID
+        startAt:
+          $ref: '#/components/schemas/EpochMillisTimestamp'
+          nullable: true
+          description: 노출 시작 시각 (null이면 즉시 노출)
+        endAt:
+          $ref: '#/components/schemas/EpochMillisTimestamp'
+          nullable: true
+          description: 노출 종료 시각 (null이면 무제한)
+      required:
+        - type
+        - name
+        - placeListId
+
+    AdminUpdatePlaceSearchRecommendationRequestDto:
+      description: 장소 검색 추천 수정 요청
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/AdminPlaceSearchRecommendationTypeDto'
+        name:
+          type: string
+          maxLength: 12
+          description: 칩에 표시하는 짧은 이름 (최대 12자)
+        placeListId:
+          type: string
+          description: 연결할 저장리스트 ID
+        startAt:
+          $ref: '#/components/schemas/EpochMillisTimestamp'
+          nullable: true
+          description: 노출 시작 시각 (null이면 즉시 노출)
+        endAt:
+          $ref: '#/components/schemas/EpochMillisTimestamp'
+          nullable: true
+          description: 노출 종료 시각 (null이면 무제한)
+      required:
+        - type
+        - name
+        - placeListId
+
+    AdminPlaceSearchRecommendationDto:
+      description: 장소 검색 추천 항목
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          $ref: '#/components/schemas/AdminPlaceSearchRecommendationTypeDto'
+        name:
+          type: string
+          description: 칩에 표시하는 짧은 이름
+        placeListId:
+          type: string
+          description: 연결된 저장리스트 ID
+        placeListName:
+          type: string
+          nullable: true
+          description: 연결된 저장리스트 이름 (표시용)
+        startAt:
+          $ref: '#/components/schemas/EpochMillisTimestamp'
+          nullable: true
+        endAt:
+          $ref: '#/components/schemas/EpochMillisTimestamp'
+          nullable: true
+        createdAt:
+          $ref: '#/components/schemas/EpochMillisTimestamp'
+        updatedAt:
+          $ref: '#/components/schemas/EpochMillisTimestamp'
+      required:
+        - id
+        - type
+        - name
+        - placeListId
+        - createdAt
+        - updatedAt
+
+    AdminListPlaceSearchRecommendationsResponseDto:
+      description: 장소 검색 추천 목록 응답
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/AdminPlaceSearchRecommendationDto'
+        cursor:
+          type: string
+          nullable: true
+          description: 다음 페이지 커서 (없으면 마지막 페이지)
+      required:
+        - items
 
   responses:
     NoContent:
