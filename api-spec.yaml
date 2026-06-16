@@ -2697,13 +2697,6 @@ components:
           type: string
         name:
           type: string
-        shortName:
-          type: string
-          nullable: true
-          maxLength: 8
-          description:
-            검색 결과 카드 등 공간이 좁은 곳에 표시하는 짧은 이름 (최대 8자).
-            null이면 태그 미노출.
         type:
           $ref: '#/components/schemas/PlaceListTypeDto'
         description:
@@ -6430,7 +6423,7 @@ components:
       type: string
       description: 장소 태그 타입
       enum:
-        - SAVED_LIST
+        - PLACE_LIST
 
     PlaceTagDto:
       type: object
@@ -6444,16 +6437,16 @@ components:
         placeListId:
           type: string
           nullable: true
-          description: SAVED_LIST 타입일 때 연결된 저장리스트 ID
+          description: PLACE_LIST 타입일 때 연결된 저장리스트 ID
       required:
         - type
         - name
 
     PlaceSearchRecommendationTypeDto:
       type: string
-      description: 장소 검색 추천 타입
+      description: 장소 검색 추천 타입 (클라이언트에 노출되는 컨텐츠 타입)
       enum:
-        - REGION_BASED
+        - PLACE_LIST
 
     PlaceSearchRecommendationDto:
       type: object
@@ -6465,12 +6458,12 @@ components:
           $ref: '#/components/schemas/PlaceSearchRecommendationTypeDto'
         name:
           type: string
-          maxLength: 12
-          description: 칩에 표시하는 짧은 이름 (최대 12자)
+          maxLength: 8
+          description: 칩에 표시하는 짧은 이름 (최대 8자)
         placeListId:
           type: string
           nullable: true
-          description: REGION_BASED 타입일 때 탭 시 이동할 저장리스트 ID
+          description: PLACE_LIST 타입일 때 탭 시 이동할 저장리스트 ID
       required:
         - id
         - type

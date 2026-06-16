@@ -5505,8 +5505,8 @@ components:
           $ref: '#/components/schemas/AdminPlaceSearchRecommendationTypeDto'
         name:
           type: string
-          maxLength: 12
-          description: 칩에 표시하는 짧은 이름 (최대 12자)
+          maxLength: 8
+          description: 칩에 표시하는 짧은 이름 (최대 8자)
         placeListId:
           type: string
           description: 연결할 저장리스트 ID
@@ -5531,8 +5531,8 @@ components:
           $ref: '#/components/schemas/AdminPlaceSearchRecommendationTypeDto'
         name:
           type: string
-          maxLength: 12
-          description: 칩에 표시하는 짧은 이름 (최대 12자)
+          maxLength: 8
+          description: 칩에 표시하는 짧은 이름 (최대 8자)
         placeListId:
           type: string
           description: 연결할 저장리스트 ID
