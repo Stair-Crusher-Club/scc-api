@@ -4685,6 +4685,13 @@ components:
         - CLUCH # 클러치(목발, 지팡이)
         - NONE # 해당사항없음
         - FRIEND_OF_TOOL_USER # 도구를 사용하는 사람의 친구
+        - SCOOTER # 스쿠터
+        - WHEELCHAIR_USER_COMPANION # 휠체어 사용자의 가족·친구·동료
+        - WALKER # 워커
+        - CANE # 지팡이
+        - WALKING_CART # 보행차
+        - CRUTCH # 목발
+        - WALKING_DIFFICULTY # 보행 대체·보조 기기가 없으나 보행 불편
 
     UpvotedPlaceDto:
       type: object
