@@ -3625,6 +3625,14 @@ components:
           description:
             '병합된 통합 화장실(Toilet) ID. 동기화된 TOILET 카테고리 데이터에만
             존재. 상세 이동(getToilet) 시 사용.'
+        source:
+          type: string
+          nullable: true
+          description: '데이터 출처 소스 코드 (예: SMART_SEOUL_MAP, MOIS_PUBLIC_TOILET). null이면 출처 미상.'
+        lastVerifiedAt:
+          $ref: '#/components/schemas/EpochMillisTimestamp'
+          nullable: true
+          description: '공공데이터 소스의 마지막 확인/수정 시각 (updatedAt 기반).'
       required:
         - id
         - name
@@ -3658,6 +3666,14 @@ components:
           type: string
         extraDesc:
           type: string
+        openingHours:
+          type: string
+          nullable: true
+          description: '화장실 개방시간 (예: "월-금 06:00~22:00"). 공공데이터 소스에만 존재.'
+        phoneNumber:
+          type: string
+          nullable: true
+          description: '관리기관 전화번호. 공공데이터 소스에만 존재.'
 
     PlaceListItem:
       type: object
@@ -6428,6 +6444,14 @@ components:
           description:
             '소스 등록 시점. 유저 리뷰 소스에만 존재하고 공공데이터 소스면 null.
             (유저 리뷰 소스)'
+        sourceName:
+          type: string
+          nullable: true
+          description: '출처 표시명 (예: "스마트서울맵", "행정안전부 전국공중화장실표준데이터"). 유저 리뷰 소스는 null.'
+        lastVerifiedAt:
+          $ref: '#/components/schemas/EpochMillisTimestamp'
+          nullable: true
+          description: '화장실 정보가 마지막으로 확인된 시각(공공데이터 소스의 updatedAt). 유저 리뷰 소스는 null.'
 
     PlaceTagTypeDto:
       type: string
