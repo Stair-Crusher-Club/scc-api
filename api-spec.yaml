@@ -3456,7 +3456,9 @@ components:
           $ref: '#/components/schemas/PlaceCategoryDto'
         displayCategoryName:
           type: string
-          description: vendor 원본 데이터에서 추출한 세부 카테고리명(e.g. "육류,고기"). 없으면 category 기반 라벨로 표시한다.
+          description:
+            vendor 원본 데이터에서 추출한 세부 카테고리명(e.g. "육류,고기").
+            없으면 category 기반 라벨로 표시한다.
         isFavorite:
           type: boolean
           description: 내가 즐겨찾기한 점포인지 여부.
@@ -3625,6 +3627,15 @@ components:
           description:
             '병합된 통합 화장실(Toilet) ID. 동기화된 TOILET 카테고리 데이터에만
             존재. 상세 이동(getToilet) 시 사용.'
+        source:
+          $ref: '#/components/schemas/AccessibilitySourceDto'
+          nullable: true
+          description: '데이터 출처. null이면 출처 미상.'
+        lastVerifiedAt:
+          $ref: '#/components/schemas/EpochMillisTimestamp'
+          nullable: true
+          description:
+            '공공데이터 소스의 마지막 확인/수정 시각 (updatedAt 기반).'
       required:
         - id
         - name
@@ -3658,6 +3669,16 @@ components:
           type: string
         extraDesc:
           type: string
+        openingHours:
+          type: string
+          nullable: true
+          description:
+            '화장실 개방시간 (예: "월-금 06:00~22:00"). 공공데이터 소스에만
+            존재.'
+        phoneNumber:
+          type: string
+          nullable: true
+          description: '관리기관 전화번호. 공공데이터 소스에만 존재.'
 
     PlaceListItem:
       type: object
@@ -5054,6 +5075,13 @@ components:
         - NONE # 없음
         - ETC # 기타
 
+    AccessibilitySourceDto:
+      type: string
+      description: 접근성 데이터 출처
+      enum:
+        - SMART_SEOUL_MAP # 스마트서울맵
+        - MOIS_PUBLIC_TOILET # 행정안전부 전국공중화장실표준데이터
+
     ToiletReviewDto:
       type: object
       properties:
@@ -6428,6 +6456,18 @@ components:
           description:
             '소스 등록 시점. 유저 리뷰 소스에만 존재하고 공공데이터 소스면 null.
             (유저 리뷰 소스)'
+        source:
+          $ref: '#/components/schemas/AccessibilitySourceDto'
+          nullable: true
+          description:
+            '데이터 출처. 유저 리뷰 소스는 null. 표시명(humanReadable)은
+            클라이언트가 매핑.'
+        lastVerifiedAt:
+          $ref: '#/components/schemas/EpochMillisTimestamp'
+          nullable: true
+          description:
+            '화장실 정보가 마지막으로 확인된 시각(공공데이터 소스의 updatedAt).
+            유저 리뷰 소스는 null.'
 
     PlaceTagTypeDto:
       type: string
@@ -6455,8 +6495,9 @@ components:
     PlaceSearchRecommendationTypeDto:
       type: string
       description:
-        '장소 검색 추천의 discovery 타입 — 추천이 어떻게 만들어지고 매칭됐는지를 나타낸다.
-        칩의 비주얼 디자인을 결정한다. 탭 시 랜딩은 navigationType이 결정(직교한 별도 차원).'
+        '장소 검색 추천의 discovery 타입 — 추천이 어떻게 만들어지고 매칭됐는지를
+        나타낸다. 칩의 비주얼 디자인을 결정한다. 탭 시 랜딩은 navigationType이
+        결정(직교한 별도 차원).'
       enum:
         - REGION_BASED # 지도 영역(폴리곤) 기반 추천
 
@@ -6483,7 +6524,8 @@ components:
         placeListId:
           type: string
           nullable: true
-          description: navigationType이 PLACE_LIST일 때 탭 시 이동할 저장리스트 ID
+          description:
+            navigationType이 PLACE_LIST일 때 탭 시 이동할 저장리스트 ID
       required:
         - id
         - type
