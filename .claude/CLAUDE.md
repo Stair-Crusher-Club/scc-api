@@ -27,6 +27,7 @@ OpenAPI 3.0 스펙 (Source of Truth). YAML 작성 절차/예제/패턴은 `/scc-
 
 ## Schema Reusability
 
+- **유한한 값 집합(출처/타입/상태 코드)은 free string이 아니라 enum Dto로 정의** (예: `AccessibilitySourceDto`). 코드값을 string + description으로 나열하지 않는다. (PR #119)
 - 관련 필드는 flat 나열 대신 별도 DTO로 묶고, 동일 enum이 3곳 이상 반복되면 별도 스키마로 분리해 `$ref` 참조
 - 새 스키마 작성 전 기존 `components/schemas`에서 재사용 가능한 것을 먼저 검색
 - 표준 Register Request/Response 구조와 예시는 `/scc-api-spec-design` 참조
