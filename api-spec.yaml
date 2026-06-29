@@ -3626,9 +3626,9 @@ components:
             '병합된 통합 화장실(Toilet) ID. 동기화된 TOILET 카테고리 데이터에만
             존재. 상세 이동(getToilet) 시 사용.'
         source:
-          type: string
+          $ref: '#/components/schemas/AccessibilitySourceDto'
           nullable: true
-          description: '데이터 출처 소스 코드 (예: SMART_SEOUL_MAP, MOIS_PUBLIC_TOILET). null이면 출처 미상.'
+          description: '데이터 출처. null이면 출처 미상.'
         lastVerifiedAt:
           $ref: '#/components/schemas/EpochMillisTimestamp'
           nullable: true
@@ -5070,6 +5070,13 @@ components:
         - NONE # 없음
         - ETC # 기타
 
+    AccessibilitySourceDto:
+      type: string
+      description: 접근성 데이터 출처
+      enum:
+        - SMART_SEOUL_MAP # 스마트서울맵
+        - MOIS_PUBLIC_TOILET # 행정안전부 전국공중화장실표준데이터
+
     ToiletReviewDto:
       type: object
       properties:
@@ -6444,10 +6451,10 @@ components:
           description:
             '소스 등록 시점. 유저 리뷰 소스에만 존재하고 공공데이터 소스면 null.
             (유저 리뷰 소스)'
-        sourceName:
-          type: string
+        source:
+          $ref: '#/components/schemas/AccessibilitySourceDto'
           nullable: true
-          description: '출처 표시명 (예: "스마트서울맵", "행정안전부 전국공중화장실표준데이터"). 유저 리뷰 소스는 null.'
+          description: '데이터 출처. 유저 리뷰 소스는 null. 표시명(humanReadable)은 클라이언트가 매핑.'
         lastVerifiedAt:
           $ref: '#/components/schemas/EpochMillisTimestamp'
           nullable: true
