@@ -2188,6 +2188,48 @@ components:
                 $ref: '#/components/schemas/BuildingAccessibility'
               description:
                 이 건물의 모든 건물 접근성 등록 정보 (접근 레벨 오름차순)
+            aiSummary:
+              $ref: '#/components/schemas/PlaceAiSummaryDto'
+              description:
+                AI 접근성/리뷰 요약 (PDP 상단 노출). 노출조건(접근레벨 계산 가능
+                또는 리뷰 존재) 불충족 시 omit.
+
+    PlaceAiSummaryDto:
+      type: object
+      description: PDP 상단에 노출하는 AI 접근성/리뷰 요약.
+      properties:
+        items:
+          type: array
+          maxItems: 4
+          items:
+            $ref: '#/components/schemas/PlaceAiSummaryItemDto'
+          description: 요약 문장 리스트 (최대 4줄).
+        isExperimental:
+          type: boolean
+          description: 실험 단계 안내 문구/툴팁 노출 여부.
+      required:
+        - items
+        - isExperimental
+
+    PlaceAiSummaryItemDto:
+      type: object
+      description: AI 요약의 한 줄.
+      properties:
+        text:
+          type: string
+          description: 요약 문장.
+        sourceTab:
+          $ref: '#/components/schemas/AiSummarySourceTabDto'
+          description: 클릭 시 이동할 탭. 없으면 출처 넘버 미노출.
+      required:
+        - text
+
+    AiSummarySourceTabDto:
+      type: string
+      description: AI 요약 한 줄의 출처 탭.
+      enum:
+        - ACCESSIBILITY
+        - REVIEW
 
     AccessibilityRankDto:
       type: object
