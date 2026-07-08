@@ -4449,11 +4449,6 @@ components:
             비어있다.
           items:
             $ref: '#/components/schemas/ToiletSummaryDto'
-        toiletSearchCenter:
-          $ref: '#/components/schemas/Location'
-          description:
-            mode가 ACCESSIBLE_TOILET일 때 판별된 지역의 중심 좌표 (지도 카메라
-            이동용).
       required:
         - items
 
