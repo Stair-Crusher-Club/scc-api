@@ -4436,8 +4436,33 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/PlaceListItem'
+        mode:
+          $ref: '#/components/schemas/PlaceSearchResultModeDto'
+          description:
+            검색 결과의 종류. 생략되거나 PLACE면 일반 장소 검색(items).
+            ACCESSIBLE_TOILET이면 "<지역명> 화장실"류 검색이 장애인 화장실
+            검색으로 처리된 것으로, 결과는 toiletItems에 담긴다.
+        toiletItems:
+          type: array
+          description:
+            mode가 ACCESSIBLE_TOILET일 때의 장애인 화장실 검색 결과. 그 외에는
+            비어있다.
+          items:
+            $ref: '#/components/schemas/ToiletSummaryDto'
+        toiletSearchCenter:
+          $ref: '#/components/schemas/Location'
+          description:
+            mode가 ACCESSIBLE_TOILET일 때 판별된 지역의 중심 좌표 (지도 카메라
+            이동용).
       required:
         - items
+
+    PlaceSearchResultModeDto:
+      type: string
+      description: /searchPlaces 응답의 결과 종류 판별자.
+      enum:
+        - PLACE
+        - ACCESSIBLE_TOILET
 
     SearchUnconqueredPlacesNearbyRequestDto:
       type: object
