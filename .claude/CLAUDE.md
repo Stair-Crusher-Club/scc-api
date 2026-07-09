@@ -30,6 +30,7 @@ OpenAPI 3.0 스펙 (Source of Truth). YAML 작성 절차/예제/패턴은 `/scc-
 - **유한한 값 집합(출처/타입/상태 코드)은 free string이 아니라 enum Dto로 정의** (예: `AccessibilitySourceDto`). 코드값을 string + description으로 나열하지 않는다. (PR #119)
 - 관련 필드는 flat 나열 대신 별도 DTO로 묶고, 동일 enum이 3곳 이상 반복되면 별도 스키마로 분리해 `$ref` 참조
 - 새 스키마 작성 전 기존 `components/schemas`에서 재사용 가능한 것을 먼저 검색
+- **응답 필드에도 YAGNI**: 실제 클라이언트 소비처가 있을 때만 필드 추가. 클라이언트가 이미 파생/처리하는 값(예: 결과 마커로 지도 카메라 fit)은 응답에 넣지 않는다. (PR #122)
 - 표준 Register Request/Response 구조와 예시는 `/scc-api-spec-design` 참조
 
 ---
