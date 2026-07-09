@@ -2035,7 +2035,6 @@ paths:
         - 좋아요 개념이 적용되지 않는 URL 이면 upvoteSummary 는 null.
         - 한 번도 저장된 적 없는 URL이면 sccContentId 는 null 로 응답한다.
       operationId: getSccContentDetails
-      security: []
       requestBody:
         required: true
         content:
