@@ -2035,8 +2035,6 @@ paths:
         - 좋아요 개념이 적용되지 않는 URL 이면 upvoteSummary 는 null.
         - 한 번도 저장된 적 없는 URL이면 sccContentId 는 null 로 응답한다.
       operationId: getSccContentDetails
-      security:
-        - Identified: []
       requestBody:
         required: true
         content:
@@ -2050,6 +2048,30 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/GetSccContentDetailsResponseDto'
+
+  /getSccContent:
+    post:
+      summary: SccContent 단건을 id로 조회한다.
+      description: |
+        sccContentId 로 SccContent 를 조회한다.
+        비로그인 사용자도 호출 가능하다 (예: 공유된 컨텐츠 링크로 진입).
+      operationId: getSccContent
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GetSccContentRequestDto'
+      responses:
+        '200':
+          description: 조회된 SccContent.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SccContentDto'
+        '404':
+          description: 해당 id의 SccContent 를 찾을 수 없음.
 
   /searchToilets:
     post:
@@ -6325,6 +6347,16 @@ components:
       required:
         - totalNumberOfItems
         - items
+
+    GetSccContentRequestDto:
+      type: object
+      description: |
+        id 로 SccContent 단건을 조회하기 위한 요청.
+      properties:
+        sccContentId:
+          type: string
+      required:
+        - sccContentId
 
     GetSccContentDetailsRequestDto:
       type: object
