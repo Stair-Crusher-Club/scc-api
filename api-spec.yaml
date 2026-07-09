@@ -2051,6 +2051,29 @@ paths:
               schema:
                 $ref: '#/components/schemas/GetSccContentDetailsResponseDto'
 
+  /getSccContent:
+    post:
+      summary: SccContent 단건을 id로 조회한다.
+      description: |
+        sccContentId 로 SccContent 를 조회한다.
+        비로그인 사용자도 호출 가능하다 (예: 공유된 컨텐츠 링크로 진입).
+      operationId: getSccContent
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GetSccContentRequestDto'
+      responses:
+        '200':
+          description: 조회된 SccContent.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SccContentDto'
+        '404':
+          description: 해당 id의 SccContent 를 찾을 수 없음.
+
   /searchToilets:
     post:
       tags:
@@ -6325,6 +6348,16 @@ components:
       required:
         - totalNumberOfItems
         - items
+
+    GetSccContentRequestDto:
+      type: object
+      description: |
+        id 로 SccContent 단건을 조회하기 위한 요청.
+      properties:
+        sccContentId:
+          type: string
+      required:
+        - sccContentId
 
     GetSccContentDetailsRequestDto:
       type: object
