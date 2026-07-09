@@ -2035,8 +2035,7 @@ paths:
         - 좋아요 개념이 적용되지 않는 URL 이면 upvoteSummary 는 null.
         - 한 번도 저장된 적 없는 URL이면 sccContentId 는 null 로 응답한다.
       operationId: getSccContentDetails
-      security:
-        - Identified: []
+      security: []
       requestBody:
         required: true
         content:
@@ -2058,6 +2057,7 @@ paths:
         sccContentId 로 SccContent 를 조회한다.
         비로그인 사용자도 호출 가능하다 (예: 공유된 컨텐츠 링크로 진입).
       operationId: getSccContent
+      security: []
       requestBody:
         required: true
         content:
