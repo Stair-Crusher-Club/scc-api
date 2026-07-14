@@ -3426,9 +3426,50 @@ components:
           $ref: '#/components/schemas/EpochMillisTimestamp'
         ignoredAt:
           $ref: '#/components/schemas/EpochMillisTimestamp'
+        checkSource:
+          $ref: '#/components/schemas/AdminClosureCheckSourceDTO'
+        closureReason:
+          $ref: '#/components/schemas/AdminClosureReasonDTO'
+        matchConfidence:
+          type: number
+          format: double
+          description: 매칭 신뢰도 (0.0~1.0). 낮은 신뢰도로 폐업 추정된 경우 등에 설정, 없으면 null.
       required:
         - id
         - placeId
+        - checkSource
+
+    AdminClosureCheckSourceDTO:
+      type: string
+      description: |
+        폐업 추정 소스 (어떤 방식으로 확인했는지)
+        - NAVER_MAPS_API: 네이버 지도 API 검색
+        - NAVER_PLACE_CRAWLER: 네이버 플레이스 크롤링
+        - PUBLIC_DATA: 공공데이터 폐업 정보
+        - KAKAO / GOOGLE / TMAP: 각 지도 서비스
+        - MANUAL: 관리자 수동 입력
+      enum:
+        - NAVER_MAPS_API
+        - NAVER_PLACE_CRAWLER
+        - PUBLIC_DATA
+        - KAKAO
+        - GOOGLE
+        - TMAP
+        - MANUAL
+
+    AdminClosureReasonDTO:
+      type: string
+      description: |
+        폐업 추정 근거 (왜 폐업으로 추정했는지)
+        - CLOSED_BY_PUBLIC_DATA: 공공데이터에서 폐업 확인
+        - NOT_FOUND_ON_MAP: 지도에서 검색 결과 없음
+        - LOW_MATCH_CONFIDENCE: 검색 결과와 일치도 낮음
+        - MANUAL_CHECK: 관리자 수동 확인
+      enum:
+        - CLOSED_BY_PUBLIC_DATA
+        - NOT_FOUND_ON_MAP
+        - LOW_MATCH_CONFIDENCE
+        - MANUAL_CHECK
 
     AdminBuildingDivisionStatusDTO:
       type: string
