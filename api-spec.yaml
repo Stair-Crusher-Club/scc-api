@@ -2753,6 +2753,32 @@ components:
         - placeGroup
         - places
 
+    PlaceListNameChipDto:
+      type: object
+      description:
+        저장리스트 이름칩. 검색 카드/PDP/상세화면에 공통으로 쓰이는 칩 하나의
+        표현.
+      properties:
+        text:
+          type: string
+          description: 칩 표시 문구
+        iconUrl:
+          type: string
+          nullable: true
+          description:
+            칩 좌측 아이콘 이미지 URL. null이면 기본 저장리스트 배지 아이콘
+            사용.
+        backgroundColor:
+          type: string
+          nullable: true
+          description: 칩 배경색 hex (예 "#FFFFFF"). null이면 기본 스타일.
+        borderColor:
+          type: string
+          nullable: true
+          description: 칩 테두리색 hex (예 "#C4132F"). null이면 기본 스타일.
+      required:
+        - text
+
     PlaceListDto:
       type: object
       description: 저장 리스트 정보
@@ -2783,6 +2809,14 @@ components:
           description: 내가 저장한 리스트인지 여부. 비인증 유저는 항상 false.
         accessControl:
           $ref: '#/components/schemas/PlaceListAccessControlDto'
+        nameChip:
+          $ref: '#/components/schemas/PlaceListNameChipDto'
+          nullable: true
+        themes:
+          type: array
+          description: 저장리스트에 지정된 관심 테마 목록. 지정 안 하면 빈 배열.
+          items:
+            $ref: '#/components/schemas/UserInterestedThemeDto'
         createdAt:
           $ref: '#/components/schemas/EpochMillisTimestamp'
         updatedAt:
@@ -2794,6 +2828,7 @@ components:
         - placeCount
         - isSaved
         - accessControl
+        - themes
         - createdAt
         - updatedAt
 
@@ -2832,11 +2867,19 @@ components:
         thumbnailUrl:
           type: string
           nullable: true
+        placeCount:
+          type: integer
+          format: int32
+          description: 리스트에 포함된 장소 수
+        nameChip:
+          $ref: '#/components/schemas/PlaceListNameChipDto'
+          nullable: true
         accessControl:
           $ref: '#/components/schemas/PlaceListAccessControlDto'
       required:
         - id
         - name
+        - placeCount
         - accessControl
 
     ListPublicPlaceListsResponseDto:
@@ -3777,7 +3820,7 @@ components:
         placeTags:
           type: array
           description: >-
-            장소에 연결된 태그 목록 (예: 저장리스트 태그). shortName이 설정된
+            장소에 연결된 태그 목록 (예: 저장리스트 태그). nameChip이 설정된
             PUBLIC 저장리스트에 포함된 경우에만 노출.
           items:
             $ref: '#/components/schemas/PlaceTagDto'
@@ -6575,8 +6618,13 @@ components:
         type:
           $ref: '#/components/schemas/PlaceTagTypeDto'
         name:
+          deprecated: true
           type: string
-          description: 태그 표시 이름
+          description:
+            태그 표시 이름. nameChip.text와 동일 — 구버전 앱 호환용. nameChip을
+            사용할 것.
+        nameChip:
+          $ref: '#/components/schemas/PlaceListNameChipDto'
         placeListId:
           type: string
           nullable: true
@@ -6584,6 +6632,7 @@ components:
       required:
         - type
         - name
+        - nameChip
 
     PlaceSearchRecommendationTypeDto:
       type: string
