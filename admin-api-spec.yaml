@@ -3433,7 +3433,9 @@ components:
         matchConfidence:
           type: number
           format: double
-          description: 매칭 신뢰도 (0.0~1.0). 낮은 신뢰도로 폐업 추정된 경우 등에 설정, 없으면 null.
+          description:
+            매칭 신뢰도 (0.0~1.0). 낮은 신뢰도로 폐업 추정된 경우 등에 설정,
+            없으면 null.
       required:
         - id
         - placeId
@@ -4492,6 +4494,55 @@ components:
         - HOSPITAL
         - PHARMACY
 
+    AdminPlaceListNameChipDto:
+      type: object
+      description:
+        저장리스트 이름칩. 검색 카드/PDP/상세화면에 공통으로 쓰이는 칩 하나의
+        표현.
+      properties:
+        text:
+          type: string
+          description: 칩 표시 문구
+        iconUrl:
+          type: string
+          nullable: true
+          description:
+            칩 좌측 아이콘 이미지 URL. null이면 기본 저장리스트 배지 아이콘
+            사용.
+        backgroundColor:
+          type: string
+          nullable: true
+          description: 칩 배경색 hex (예 "#FFFFFF"). null이면 기본 스타일.
+        borderColor:
+          type: string
+          nullable: true
+          description: 칩 테두리색 hex (예 "#C4132F"). null이면 기본 스타일.
+      required:
+        - text
+
+    AdminUserInterestedThemeDto:
+      type: string
+      description: |
+        사용자의 관심 테마. 윌리의 외출 NUX 튜토리얼 첫 번째 메인 미션에서 선택한다.
+        Figma 1427-8980 화면 기준 8개 항목.
+        - WHEELCHAIR_REVIEW: 휠체어 찐방문기
+        - MEDIA_HOTSPOT: 방송·SNS 핫플
+        - FOOD_CAFE_TOUR: 맛집·카페 투어
+        - EMOTIONAL_VIEW: 감성·뷰 맛집
+        - SPORTS: 야구장·스포츠
+        - CULTURE: 공연·전시·영화
+        - TRAVEL: 훌쩍 떠나는 여행
+        - NATURE: 자연·공원 힐링
+      enum:
+        - WHEELCHAIR_REVIEW
+        - MEDIA_HOTSPOT
+        - FOOD_CAFE_TOUR
+        - EMOTIONAL_VIEW
+        - SPORTS
+        - CULTURE
+        - TRAVEL
+        - NATURE
+
     AdminPlaceListDto:
       description: 저장 리스트 목록 항목
       type: object
@@ -4500,12 +4551,6 @@ components:
           type: string
         name:
           type: string
-        shortName:
-          type: string
-          nullable: true
-          maxLength: 8
-          description:
-            검색 결과 카드 등 공간이 좁은 곳에 표시하는 짧은 이름 (최대 8자).
         description:
           type: string
           nullable: true
@@ -4521,6 +4566,14 @@ components:
           type: integer
           format: int32
           description: 리스트에 포함된 장소 수
+        nameChip:
+          $ref: '#/components/schemas/AdminPlaceListNameChipDto'
+          nullable: true
+        themes:
+          type: array
+          description: 저장리스트에 지정된 관심 테마 목록. 지정 안 하면 빈 배열.
+          items:
+            $ref: '#/components/schemas/AdminUserInterestedThemeDto'
         accessControl:
           $ref: '#/components/schemas/AdminPlaceListAccessControlDto'
         createdAt:
@@ -4531,6 +4584,7 @@ components:
         - id
         - name
         - placeCount
+        - themes
         - accessControl
         - createdAt
         - updatedAt
@@ -4555,12 +4609,6 @@ components:
           type: string
         name:
           type: string
-        shortName:
-          type: string
-          nullable: true
-          maxLength: 8
-          description:
-            검색 결과 카드 등 공간이 좁은 곳에 표시하는 짧은 이름 (최대 8자).
         description:
           type: string
           nullable: true
@@ -4572,6 +4620,14 @@ components:
           nullable: true
           description:
             아이콘 배경색 (hex, e.g. "#FFC01E"). null이면 기본색 사용.
+        nameChip:
+          $ref: '#/components/schemas/AdminPlaceListNameChipDto'
+          nullable: true
+        themes:
+          type: array
+          description: 저장리스트에 지정된 관심 테마 목록. 지정 안 하면 빈 배열.
+          items:
+            $ref: '#/components/schemas/AdminUserInterestedThemeDto'
         accessControl:
           $ref: '#/components/schemas/AdminPlaceListAccessControlDto'
         places:
@@ -4585,6 +4641,7 @@ components:
       required:
         - id
         - name
+        - themes
         - accessControl
         - places
         - createdAt
@@ -4633,12 +4690,6 @@ components:
       properties:
         name:
           type: string
-        shortName:
-          type: string
-          nullable: true
-          maxLength: 8
-          description:
-            검색 결과 카드 등 공간이 좁은 곳에 표시하는 짧은 이름 (최대 8자).
         description:
           type: string
           nullable: true
@@ -4650,6 +4701,15 @@ components:
           nullable: true
           description:
             아이콘 배경색 (hex, e.g. "#FFC01E"). null이면 기본색 사용.
+        nameChip:
+          $ref: '#/components/schemas/AdminPlaceListNameChipDto'
+          nullable: true
+        themes:
+          type: array
+          description:
+            저장리스트에 지정할 관심 테마 목록. 지정 안 하면 빈 배열로 저장.
+          items:
+            $ref: '#/components/schemas/AdminUserInterestedThemeDto'
         accessControl:
           $ref: '#/components/schemas/AdminPlaceListAccessControlDto'
         placeIds:
@@ -4667,12 +4727,6 @@ components:
       properties:
         name:
           type: string
-        shortName:
-          type: string
-          nullable: true
-          maxLength: 8
-          description:
-            검색 결과 카드 등 공간이 좁은 곳에 표시하는 짧은 이름 (최대 8자).
         description:
           type: string
           nullable: true
@@ -4684,6 +4738,15 @@ components:
           nullable: true
           description:
             아이콘 배경색 (hex, e.g. "#FFC01E"). null이면 기본색 사용.
+        nameChip:
+          $ref: '#/components/schemas/AdminPlaceListNameChipDto'
+          nullable: true
+        themes:
+          type: array
+          description:
+            저장리스트에 지정할 관심 테마 목록. 지정 안 하면 빈 배열로 저장.
+          items:
+            $ref: '#/components/schemas/AdminUserInterestedThemeDto'
         accessControl:
           $ref: '#/components/schemas/AdminPlaceListAccessControlDto'
         placeIds:
