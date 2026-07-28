@@ -2776,8 +2776,31 @@ components:
           type: string
           nullable: true
           description: 칩 테두리색 hex (예 "#C4132F"). null이면 기본 스타일.
+        placeListId:
+          type: string
+          nullable: true
+          description:
+            칩이 가리키는 저장리스트 ID. 장소에 붙어 내려올
+            때(placeListNameChips)만 채워진다. 저장리스트 자신의 nameChip으로
+            내려올 때는 null.
       required:
         - text
+
+    PlaceListOwnerDto:
+      type: object
+      description:
+        저장리스트를 만든 주체(큐레이터). 지금은 서버가 계단뿌셔클럽으로 고정해
+        내려준다 — PlaceList 엔티티에 저장하지 않는다.
+      properties:
+        name:
+          type: string
+          description: 표시 이름 (예 "계단뿌셔클럽")
+        profileImageUrl:
+          type: string
+          nullable: true
+          description: 프로필 이미지 URL. null이면 클라이언트 기본 이미지 사용.
+      required:
+        - name
 
     PlaceListDto:
       type: object
@@ -2817,6 +2840,8 @@ components:
           description: 저장리스트에 지정된 관심 테마 목록. 지정 안 하면 빈 배열.
           items:
             $ref: '#/components/schemas/UserInterestedThemeDto'
+        owner:
+          $ref: '#/components/schemas/PlaceListOwnerDto'
         createdAt:
           $ref: '#/components/schemas/EpochMillisTimestamp'
         updatedAt:
@@ -2829,6 +2854,7 @@ components:
         - isSaved
         - accessControl
         - themes
+        - owner
         - createdAt
         - updatedAt
 
@@ -3818,12 +3844,21 @@ components:
         specialAccessibility:
           $ref: '#/components/schemas/PlaceSpecialAccessibilityDto'
         placeTags:
+          deprecated: true
           type: array
           description: >-
-            장소에 연결된 태그 목록 (예: 저장리스트 태그). nameChip이 설정된
-            PUBLIC 저장리스트에 포함된 경우에만 노출.
+            장소에 연결된 태그 목록. placeListNameChips로 대체됐다 — 이미 출시된
+            구버전 앱 호환용으로만 계속 내려준다. 신규 클라이언트는 쓰지 말 것.
           items:
             $ref: '#/components/schemas/PlaceTagDto'
+        placeListNameChips:
+          type: array
+          description: >-
+            이 장소가 속한 저장리스트의 이름칩 목록. nameChip이 설정된 PUBLIC
+            저장리스트에 포함된 경우에만 노출. 각 칩의 placeListId로 리스트
+            상세로 이동한다.
+          items:
+            $ref: '#/components/schemas/PlaceListNameChipDto'
 
       required:
         - place
@@ -6612,19 +6647,17 @@ components:
         - PLACE_LIST
 
     PlaceTagDto:
+      deprecated: true
       type: object
-      description: 장소에 연결된 태그
+      description:
+        장소에 연결된 태그. placeListNameChips로 대체됐다 — 이미 출시된 구버전
+        앱 호환용으로만 남아 있다. 신규 클라이언트는 placeListNameChips를 쓸 것.
       properties:
         type:
           $ref: '#/components/schemas/PlaceTagTypeDto'
         name:
-          deprecated: true
           type: string
-          description:
-            태그 표시 이름. nameChip.text와 동일 — 구버전 앱 호환용. nameChip을
-            사용할 것.
-        nameChip:
-          $ref: '#/components/schemas/PlaceListNameChipDto'
+          description: 태그 표시 이름
         placeListId:
           type: string
           nullable: true
@@ -6632,7 +6665,6 @@ components:
       required:
         - type
         - name
-        - nameChip
 
     PlaceSearchRecommendationTypeDto:
       type: string
