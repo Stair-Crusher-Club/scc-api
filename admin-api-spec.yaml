@@ -3439,8 +3439,8 @@ components:
         originalName:
           type: string
           description:
-            폐업 추정의 근거가 된 원본 레코드의 상호명. PUBLIC_DATA면 공공데이터(행안부 인허가)
-            상호명이라 우리 place 이름과 다를 수 있다.
+            폐업 추정의 근거가 된 원본 레코드의 상호명. PUBLIC_DATA면
+            공공데이터(행안부 인허가) 상호명이라 우리 place 이름과 다를 수 있다.
         originalAddress:
           type: string
           description: 폐업 추정의 근거가 된 원본 레코드의 주소.
