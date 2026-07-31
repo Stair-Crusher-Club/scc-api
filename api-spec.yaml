@@ -788,6 +788,21 @@ paths:
         '204':
           $ref: '#/components/responses/NoContent'
 
+  /givePlaceAiSummaryFeedback:
+    post:
+      summary:
+        PDP AI 접근성 요약에 붐업/붐따를 남긴다. 같은 장소에 다시 호출하면
+        덮어쓴다.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GivePlaceAiSummaryFeedbackRequestDto'
+      responses:
+        '204':
+          $ref: '#/components/responses/NoContent'
+
   /giveUpvote:
     post:
       summary: "'도움이 돼요'를 준다."
@@ -2230,9 +2245,15 @@ components:
         isExperimental:
           type: boolean
           description: 실험 단계 안내 문구/툴팁 노출 여부.
+        isFeedbackGiven:
+          type: boolean
+          description:
+            이 장소에 AI 요약 붐업/붐따를 남긴 적이 있는지. true면 클라이언트가
+            붐업/붐따 버튼을 숨긴다.
       required:
         - items
         - isExperimental
+        - isFeedbackGiven
 
     PlaceAiSummaryItemDto:
       type: object
@@ -3227,6 +3248,43 @@ components:
           type: string
       required:
         - placeAccessibilityId
+
+    GivePlaceAiSummaryFeedbackRequestDto:
+      type: object
+      properties:
+        placeId:
+          type: string
+        vote:
+          $ref: '#/components/schemas/PlaceAiSummaryVoteDto'
+        downvoteReason:
+          $ref: '#/components/schemas/PlaceAiSummaryDownvoteReasonDto'
+          description: vote=DOWN 이면 필수, vote=UP 이면 무시된다.
+        comment:
+          type: string
+          maxLength: 300
+          description: 자유 의견 (선택). vote=UP 이면 무시된다.
+      required:
+        - placeId
+        - vote
+
+    PlaceAiSummaryVoteDto:
+      type: string
+      description:
+        AI 요약에 대한 붐업/붐따 투표. CANCEL 은 이미 남긴 붐업/붐따를 취소한
+        것으로, 서버는 해당 피드백을 삭제해 남기지 않은 상태로 되돌린다 (재진입
+        시 버튼이 다시 노출된다).
+      enum:
+        - UP
+        - DOWN
+        - CANCEL
+
+    PlaceAiSummaryDownvoteReasonDto:
+      type: string
+      description: 붐따 사유.
+      enum:
+        - INACCURATE_INFO
+        - TOO_LONG
+        - OTHER
 
     GiveUpvoteRequestDto:
       type: object
