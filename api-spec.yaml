@@ -6513,8 +6513,9 @@ components:
           type: string
           description:
             조회할 컨텐츠의 URL. 서버에서 정규화 후 SccContent를 찾는다. 또한 이
-            URL 에서 좋아요 target (BBUCLE_ROAD path id 또는 ARTICLE slug) 도 추론한다.
-            정적 아티클 페이지에서 보낼 때는 canonical URL (https://web.staircrusher.club/articles/<slug>) 을 쓴다.
+            URL 에서 좋아요 target (BBUCLE_ROAD path id 또는 ARTICLE slug) 도
+            추론한다. 정적 아티클 페이지에서 보낼 때는 canonical URL
+            (https://web.staircrusher.club/articles/<slug>) 을 쓴다.
       required:
         - url
 
