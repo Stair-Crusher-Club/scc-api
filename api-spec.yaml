@@ -2047,7 +2047,8 @@ paths:
       description: |
         웹뷰 진입 시 라운드트립 1회로 끝낼 수 있도록 저장 상태와 좋아요 요약을 통합 응답한다.
         - URL 기준으로 SccContent id + 현재 유저의 저장 여부.
-        - 서버가 URL pattern 에서 좋아요 target (e.g. BBUCLE_ROAD path id) 을 추론하여 응답의 upvoteSummary 에 좋아요 요약(totalCount, isUpvoted) 을 채운다.
+        - 서버가 URL pattern 에서 좋아요 target 을 추론하여 응답의 upvoteSummary 에 좋아요 요약(totalCount, isUpvoted) 을 채운다.
+          (BBUCLE_ROAD: con.staircrusher.club / staircrusherclub.notion.site 의 path id, ARTICLE: web.staircrusher.club/articles/ 이하 경로)
         - 좋아요 개념이 적용되지 않는 URL 이면 upvoteSummary 는 null.
         - 한 번도 저장된 적 없는 URL이면 sccContentId 는 null 로 응답한다.
       operationId: getSccContentDetails
@@ -4989,6 +4990,7 @@ components:
         - PLACE_REVIEW
         - TOILET_REVIEW
         - BBUCLE_ROAD
+        - ARTICLE
 
     PlaceUpvoteInfoDto:
       type: object
@@ -6511,7 +6513,9 @@ components:
           type: string
           description:
             조회할 컨텐츠의 URL. 서버에서 정규화 후 SccContent를 찾는다. 또한 이
-            URL 에서 좋아요 target (e.g. BBUCLE_ROAD path id) 도 추론한다.
+            URL 에서 좋아요 target (BBUCLE_ROAD path id 또는 ARTICLE slug) 도
+            추론한다. 정적 아티클 페이지에서 보낼 때는 canonical URL
+            (https://web.staircrusher.club/articles/<slug>) 을 쓴다.
       required:
         - url
 
