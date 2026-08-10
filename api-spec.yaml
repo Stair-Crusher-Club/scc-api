@@ -4661,7 +4661,10 @@ components:
       type: object
       properties:
         suggestion:
-          $ref: '#/components/schemas/AlternativeSearchSuggestionDto'
+          # OpenAPI 3.0 에서는 $ref 형제로 nullable 을 쓸 수 없어 allOf 로 감싼다.
+          allOf:
+            - $ref: '#/components/schemas/AlternativeSearchSuggestionDto'
+          nullable: true
           description: 제안할 대체 검색이 없으면 null.
 
     AlternativeSearchSuggestionDto:
