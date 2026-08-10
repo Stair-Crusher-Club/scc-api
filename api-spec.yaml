@@ -4661,11 +4661,11 @@ components:
       type: object
       properties:
         suggestion:
-          # OpenAPI 3.0 에서는 $ref 형제로 nullable 을 쓸 수 없어 allOf 로 감싼다.
-          allOf:
-            - $ref: '#/components/schemas/AlternativeSearchSuggestionDto'
-          nullable: true
-          description: 제안할 대체 검색이 없으면 null.
+          # allOf + nullable 로 감싸면 typescript-axios(6.2.0)가 AlternativeSearchSuggestionDto
+          # 를 재사용하지 않고 인라인 타입을 복제한다(타입 드리프트). 필드를 optional 로 두는
+          # 편이 낫다 — 클라이언트는 `?? null` 로 omission/null 을 함께 받는다.
+          $ref: '#/components/schemas/AlternativeSearchSuggestionDto'
+          description: 제안할 대체 검색이 없으면 null 또는 생략.
 
     AlternativeSearchSuggestionDto:
       type: object
