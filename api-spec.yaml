@@ -1531,6 +1531,29 @@ paths:
               schema:
                 $ref: '#/components/schemas/SearchPlacesResponseDto'
 
+  /getAlternativeSearchSuggestion:
+    post:
+      summary: 포커스된 장소를 기준으로 대체 검색어를 제안할지 판단한다.
+      description: |
+        검색 결과에 접근레벨 2 이하인 장소가 하나도 없을 때(부정경험 상태) 클라이언트가 지도 카드
+        포커스가 확정될 때마다 호출한다. 해당 장소의 vendor 세부 카테고리(예: 한식)를 대체 검색어
+        후보로 뽑아 실제 재검색을 시뮬레이션하고, 접근레벨 2 이하 결과가 3개를 초과할 때만 제안을
+        내려준다. 제안할 것이 없으면 suggestion이 null이다. 비인증 유저도 조회 가능하다.
+      operationId: getAlternativeSearchSuggestion
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GetAlternativeSearchSuggestionRequestDto'
+      responses:
+        '200':
+          description: 대체 검색 제안. 제안할 것이 없으면 suggestion이 null이다.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetAlternativeSearchSuggestionResponseDto'
+
   /searchPlacesByNaturalLanguage:
     post:
       summary: 자연어로 장소를 검색한다.
@@ -4618,6 +4641,47 @@ components:
       enum:
         - PLACE
         - ACCESSIBLE_TOILET
+
+    GetAlternativeSearchSuggestionRequestDto:
+      type: object
+      properties:
+        placeId:
+          type: string
+          description: 지도 카드에서 현재 포커스된 장소의 ID
+        currentSearchText:
+          type: string
+          description:
+            현재 화면의 검색어. 대체 검색어가 이 값과 같으면 같은 말을 반복하게
+            되므로 제안하지 않는다.
+      required:
+        - placeId
+        - currentSearchText
+
+    GetAlternativeSearchSuggestionResponseDto:
+      type: object
+      properties:
+        suggestion:
+          # allOf + nullable 로 감싸면 typescript-axios(6.2.0)가 AlternativeSearchSuggestionDto
+          # 를 재사용하지 않고 인라인 타입을 복제한다(타입 드리프트). 필드를 optional 로 두는
+          # 편이 낫다 — 클라이언트는 `?? null` 로 omission/null 을 함께 받는다.
+          $ref: '#/components/schemas/AlternativeSearchSuggestionDto'
+          description: 제안할 대체 검색이 없으면 null 또는 생략.
+
+    AlternativeSearchSuggestionDto:
+      type: object
+      properties:
+        searchText:
+          type: string
+          description:
+            대체 검색어. 버튼 라벨은 "주위 다른 {searchText} 확인하기".
+        circleRegion:
+          $ref: '#/components/schemas/CircleSearchRegionDto'
+          description:
+            서버가 제안 여부 판단에 사용한 원형 영역. 재검색 시 이 값을 그대로
+            /searchPlaces 의 circleRegion 으로 보내야 제안된 결과가 보장된다.
+      required:
+        - searchText
+        - circleRegion
 
     SearchUnconqueredPlacesNearbyRequestDto:
       type: object
