@@ -16,6 +16,12 @@ OpenAPI 3.0 스펙 (Source of Truth). YAML 작성 절차/예제/패턴은 `/scc-
 - 타임스탬프: `~~At` suffix = `EpochMillisTimestamp` $ref, `~~Date` suffix = `format: date-time` 문자열
 - operationId: camelCase 동사+명사 (`listPlaces`, `registerPlaceAccessibility`)
 
+## 포맷 (CI 게이트)
+
+`pr-ci` 의 `lint-and-format` 이 `prettier --check api-spec.yaml admin-api-spec.yaml` 를 돈다.
+스펙을 손으로 편집하면 description 줄바꿈이 거의 항상 어긋나 CI 가 빨개진다 —
+**푸시 전 `npx prettier --write api-spec.yaml` 을 돌린다.** (2026-08-25: 이걸 빼먹어 PR CI 실패)
+
 ## Versioning
 
 - V2 API는 closed beta용 — V1 하위 호환을 유지한 채 독립 진화하도록 **별도 V2 suffix DTO** 사용 (예: `POST /v2/registerPlaceAccessibilityV2`)
