@@ -705,6 +705,13 @@ paths:
                     required:
                       - accessibilityId
                       - accessibilityType
+                forceReinspect:
+                  type: boolean
+                  default: false
+                  description: |
+                    기존 검수 결과가 있어도 다시 검수한다. 기준이 변경된 뒤 재검수용.
+                    기존 row 를 같은 id 로 갱신하므로 accessibilityId 당 1건 조회가 유지되고,
+                    이미 반영된(handledAt != null) 결과는 덮어쓰지 않는다.
               required:
                 - items
       responses:
