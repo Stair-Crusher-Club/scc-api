@@ -1802,7 +1802,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AdminConquerTargetPlaceListDetailDto'
+                $ref: '#/components/schemas/AdminConquerTargetPlaceListDto'
         '404':
           description: 해당 ID의 리스트를 찾을 수 없음
 
@@ -1846,6 +1846,35 @@ paths:
           type: string
         required: true
         description: ConquerTargetPlaceList ID
+
+    get:
+      summary:
+        정복 대상 장소 목록에 포함된 장소를 커서 페이지네이션으로 조회한다.
+      operationId: listConquerTargetPlaces
+      tags:
+        - conquer-target-place-list
+      parameters:
+        - in: query
+          name: cursor
+          schema:
+            type: string
+          required: false
+          description: 페이지네이션 커서
+        - in: query
+          name: limit
+          schema:
+            type: integer
+          required: false
+          description: 페이지당 항목 수 (기본값 20)
+      responses:
+        '200':
+          description: 조회 성공
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminListConquerTargetPlacesResponseDto'
+        '404':
+          description: 해당 ID의 리스트를 찾을 수 없음
 
     post:
       summary: 정복 대상 장소 목록에 장소를 일괄 추가한다.
@@ -4973,34 +5002,6 @@ components:
         - conqueredPlaceCount
         - createdAt
 
-    AdminConquerTargetPlaceListDetailDto:
-      description: 정복 대상 장소 목록 상세 정보 (장소 목록 포함)
-      type: object
-      properties:
-        id:
-          type: string
-        name:
-          type: string
-        placeCount:
-          type: integer
-          format: int32
-        conqueredPlaceCount:
-          type: integer
-          format: int32
-        createdAt:
-          $ref: '#/components/schemas/EpochMillisTimestamp'
-        places:
-          type: array
-          items:
-            $ref: '#/components/schemas/AdminConquerTargetPlaceDto'
-      required:
-        - id
-        - name
-        - placeCount
-        - conqueredPlaceCount
-        - createdAt
-        - places
-
     AdminConquerTargetPlaceDto:
       description: 정복 대상 장소 목록에 포함된 장소 정보
       type: object
@@ -5029,6 +5030,21 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/AdminConquerTargetPlaceListDto'
+      required:
+        - items
+
+    AdminListConquerTargetPlacesResponseDto:
+      description: 정복 대상 장소 목록에 포함된 장소 커서 페이지네이션 조회 응답
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/AdminConquerTargetPlaceDto'
+        cursor:
+          type: string
+          nullable: true
+          description: 다음 페이지 커서 (없으면 마지막 페이지)
       required:
         - items
 
