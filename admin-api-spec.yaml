@@ -27,6 +27,7 @@ tags:
   - name: bbucle-road
   - name: building-division
   - name: place-list
+  - name: conquer-target-place-list
   - name: place-accessibility-suggestion
   - name: experiment
   - name: place-special-accessibility
@@ -1748,6 +1749,179 @@ paths:
         '404':
           description: 해당 ID의 리스트를 찾을 수 없음
 
+  /conquer-target-place-lists:
+    get:
+      summary: 정복 대상 장소 목록을 조회한다.
+      operationId: listConquerTargetPlaceLists
+      tags:
+        - conquer-target-place-list
+      responses:
+        '200':
+          description: 목록 조회 성공
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminListConquerTargetPlaceListsResponseDto'
+
+    post:
+      summary: 정복 대상 장소 목록을 생성한다.
+      operationId: createConquerTargetPlaceList
+      tags:
+        - conquer-target-place-list
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdminCreateConquerTargetPlaceListRequestDto'
+      responses:
+        '200':
+          description: 생성 성공
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminConquerTargetPlaceListDto'
+
+  /conquer-target-place-lists/{id}:
+    parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+        description: ConquerTargetPlaceList ID
+
+    get:
+      summary: 정복 대상 장소 목록 상세를 조회한다.
+      operationId: getConquerTargetPlaceList
+      tags:
+        - conquer-target-place-list
+      responses:
+        '200':
+          description: 조회 성공
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminConquerTargetPlaceListDto'
+        '404':
+          description: 해당 ID의 리스트를 찾을 수 없음
+
+    put:
+      summary: 정복 대상 장소 목록을 수정한다.
+      operationId: updateConquerTargetPlaceList
+      tags:
+        - conquer-target-place-list
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdminUpdateConquerTargetPlaceListRequestDto'
+      responses:
+        '200':
+          description: 수정 성공
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminConquerTargetPlaceListDto'
+        '404':
+          description: 해당 ID의 리스트를 찾을 수 없음
+
+    delete:
+      summary: 정복 대상 장소 목록을 삭제한다.
+      operationId: deleteConquerTargetPlaceList
+      tags:
+        - conquer-target-place-list
+      responses:
+        '204':
+          $ref: '#/components/responses/NoContent'
+        '404':
+          description: 해당 ID의 리스트를 찾을 수 없음
+
+  /conquer-target-place-lists/{id}/places:
+    parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+        description: ConquerTargetPlaceList ID
+
+    get:
+      summary:
+        정복 대상 장소 목록에 포함된 장소를 커서 페이지네이션으로 조회한다.
+      operationId: listConquerTargetPlaces
+      tags:
+        - conquer-target-place-list
+      parameters:
+        - in: query
+          name: cursor
+          schema:
+            type: string
+          required: false
+          description: 페이지네이션 커서
+        - in: query
+          name: limit
+          schema:
+            type: integer
+          required: false
+          description: 페이지당 항목 수 (기본값 20)
+      responses:
+        '200':
+          description: 조회 성공
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminListConquerTargetPlacesResponseDto'
+        '404':
+          description: 해당 ID의 리스트를 찾을 수 없음
+
+    post:
+      summary: 정복 대상 장소 목록에 장소를 일괄 추가한다.
+      operationId: addPlacesToConquerTargetPlaceList
+      tags:
+        - conquer-target-place-list
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdminAddPlacesToConquerTargetPlaceListRequestDto'
+      responses:
+        '200':
+          description: 추가 성공
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminAddPlacesToConquerTargetPlaceListResponseDto'
+        '404':
+          description: 해당 ID의 리스트를 찾을 수 없음
+
+  /conquer-target-place-lists/{id}/places/{placeId}:
+    delete:
+      summary: 정복 대상 장소 목록에서 장소를 제거한다.
+      operationId: removePlaceFromConquerTargetPlaceList
+      tags:
+        - conquer-target-place-list
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: ConquerTargetPlaceList ID
+        - in: path
+          name: placeId
+          schema:
+            type: string
+          required: true
+          description: Place ID
+      responses:
+        '204':
+          $ref: '#/components/responses/NoContent'
+        '404':
+          description: 해당 ID의 리스트 또는 장소를 찾을 수 없음
+
   /place-search-recommendations:
     get:
       summary: 장소 검색 추천 목록을 조회한다.
@@ -2755,6 +2929,11 @@ components:
         maxParticipants:
           type: integer
           format: int32
+        conquerTargetPlaceListId:
+          type: string
+          description:
+            지정 시 이 챌린지의 대상 장소는 해당 정복 대상 리스트로 정해지며,
+            goal 은 리스트의 장소 수로 서버가 덮어쓴다. conditions 는 무시된다.
       required:
         - id
         - name
@@ -2859,6 +3038,11 @@ components:
         maxParticipants:
           type: integer
           format: int32
+        conquerTargetPlaceListId:
+          type: string
+          description:
+            지정 시 이 챌린지의 대상 장소는 해당 정복 대상 리스트로 정해지며,
+            goal 은 리스트의 장소 수로 서버가 덮어쓴다. conditions 는 무시된다.
       required:
         - name
         - isPublic
@@ -3184,6 +3368,11 @@ components:
         maxParticipants:
           type: integer
           format: int32
+        conquerTargetPlaceListId:
+          type: string
+          description:
+            지정 시 이 챌린지의 대상 장소는 해당 정복 대상 리스트로 정해지며,
+            goal 은 리스트의 장소 수로 서버가 덮어쓴다. conditions 는 무시된다.
       required:
         - name
         - description
@@ -4789,6 +4978,126 @@ components:
       required:
         - name
         - placeIds
+
+    AdminConquerTargetPlaceListDto:
+      description: 정복 대상 장소 목록 항목
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        placeCount:
+          type: integer
+          format: int32
+        conqueredPlaceCount:
+          type: integer
+          format: int32
+        createdAt:
+          $ref: '#/components/schemas/EpochMillisTimestamp'
+      required:
+        - id
+        - name
+        - placeCount
+        - conqueredPlaceCount
+        - createdAt
+
+    AdminConquerTargetPlaceDto:
+      description: 정복 대상 장소 목록에 포함된 장소 정보
+      type: object
+      properties:
+        placeId:
+          type: string
+        name:
+          type: string
+        address:
+          type: string
+        isConquered:
+          type: boolean
+          description:
+            접근성 정보(PlaceAccessibility)가 등록되어 "정복"된 상태인지 여부
+      required:
+        - placeId
+        - name
+        - address
+        - isConquered
+
+    AdminListConquerTargetPlaceListsResponseDto:
+      description: 정복 대상 장소 목록 목록 조회 응답
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/AdminConquerTargetPlaceListDto'
+      required:
+        - items
+
+    AdminListConquerTargetPlacesResponseDto:
+      description: 정복 대상 장소 목록에 포함된 장소 커서 페이지네이션 조회 응답
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/AdminConquerTargetPlaceDto'
+        cursor:
+          type: string
+          nullable: true
+          description: 다음 페이지 커서 (없으면 마지막 페이지)
+      required:
+        - items
+
+    AdminCreateConquerTargetPlaceListRequestDto:
+      description: 정복 대상 장소 목록 생성 요청
+      type: object
+      properties:
+        name:
+          type: string
+      required:
+        - name
+
+    AdminUpdateConquerTargetPlaceListRequestDto:
+      description: 정복 대상 장소 목록 수정 요청
+      type: object
+      properties:
+        name:
+          type: string
+      required:
+        - name
+
+    AdminAddPlacesToConquerTargetPlaceListRequestDto:
+      description: 정복 대상 장소 목록에 장소를 일괄 추가하는 요청
+      type: object
+      properties:
+        placeIds:
+          type: array
+          items:
+            type: string
+      required:
+        - placeIds
+
+    AdminAddPlacesToConquerTargetPlaceListResponseDto:
+      description:
+        정복 대상 장소 목록에 장소를 일괄 추가한 결과. 어드민이 붙여넣은 ID 중
+        오타/미존재를 되돌려주기 위해 실패 목록을 함께 내려준다.
+      type: object
+      properties:
+        addedCount:
+          type: integer
+          format: int32
+        alreadyExistingPlaceIds:
+          type: array
+          items:
+            type: string
+        notFoundPlaceIds:
+          type: array
+          items:
+            type: string
+      required:
+        - addedCount
+        - alreadyExistingPlaceIds
+        - notFoundPlaceIds
 
     AdminPlaceCategoryCacheDto:
       description: 장소 카테고리 캐시 정보
