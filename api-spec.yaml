@@ -835,6 +835,26 @@ paths:
               schema:
                 $ref: '#/components/schemas/JoinChallengeResponseDto'
 
+  /listChallengeConquerTargetPlaces:
+    post:
+      summary: 챌린지에 연결된 정복 대상 장소 목록을 조회한다.
+      description: |
+        challenge.hasConquerTargetPlaceList 가 true 인 챌린지에서만 호출 가능하다.
+        연결된 정복 대상 장소 목록이 없으면 400 을 내려준다.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ListChallengeConquerTargetPlacesRequestDto'
+      responses:
+        '200':
+          description: 조회된 정복 대상 장소 목록을 내려준다.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListChallengeConquerTargetPlacesResponseDto'
+
   /listChallenges:
     post:
       summary: 공개된 챌린지 리스트를 조회한다.
@@ -2567,6 +2587,11 @@ components:
         modalImageUrl:
           type: string
           description: 팝업 모달 이미지 URL
+        hasConquerTargetPlaceList:
+          type: boolean
+          description:
+            이 챌린지가 정복 대상 장소 목록과 연결되어 있는지 여부. true면 '남은
+            매장 보기' 진입점을 노출한다.
       required:
         - id
         - name
@@ -2580,6 +2605,7 @@ components:
         - contributionsCount
         - description
         - isB2b
+        - hasConquerTargetPlaceList
 
     ChallengeRankDto:
       type: object
@@ -3365,6 +3391,43 @@ components:
         - accessToken
         - refreshToken
         - idToken
+
+    ListChallengeConquerTargetPlacesRequestDto:
+      type: object
+      properties:
+        challengeId:
+          type: string
+        onlyUnconquered:
+          type: boolean
+          description:
+            정복되지 않은 장소만 내려줄지 여부. 생략 시 true 로 취급한다.
+        sort:
+          $ref: '#/components/schemas/SearchPlaceSortDto'
+        # 거리 계산 및 DISTANCE 정렬에 사용. 생략 시 거리 정보 없이 내려준다.
+        currentLocation:
+          $ref: '#/components/schemas/Location'
+      required:
+        - challengeId
+
+    ListChallengeConquerTargetPlacesResponseDto:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/PlaceListItem'
+        totalCount:
+          type: integer
+          format: int32
+          description: 챌린지에 연결된 정복 대상 장소의 전체 갯수.
+        conqueredCount:
+          type: integer
+          format: int32
+          description: 그중 이미 정복된 장소의 갯수.
+      required:
+        - items
+        - totalCount
+        - conqueredCount
 
     ListChallengesItemDto:
       type: object
