@@ -118,6 +118,15 @@ paths:
                   type: array
                   items:
                     $ref: '#/components/schemas/QuestTargetPlaceCategoryEnumDTO'
+                conquerTargetPlaceListIds:
+                  type: array
+                  items:
+                    type: string
+                  description: |
+                    지정되면, 이 정복 대상 장소 목록(CTPL)에 속한 장소는 questTargetPlaceCategories와
+                    무관하게 퀘스트 대상에 포함된다. 비활성(기간 밖)이거나 존재하지 않는 id는 무시된다.
+                    영역(원/다각형) 밖의 장소는 포함되지 않는다.
+                    지정되지 않은 경우, 기존과 동일하게 카테고리 기준으로만 대상을 고른다.
                 includePlaceAccessibilityOlderThanMonths:
                   type: integer
                   description: |
@@ -5007,6 +5016,20 @@ components:
         conqueredPlaceCount:
           type: integer
           format: int32
+        startAt:
+          $ref: '#/components/schemas/EpochMillisTimestamp'
+          nullable: true
+          description: CTPL 유효 기간 시작. null이면 시작 제한 없음.
+        endAt:
+          $ref: '#/components/schemas/EpochMillisTimestamp'
+          nullable: true
+          description: CTPL 유효 기간 종료. null이면 종료 제한 없음.
+        isActive:
+          type: boolean
+          description: |
+            서버 시계 기준으로 지금 유효한 기간인지 여부.
+            (startAt == null || now >= startAt) && (endAt == null || now <= endAt).
+            클라이언트가 now 비교를 재구현하지 않도록 서버가 확정해 내려준다.
         createdAt:
           $ref: '#/components/schemas/EpochMillisTimestamp'
       required:
@@ -5014,6 +5037,7 @@ components:
         - name
         - placeCount
         - conqueredPlaceCount
+        - isActive
         - createdAt
 
     AdminConquerTargetPlaceDto:
@@ -5068,15 +5092,33 @@ components:
       properties:
         name:
           type: string
+        startAt:
+          $ref: '#/components/schemas/EpochMillisTimestamp'
+          nullable: true
+          description: CTPL 유효 기간 시작. 지정하지 않으면 시작 제한 없음.
+        endAt:
+          $ref: '#/components/schemas/EpochMillisTimestamp'
+          nullable: true
+          description: CTPL 유효 기간 종료. 지정하지 않으면 종료 제한 없음.
       required:
         - name
 
     AdminUpdateConquerTargetPlaceListRequestDto:
-      description: 정복 대상 장소 목록 수정 요청
+      description: |
+        정복 대상 장소 목록 수정 요청.
+        startAt/endAt은 부분 수정이 아니라 덮어쓰기다 — 값을 보내지 않으면 null(기간 없음)로 저장된다.
       type: object
       properties:
         name:
           type: string
+        startAt:
+          $ref: '#/components/schemas/EpochMillisTimestamp'
+          nullable: true
+          description: CTPL 유효 기간 시작. 지정하지 않으면 시작 제한 없음.
+        endAt:
+          $ref: '#/components/schemas/EpochMillisTimestamp'
+          nullable: true
+          description: CTPL 유효 기간 종료. 지정하지 않으면 종료 제한 없음.
       required:
         - name
 
