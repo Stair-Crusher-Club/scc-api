@@ -127,13 +127,14 @@ paths:
                     무관하게 퀘스트 대상에 포함된다. 비활성(기간 밖)이거나 존재하지 않는 id는 무시된다.
                     영역(원/다각형) 밖의 장소는 포함되지 않는다.
                     지정되지 않은 경우, 기존과 동일하게 카테고리 기준으로만 대상을 고른다.
-                includePlaceAccessibilityOlderThanMonths:
-                  type: integer
+                includePlaceAccessibilityRegisteredBefore:
+                  $ref: '#/components/schemas/EpochMillisTimestamp'
+                  nullable: true
                   description: |
-                    지정되면, 접근성 정보(PlaceAccessibility)가 등록된 지 이 개월수보다 오래된 장소도 퀘스트 대상에 포함한다.
-                    이 경우 퀘스트를 실제로 생성하는 시점에 해당 장소의 오래된 접근성 정보는 archive 되고,
-                    퀘스트 종료 후 자동으로 복원된다.
+                    지정되면, 이 시각 이전에 등록된 접근성 정보(PlaceAccessibility)를 가진 장소도 퀘스트 대상에 포함한다.
+                    이 경우 퀘스트를 실제로 생성하는 시점에 해당 장소의 접근성 정보는 archive 되고, 퀘스트 종료 후 자동으로 복원된다.
                     지정되지 않은 경우, 기존과 동일하게 접근성 정보가 없는 장소만 대상이 된다.
+                    어드민 UI 는 날짜를 받아 그 날 00:00(KST)을 보낸다. 과거 시각이어야 하며, 미래 시각은 거부된다.
               required:
                 - clusterCount
                 - maxPlaceCountPerQuest
@@ -173,13 +174,14 @@ paths:
                 dryRunResults:
                   items:
                     $ref: '#/components/schemas/ClubQuestCreateDryRunResultItemDTO'
-                includePlaceAccessibilityOlderThanMonths:
-                  type: integer
+                includePlaceAccessibilityRegisteredBefore:
+                  $ref: '#/components/schemas/EpochMillisTimestamp'
+                  nullable: true
                   description: |
-                    지정되면, 접근성 정보(PlaceAccessibility)가 등록된 지 이 개월수보다 오래된 장소도 퀘스트 대상에 포함한다.
-                    이 경우 퀘스트를 실제로 생성하는 시점에 해당 장소의 오래된 접근성 정보는 archive 되고,
-                    퀘스트 종료 후 자동으로 복원된다.
+                    지정되면, 이 시각 이전에 등록된 접근성 정보(PlaceAccessibility)를 가진 장소도 퀘스트 대상에 포함한다.
+                    이 경우 퀘스트를 실제로 생성하는 시점에 해당 장소의 접근성 정보는 archive 되고, 퀘스트 종료 후 자동으로 복원된다.
                     지정되지 않은 경우, 기존과 동일하게 접근성 정보가 없는 장소만 대상이 된다.
+                    어드민 UI 는 날짜를 받아 그 날 00:00(KST)을 보낸다. 과거 시각이어야 하며, 미래 시각은 거부된다.
               required:
                 - questNamePrefix
                 - purposeType
