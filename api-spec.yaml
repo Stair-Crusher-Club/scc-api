@@ -398,6 +398,15 @@ paths:
                 properties:
                   conqueredCount:
                     type: integer
+                  unconqueredTargetPlaceListNearby:
+                    $ref: '#/components/schemas/ConquerTargetPlaceListDto'
+                    nullable: true
+                    description:
+                      요청자가 참여 중인 진행 중 챌린지에 연결된 활성 정복 대상
+                      장소 목록 중, distanceMetersLimit 반경 안에 아직 정복되지
+                      않은 장소가 하나라도 남아 있는 첫 번째 목록. 없거나
+                      비로그인이면 null. 홈 툴팁 '반경 500m내에 정복 안 된
+                      {displayName}이 있어요' 용.
 
   /getPlaceWithBuilding:
     post:
@@ -2592,6 +2601,24 @@ components:
           description:
             이 챌린지가 정복 대상 장소 목록과 연결되어 있는지 여부. true면 '남은
             매장 보기' 진입점을 노출한다.
+        conquerTargetPlaceList:
+          $ref: '#/components/schemas/ConquerTargetPlaceListDto'
+          nullable: true
+          description:
+            연결된 정복 대상 장소 목록. 없으면 null. hasConquerTargetPlaceList
+            와 의미가 겹치지만 구버전 앱 호환을 위해 둘 다 유지한다. 이 값이
+            있으면 goal = 목록 전체 장소 수, contributionsCount = 정복된 장소
+            수다.
+        welcomePopupImageUrl:
+          type: string
+          nullable: true
+          description:
+            참여 환영 팝업 이미지 URL. 지정하면 새 디자인 팝업을 띄운다.
+        welcomePopupDescription:
+          type: string
+          nullable: true
+          description:
+            참여 환영 팝업 본문 문구. 미지정이면 기존 기본 문구를 쓴다.
       required:
         - id
         - name
@@ -2604,7 +2631,7 @@ components:
         - participationsCount
         - contributionsCount
         - description
-        - isB2b
+        - isB2B
         - hasConquerTargetPlaceList
 
     ChallengeRankDto:
@@ -2646,6 +2673,39 @@ components:
           type: string
       required:
         - name
+
+    ConquerTargetPlaceListDto:
+      description: 챌린지에 연결된 정복 대상 장소 목록.
+      type: object
+      properties:
+        id:
+          type: string
+        displayName:
+          type: string
+          description:
+            앱 노출용 이름. '{displayName} 정복하기', '정복 안 된
+            {displayName}이 있어요', 'N번째 {displayName} 정복 완료!' 처럼
+            브랜드명 단독으로 쓰인다. 어드민이 표시명을 비워두면 서버가 목록
+            이름으로 폴백하므로 항상 값이 있다.
+      required:
+        - id
+        - displayName
+
+    ConquerTargetPlaceListMarkerIconDto:
+      description:
+        정복 대상 장소 목록 전용 지도 마커 아이콘. 값은 SVG 원문 문자열이며 앱이
+        그대로 네이티브 마커 렌더러에 넘긴다 (원격 URL 미지원).
+      type: object
+      properties:
+        defaultSvg:
+          type: string
+        focusedSvg:
+          type: string
+          nullable: true
+          description:
+            선택(포커스) 상태 마커. null 이면 defaultSvg 를 그대로 쓴다.
+      required:
+        - defaultSvg
 
     CreateAnonymousUserResponseDto:
       type: object
@@ -3424,10 +3484,18 @@ components:
           type: integer
           format: int32
           description: 그중 이미 정복된 장소의 갯수.
+        conquerTargetPlaceList:
+          $ref: '#/components/schemas/ConquerTargetPlaceListDto'
+        markerIcon:
+          $ref: '#/components/schemas/ConquerTargetPlaceListMarkerIconDto'
+          nullable: true
+          description:
+            어드민이 지정한 전용 마커. null 이면 앱이 기존 카테고리 마커를 쓴다.
       required:
         - items
         - totalCount
         - conqueredCount
+        - conquerTargetPlaceList
 
     ListChallengesItemDto:
       type: object
@@ -3447,6 +3515,27 @@ components:
           description: 내가 참여중인지 여부
         createdAt:
           $ref: '#/components/schemas/EpochMillisTimestamp'
+        goal:
+          type: integer
+          format: int32
+          nullable: true
+        milestones:
+          type: array
+          nullable: true
+          items:
+            type: integer
+            format: int32
+        contributionsCount:
+          type: integer
+          format: int32
+          nullable: true
+          description:
+            CTPL 챌린지에서만 채워진다(= 지금까지 정복된 장소 수). 그 외
+            챌린지는 null — 목록 전체에 기여 수 집계 쿼리를 돌리지 않기
+            위해서다. 필요하면 getChallenge 를 호출한다.
+        conquerTargetPlaceList:
+          $ref: '#/components/schemas/ConquerTargetPlaceListDto'
+          nullable: true
       required:
         - id
         - name
@@ -3467,8 +3556,6 @@ components:
         limit:
           type: integer
           format: int64
-      required:
-        - status
 
     ListChallengesResponseDto:
       description:
@@ -4504,6 +4591,11 @@ components:
       properties:
         challenge:
           $ref: '#/components/schemas/ChallengeDto'
+          description:
+            이 등록으로 기여한 챌린지. challenge.conquerTargetPlaceList 가
+            non-null 이면 challenge.goal = 그 목록의 전체 장소 수,
+            challenge.contributionsCount = 방금 등록한 장소를 포함한 정복
+            순번이다 (정복 완료 축하 화면용).
         completedQuestsByContribution:
           description: 이번 유저 참여로 인해 달성된 퀘스트 목록.
           type: array
