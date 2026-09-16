@@ -2959,16 +2959,9 @@ components:
           description:
             지정 시 이 챌린지의 대상 장소는 해당 정복 대상 리스트로 정해지며,
             goal 은 리스트의 장소 수로 서버가 덮어쓴다. conditions 는 무시된다.
-        welcomePopupImageUrl:
-          type: string
+        welcomePopup:
+          $ref: '#/components/schemas/AdminChallengeWelcomePopupDto'
           nullable: true
-          description:
-            참여 환영 팝업 이미지 URL. 지정하면 새 디자인 팝업을 띄운다.
-        welcomePopupDescription:
-          type: string
-          nullable: true
-          description:
-            참여 환영 팝업 본문 문구. 미지정이면 기존 기본 문구를 쓴다.
       required:
         - id
         - name
@@ -2981,6 +2974,19 @@ components:
         - createdAtMillis
         - updatedAtMillis
         - description
+
+    AdminChallengeWelcomePopupDto:
+      description:
+        챌린지 참여 직후 띄울 환영 팝업. 지정하지 않으면 기존 기본 팝업 동작을
+        따른다.
+      type: object
+      properties:
+        imageUrl:
+          type: string
+          nullable: true
+        description:
+          type: string
+          nullable: true
 
     AdminChallengeConditionDTO:
       type: object
@@ -3078,16 +3084,9 @@ components:
           description:
             지정 시 이 챌린지의 대상 장소는 해당 정복 대상 리스트로 정해지며,
             goal 은 리스트의 장소 수로 서버가 덮어쓴다. conditions 는 무시된다.
-        welcomePopupImageUrl:
-          type: string
+        welcomePopup:
+          $ref: '#/components/schemas/AdminChallengeWelcomePopupDto'
           nullable: true
-          description:
-            참여 환영 팝업 이미지 URL. 지정하면 새 디자인 팝업을 띄운다.
-        welcomePopupDescription:
-          type: string
-          nullable: true
-          description:
-            참여 환영 팝업 본문 문구. 미지정이면 기존 기본 문구를 쓴다.
       required:
         - name
         - isPublic
@@ -3418,16 +3417,9 @@ components:
           description:
             지정 시 이 챌린지의 대상 장소는 해당 정복 대상 리스트로 정해지며,
             goal 은 리스트의 장소 수로 서버가 덮어쓴다. conditions 는 무시된다.
-        welcomePopupImageUrl:
-          type: string
+        welcomePopup:
+          $ref: '#/components/schemas/AdminChallengeWelcomePopupDto'
           nullable: true
-          description:
-            참여 환영 팝업 이미지 URL. 지정하면 새 디자인 팝업을 띄운다.
-        welcomePopupDescription:
-          type: string
-          nullable: true
-          description:
-            참여 환영 팝업 본문 문구. 미지정이면 기존 기본 문구를 쓴다.
       required:
         - name
         - description
