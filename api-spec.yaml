@@ -1740,6 +1740,12 @@ paths:
     post:
       summary: 홈 화면에 필요한 모든 데이터를 가져온다.
       operationId: getHomeScreenData
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GetHomeScreenDataRequestDto'
       responses:
         '200':
           description: 홈 화면 데이터를 내려준다.
@@ -2592,6 +2598,17 @@ components:
           description:
             이 챌린지가 정복 대상 장소 목록과 연결되어 있는지 여부. true면 '남은
             매장 보기' 진입점을 노출한다.
+        conquerTargetPlaceList:
+          $ref: '#/components/schemas/ConquerTargetPlaceListDto'
+          nullable: true
+          description:
+            연결된 정복 대상 장소 목록. 없으면 null. hasConquerTargetPlaceList
+            와 의미가 겹치지만 구버전 앱 호환을 위해 둘 다 유지한다. 이 값이
+            있으면 goal = 목록 전체 장소 수, contributionsCount = 정복된 장소
+            수다.
+        welcomePopup:
+          $ref: '#/components/schemas/ChallengeWelcomePopupDto'
+          nullable: true
       required:
         - id
         - name
@@ -2604,8 +2621,21 @@ components:
         - participationsCount
         - contributionsCount
         - description
-        - isB2b
+        - isB2B
         - hasConquerTargetPlaceList
+
+    ChallengeWelcomePopupDto:
+      description:
+        챌린지 참여 직후 띄울 환영 팝업. 지정하지 않으면 기존 기본 팝업 동작을
+        따른다.
+      type: object
+      properties:
+        imageUrl:
+          type: string
+          nullable: true
+        description:
+          type: string
+          nullable: true
 
     ChallengeRankDto:
       type: object
@@ -2646,6 +2676,39 @@ components:
           type: string
       required:
         - name
+
+    ConquerTargetPlaceListDto:
+      description: 챌린지에 연결된 정복 대상 장소 목록.
+      type: object
+      properties:
+        id:
+          type: string
+        displayName:
+          type: string
+          description:
+            앱 노출용 이름. '{displayName} 정복하기', '정복 안 된
+            {displayName}이 있어요', 'N번째 {displayName} 정복 완료!' 처럼
+            브랜드명 단독으로 쓰인다. 어드민이 표시명을 비워두면 서버가 목록
+            이름으로 폴백하므로 항상 값이 있다.
+      required:
+        - id
+        - displayName
+
+    ConquerTargetPlaceListMarkerIconDto:
+      description:
+        정복 대상 장소 목록 전용 지도 마커 아이콘. 값은 SVG 원문 문자열이며 앱이
+        그대로 네이티브 마커 렌더러에 넘긴다 (원격 URL 미지원).
+      type: object
+      properties:
+        defaultSvg:
+          type: string
+        focusedSvg:
+          type: string
+          nullable: true
+          description:
+            선택(포커스) 상태 마커. null 이면 defaultSvg 를 그대로 쓴다.
+      required:
+        - defaultSvg
 
     CreateAnonymousUserResponseDto:
       type: object
@@ -3424,10 +3487,18 @@ components:
           type: integer
           format: int32
           description: 그중 이미 정복된 장소의 갯수.
+        conquerTargetPlaceList:
+          $ref: '#/components/schemas/ConquerTargetPlaceListDto'
+        markerIcon:
+          $ref: '#/components/schemas/ConquerTargetPlaceListMarkerIconDto'
+          nullable: true
+          description:
+            어드민이 지정한 전용 마커. null 이면 앱이 기존 카테고리 마커를 쓴다.
       required:
         - items
         - totalCount
         - conqueredCount
+        - conquerTargetPlaceList
 
     ListChallengesItemDto:
       type: object
@@ -3467,8 +3538,6 @@ components:
         limit:
           type: integer
           format: int64
-      required:
-        - status
 
     ListChallengesResponseDto:
       description:
@@ -4504,6 +4573,11 @@ components:
       properties:
         challenge:
           $ref: '#/components/schemas/ChallengeDto'
+          description:
+            이 등록으로 기여한 챌린지. challenge.conquerTargetPlaceList 가
+            non-null 이면 challenge.goal = 그 목록의 전체 장소 수,
+            challenge.contributionsCount = 방금 등록한 장소를 포함한 정복
+            순번이다 (정복 완료 축하 화면용).
         completedQuestsByContribution:
           description: 이번 유저 참여로 인해 달성된 퀘스트 목록.
           type: array
@@ -6134,6 +6208,16 @@ components:
         - PARKING
         - CUSTOM
 
+    GetHomeScreenDataRequestDto:
+      type: object
+      properties:
+        currentLocation:
+          $ref: '#/components/schemas/Location'
+          nullable: true
+          description:
+            정복 대상 장소 근처 여부 판정용. 생략하면 hasUnconqueredPlaceNearby
+            가 항상 false 다.
+
     GetHomeScreenDataResponseDto:
       type: object
       description: 홈 화면에 필요한 모든 데이터
@@ -6163,12 +6247,67 @@ components:
           description: 홈 화면 팝업 (활성 상태, displayOrder 오름차순)
           items:
             $ref: '#/components/schemas/HomePopupDto'
+        quickAction:
+          $ref: '#/components/schemas/HomeQuickActionDto'
+          nullable: true
+          description:
+            홈 quick action 영역에 노출할 항목들. 노출할 게 없으면 null.
       required:
         - mainBanners
         - stripBanners
         - announcements
         - recommendedContents
         - homePopups
+
+    HomeQuickActionDto:
+      description: |
+        홈 quick action 영역. 지금은 정복하기 진척 카드 하나뿐이지만, 이 영역에 노출되는
+        항목이 늘어날 수 있어 래퍼를 둔다.
+      type: object
+      properties:
+        challenge:
+          $ref: '#/components/schemas/HomeQuickActionChallengeDto'
+          nullable: true
+          description: 정복하기 진척 카드. 조건에 맞는 챌린지가 없으면 null.
+
+    HomeQuickActionChallengeDto:
+      description: |
+        홈 quick action 에 노출할 '정복하기' 진척 카드. 내가 참여 중이고 정복 대상 장소 목록이
+        연결된 진행 중 챌린지 하나를 서버가 고른다.
+        툴팁 노출 여부(hasUnconqueredPlaceNearby)도 이 챌린지의 목록 기준으로 함께 판정하므로
+        카드와 툴팁이 서로 다른 목록을 가리키는 일이 없다.
+      type: object
+      properties:
+        challengeId:
+          type: string
+        displayName:
+          type: string
+          description:
+            브랜드명 단독. '{displayName} 정복하기', '정복 안 된 {displayName}이
+            있어요' 에 쓰인다.
+        contributionsCount:
+          type: integer
+          format: int32
+        goal:
+          type: integer
+          format: int32
+        milestones:
+          type: array
+          items:
+            type: integer
+            format: int32
+        hasUnconqueredPlaceNearby:
+          type: boolean
+          description:
+            요청의 currentLocation 반경 안에 이 목록의 미정복 장소가 남아
+            있는지. 홈 툴팁 노출 조건. currentLocation 이 없으면 false.
+      required:
+        - challengeId
+        - displayName
+        - contributionsCount
+        - goal
+        - milestones
+        - hasUnconqueredPlaceNearby
 
     HomeAnnouncementDto:
       type: object

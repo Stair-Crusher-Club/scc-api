@@ -2959,6 +2959,9 @@ components:
           description:
             지정 시 이 챌린지의 대상 장소는 해당 정복 대상 리스트로 정해지며,
             goal 은 리스트의 장소 수로 서버가 덮어쓴다. conditions 는 무시된다.
+        welcomePopup:
+          $ref: '#/components/schemas/AdminChallengeWelcomePopupDto'
+          nullable: true
       required:
         - id
         - name
@@ -2971,6 +2974,19 @@ components:
         - createdAtMillis
         - updatedAtMillis
         - description
+
+    AdminChallengeWelcomePopupDto:
+      description:
+        챌린지 참여 직후 띄울 환영 팝업. 지정하지 않으면 기존 기본 팝업 동작을
+        따른다.
+      type: object
+      properties:
+        imageUrl:
+          type: string
+          nullable: true
+        description:
+          type: string
+          nullable: true
 
     AdminChallengeConditionDTO:
       type: object
@@ -3068,6 +3084,9 @@ components:
           description:
             지정 시 이 챌린지의 대상 장소는 해당 정복 대상 리스트로 정해지며,
             goal 은 리스트의 장소 수로 서버가 덮어쓴다. conditions 는 무시된다.
+        welcomePopup:
+          $ref: '#/components/schemas/AdminChallengeWelcomePopupDto'
+          nullable: true
       required:
         - name
         - isPublic
@@ -3398,6 +3417,9 @@ components:
           description:
             지정 시 이 챌린지의 대상 장소는 해당 정복 대상 리스트로 정해지며,
             goal 은 리스트의 장소 수로 서버가 덮어쓴다. conditions 는 무시된다.
+        welcomePopup:
+          $ref: '#/components/schemas/AdminChallengeWelcomePopupDto'
+          nullable: true
       required:
         - name
         - description
@@ -5032,6 +5054,16 @@ components:
             서버 시계 기준으로 지금 유효한 기간인지 여부.
             (startAt == null || now >= startAt) && (endAt == null || now <= endAt).
             클라이언트가 now 비교를 재구현하지 않도록 서버가 확정해 내려준다.
+        displayName:
+          type: string
+          nullable: true
+          description:
+            앱 노출용 브랜드 표시명. '{displayName} 정복하기' 처럼 브랜드명
+            단독으로 쓰이므로 '올리브영' 형태를 권장한다. 비워두면 앱이 name
+            으로 폴백한다.
+        markerIcon:
+          $ref: '#/components/schemas/AdminConquerTargetPlaceListMarkerIconDto'
+          nullable: true
         createdAt:
           $ref: '#/components/schemas/EpochMillisTimestamp'
       required:
@@ -5041,6 +5073,22 @@ components:
         - conqueredPlaceCount
         - isActive
         - createdAt
+
+    AdminConquerTargetPlaceListMarkerIconDto:
+      description:
+        정복 대상 장소 목록 전용 지도 마커 아이콘. 값은 SVG 원문 문자열이다.
+        256KB 이하여야 한다.
+      type: object
+      properties:
+        defaultSvg:
+          type: string
+        focusedSvg:
+          type: string
+          nullable: true
+          description:
+            선택(포커스) 상태 마커. 지정하지 않으면 defaultSvg 를 그대로 쓴다.
+      required:
+        - defaultSvg
 
     AdminConquerTargetPlaceDto:
       description: 정복 대상 장소 목록에 포함된 장소 정보
@@ -5102,13 +5150,23 @@ components:
           $ref: '#/components/schemas/EpochMillisTimestamp'
           nullable: true
           description: CTPL 유효 기간 종료. 지정하지 않으면 종료 제한 없음.
+        displayName:
+          type: string
+          nullable: true
+          description:
+            앱 노출용 브랜드 표시명. '{displayName} 정복하기' 처럼 브랜드명
+            단독으로 쓰이므로 '올리브영' 형태를 권장한다. 비워두면 앱이 name
+            으로 폴백한다.
+        markerIcon:
+          $ref: '#/components/schemas/AdminConquerTargetPlaceListMarkerIconDto'
+          nullable: true
       required:
         - name
 
     AdminUpdateConquerTargetPlaceListRequestDto:
       description: |
         정복 대상 장소 목록 수정 요청.
-        startAt/endAt은 부분 수정이 아니라 덮어쓰기다 — 값을 보내지 않으면 null(기간 없음)로 저장된다.
+        startAt/endAt/displayName/markerIcon 은 부분 수정이 아니라 덮어쓰기다 — 값을 보내지 않으면 null 로 저장된다.
       type: object
       properties:
         name:
@@ -5121,6 +5179,16 @@ components:
           $ref: '#/components/schemas/EpochMillisTimestamp'
           nullable: true
           description: CTPL 유효 기간 종료. 지정하지 않으면 종료 제한 없음.
+        displayName:
+          type: string
+          nullable: true
+          description:
+            앱 노출용 브랜드 표시명. '{displayName} 정복하기' 처럼 브랜드명
+            단독으로 쓰이므로 '올리브영' 형태를 권장한다. 비워두면 앱이 name
+            으로 폴백한다.
+        markerIcon:
+          $ref: '#/components/schemas/AdminConquerTargetPlaceListMarkerIconDto'
+          nullable: true
       required:
         - name
 
