@@ -6247,12 +6247,11 @@ components:
           description: 홈 화면 팝업 (활성 상태, displayOrder 오름차순)
           items:
             $ref: '#/components/schemas/HomePopupDto'
-        conquerChallenge:
-          $ref: '#/components/schemas/HomeConquerChallengeDto'
+        quickAction:
+          $ref: '#/components/schemas/HomeQuickActionDto'
           nullable: true
           description:
-            홈 quick action 에 노출할 정복하기 진척 카드. 조건에 맞는 챌린지가
-            없으면 null.
+            홈 quick action 영역에 노출할 항목들. 노출할 게 없으면 null.
       required:
         - mainBanners
         - stripBanners
@@ -6260,7 +6259,18 @@ components:
         - recommendedContents
         - homePopups
 
-    HomeConquerChallengeDto:
+    HomeQuickActionDto:
+      description: |
+        홈 quick action 영역. 지금은 정복하기 진척 카드 하나뿐이지만, 이 영역에 노출되는
+        항목이 늘어날 수 있어 래퍼를 둔다.
+      type: object
+      properties:
+        challenge:
+          $ref: '#/components/schemas/HomeQuickActionChallengeDto'
+          nullable: true
+          description: 정복하기 진척 카드. 조건에 맞는 챌린지가 없으면 null.
+
+    HomeQuickActionChallengeDto:
       description: |
         홈 quick action 에 노출할 '정복하기' 진척 카드. 내가 참여 중이고 정복 대상 장소 목록이
         연결된 진행 중 챌린지 하나를 서버가 고른다.
