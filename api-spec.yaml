@@ -5751,7 +5751,7 @@ components:
         - CONQUER_4 # 정복활동 4
         - CONQUER_5 # 정복활동 5
         - CONQUER_6 # 정복활동 6
-        - OLIVEYOUNG_CONQUER # 올리브영 정복
+        - CONQUER_CORE_MISSION # 시즌 핵심 미션 정복 (26 가을: 올리브영 정복)
         - EDITOR_TIME_1 # 에디터 타임 1
         - EDITOR_TIME_2 # 에디터 타임 2
         - TEAM_OUTING # 팀소풍
