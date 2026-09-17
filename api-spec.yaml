@@ -5725,7 +5725,6 @@ components:
       required:
         - id
         - title
-        - description
         - completeStampType
 
     CrusherClubQuestCompleteStampTypeDto:
@@ -5742,6 +5741,7 @@ components:
         - SHORT_REVIEW_8 # 숏리뷰 8
         - LONG_REVIEW_1 # 롱리뷰 1
         - LONG_REVIEW_2 # 롱리뷰 2
+        - LONG_REVIEW_CORE_MISSION # 시즌 핵심 미션 롱리뷰 (26 가을: CGV 리뷰)
         - APP_USAGE_REVIEW # 앱 사용리뷰
         - CONQUER_QUEST # 정복 퀘스트
         - WARMING_UP_CONQUER # 워밍업 정복활동
@@ -5749,6 +5749,12 @@ components:
         - CONQUER_2 # 정복활동 2
         - CONQUER_3 # 정복활동 3
         - CONQUER_4 # 정복활동 4
+        - CONQUER_5 # 정복활동 5
+        - CONQUER_6 # 정복활동 6
+        - OLIVEYOUNG_CONQUER # 올리브영 정복
+        - EDITOR_TIME_1 # 에디터 타임 1
+        - EDITOR_TIME_2 # 에디터 타임 2
+        - TEAM_OUTING # 팀소풍
         - DAILY_LIFE_QUEST # 일상과 퀘스트
         - SAVED_PLACE_LIST # 팀 저장리스트
 
@@ -5771,7 +5777,6 @@ components:
         - startDate
         - endDate
         - crewType
-        - quests
 
     CrusherClubActivityLogDto:
       type: object
