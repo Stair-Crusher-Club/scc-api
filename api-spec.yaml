@@ -2677,6 +2677,22 @@ components:
       required:
         - name
 
+    ConquerTargetPlaceListCelebrationDto:
+      description:
+        정복 완료 축하 화면의 CTPL 별 에셋. 이 객체나 개별 필드가 null 이면 앱이
+        내장 기본값(도장 로티 / 연두 강조색)을 쓴다. 마커 아이콘과 달리 로티는
+        용량이 커서 SVG 원문이 아니라 원격 URL 로 내려준다.
+      type: object
+      properties:
+        stampAnimationUrl:
+          type: string
+          nullable: true
+          description: 도장 로티 원격 URL. .lottie / .json 둘 다 가능.
+        brandColor:
+          type: string
+          nullable: true
+          description: '제목의 브랜드명 강조색 hex (예: #A7CE49).'
+
     ConquerTargetPlaceListDto:
       description: 챌린지에 연결된 정복 대상 장소 목록.
       type: object
@@ -2690,6 +2706,11 @@ components:
             {displayName}이 있어요', 'N번째 {displayName} 정복 완료!' 처럼
             브랜드명 단독으로 쓰인다. 어드민이 표시명을 비워두면 서버가 목록
             이름으로 폴백하므로 항상 값이 있다.
+        celebration:
+          $ref: '#/components/schemas/ConquerTargetPlaceListCelebrationDto'
+          nullable: true
+          description:
+            정복 완료 축하 화면 에셋. null 이면 앱 내장 기본값을 쓴다.
       required:
         - id
         - displayName
@@ -4509,6 +4530,12 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ContributedChallengeInfoDto'
+        isFirstPlaceAccessibility:
+          type: boolean
+          description:
+            이번 등록이 해당 장소의 첫 접근성 정보였는지. 서버에 재등록 가드가
+            없어 이미 정복된 장소도 기여로 인정되므로, 정복 완료 축하를 첫
+            정복에만 띄우려면 이 값이 필요하다. 앱은 true 일 때만 축하를 띄운다.
       required:
         - accessibilityInfo
         - registeredUserOrder
