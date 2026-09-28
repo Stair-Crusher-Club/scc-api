@@ -3928,7 +3928,9 @@ components:
           type: string
         ignoreQuietHours:
           type: boolean
-          description: '즉시 전송(scheduledAt 없음)일 때 야간(21~08시 KST) 지연을 건너뛰고 바로 보낸다. 테스트용이라 PROD 에서는 400 으로 거부한다.'
+          description:
+            '즉시 전송(scheduledAt 없음)일 때 야간(21~08시 KST) 지연을 건너뛰고
+            바로 보낸다. 테스트용이라 PROD 에서는 400 으로 거부한다.'
       required:
         - userIds
         - body
