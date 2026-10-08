@@ -2407,6 +2407,7 @@ components:
       type: string
       enum:
         - CRUSHER_CLUB
+        - CRUSHER_CLUB_WARMING_UP
         - DAILY_CLUB
         - COLLABO_CLUB
         - ESG_PARTNERS
