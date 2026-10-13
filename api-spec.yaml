@@ -1690,6 +1690,25 @@ paths:
           #   - INVALID_EMAIL : 이메일이 유효하지 않을 때. e.g. 중복, 이상한 형태 등.
           #   - INVALID_BIRTH_YEAR : 출생 연도가 유효하지 않을 때. e.g. 1900년 이전, 2025년 이후 등.
 
+  /updateMarketingPushAgreement:
+    post:
+      summary: 마케팅 정보(광고성) 푸시 수신 동의 여부를 수정한다.
+      security:
+        - Identified: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateMarketingPushAgreementRequestDto'
+      responses:
+        '200':
+          description: 수신 동의 여부 수정 성공.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateMarketingPushAgreementResponseDto'
+
   /updatePushToken:
     post:
       summary: 유저의 push token 정보를 수정한다.
@@ -5039,6 +5058,9 @@ components:
         isNewsLetterSubscriptionAgreed:
           type: boolean
           description: 뉴스레터 구독 동의 여부
+        isMarketingPushAgreed:
+          type: boolean
+          description: 마케팅 정보(광고성) 푸시 수신 동의 여부.
         interestedRegionIds:
           type: array
           description: |
@@ -5062,6 +5084,23 @@ components:
         - isNewsLetterSubscriptionAgreed
         - interestedRegionIds
         - interestedThemes
+        - isMarketingPushAgreed
+
+    UpdateMarketingPushAgreementRequestDto:
+      type: object
+      properties:
+        isAgreed:
+          type: boolean
+      required:
+        - isAgreed
+
+    UpdateMarketingPushAgreementResponseDto:
+      type: object
+      properties:
+        user:
+          $ref: '#/components/schemas/User'
+      required:
+        - user
 
     UserMobilityToolDto:
       type: string
@@ -6194,12 +6233,18 @@ components:
           nullable: true
           description:
             홈 quick action 영역에 노출할 항목들. 노출할 게 없으면 null.
+        needsMarketingPushAgreementConfirmation:
+          type: boolean
+          description:
+            마케팅 수신동의 확인 팝업을 띄워야 하는지 (한 번도 확인 안 했거나
+            마지막 확인 후 2년 경과). 비로그인/익명은 false.
       required:
         - mainBanners
         - stripBanners
         - announcements
         - recommendedContents
         - homePopups
+        - needsMarketingPushAgreementConfirmation
 
     HomeQuickActionDto:
       description: |
