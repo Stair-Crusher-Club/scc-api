@@ -3932,9 +3932,15 @@ components:
           description:
             '즉시 전송(scheduledAt 없음)일 때 야간(21~08시 KST) 지연을 건너뛰고
             바로 보낸다. 테스트용이라 PROD 에서는 400 으로 거부한다.'
+        isMarketing:
+          type: boolean
+          description:
+            true 면 마케팅(광고성) 푸시 — 서버가 제목 앞에 "(광고) " 를 붙이고
+            수신 미동의 유저는 제외한다.
       required:
         - userIds
         - body
+        - isMarketing
 
     AdminPushNotificationScheduleDTO:
       type: object
@@ -3955,10 +3961,16 @@ components:
           type: array
           items:
             type: string
+        isMarketing:
+          type: boolean
+          description:
+            true 면 마케팅(광고성) 푸시 — 서버가 제목 앞에 "(광고) " 를 붙이고
+            수신 미동의 유저는 제외한다.
       required:
         - id
         - body
         - targetUserIds
+        - isMarketing
 
     AdminListPushNotificationSchedulesResponseDTO:
       type: object
@@ -3984,9 +3996,15 @@ components:
           type: string
         deepLink:
           type: string
+        isMarketing:
+          type: boolean
+          description:
+            true 면 마케팅(광고성) 푸시 — 서버가 제목 앞에 "(광고) " 를 붙이고
+            수신 미동의 유저는 제외한다.
       required:
         - scheduledAt
         - body
+        - isMarketing
 
     AdminChallengeB2bFormSchemaDTO:
       type: object
